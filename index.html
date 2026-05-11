@@ -96,7 +96,7 @@ font-size:1rem;
 
 .products-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
 gap:25px;
 }
 
@@ -285,6 +285,49 @@ color:#888;
 background:#050505;
 }
 
+/* GUIA TALLES */
+
+.size-guide{
+margin-top:10px;
+background:#111;
+border:1px solid #222;
+border-radius:12px;
+padding:12px;
+}
+
+.size-guide h4{
+margin-bottom:10px;
+color:var(--green);
+font-size:0.95rem;
+}
+
+.size-table{
+width:100%;
+border-collapse:collapse;
+font-size:0.8rem;
+margin-bottom:10px;
+}
+
+.size-table th,
+.size-table td{
+border:1px solid #222;
+padding:6px;
+text-align:center;
+}
+
+.size-table th{
+background:#181818;
+}
+
+.size-info{
+font-size:0.78rem;
+color:#bbb;
+display:flex;
+flex-direction:column;
+gap:8px;
+line-height:1.4;
+}
+
 /* CARRITO */
 
 .cart-floating{
@@ -437,23 +480,19 @@ Aplicar Código
 
 <div class="products-grid">
 
-<!-- ROJO -->
+<!-- PRODUCTO -->
 <div class="product-card">
 
 <div class="slider">
 
-<button class="slide-btn left" onclick="prevSlide(0)">
-❮
-</button>
+<button class="slide-btn left" onclick="prevSlide(0)">❮</button>
 
 <div class="slides" id="slider0">
 <img src="compresrojo.png">
 <img src="compresrojo1.png">
 </div>
 
-<button class="slide-btn right" onclick="nextSlide(0)">
-❯
-</button>
+<button class="slide-btn right" onclick="nextSlide(0)">❯</button>
 
 </div>
 
@@ -473,8 +512,65 @@ $29.500 ARS
 <option>S</option>
 <option>M</option>
 <option>L</option>
-<option>XL</option>
 </select>
+
+<div class="size-guide">
+
+<h4>Guía de talles:</h4>
+
+<table class="size-table">
+
+<tr>
+<th>Talle</th>
+<th>Pecho</th>
+<th>Largo</th>
+<th>Hombro</th>
+<th>Manga</th>
+</tr>
+
+<tr>
+<td>S</td>
+<td>44</td>
+<td>70</td>
+<td>39</td>
+<td>19</td>
+</tr>
+
+<tr>
+<td>M</td>
+<td>46</td>
+<td>72</td>
+<td>41</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>L</td>
+<td>48</td>
+<td>74</td>
+<td>43</td>
+<td>21</td>
+</tr>
+
+</table>
+
+<div class="size-info">
+
+<p><strong>1. Ancho de hombro:</strong>
+Medí la distancia entre las costuras de los hombros.</p>
+
+<p><strong>2. Ancho de pecho:</strong>
+Medí la distancia entre las costuras de las axilas.</p>
+
+<p><strong>3. Largo de prenda:</strong>
+Medí desde el cuello hasta la parte inferior de la prenda.</p>
+
+<p><strong>4. Largo de manga:</strong>
+Medí desde la costura del hombro hasta el puño de la manga.</p>
+
+</div>
+
+</div>
 
 <button class="btn cart-btn"
 onclick="addToCart('Compresivo Tribal Rojo',29500,'size0')">
@@ -489,167 +585,10 @@ Comprar por WhatsApp
 </div>
 </div>
 
-<!-- MORADO -->
-<div class="product-card">
-
-<div class="slider">
-
-<button class="slide-btn left" onclick="prevSlide(1)">
-❮
-</button>
-
-<div class="slides" id="slider1">
-<img src="compresmorado.png">
-<img src="compresmorado1.png">
-</div>
-
-<button class="slide-btn right" onclick="nextSlide(1)">
-❯
-</button>
-
-</div>
-
-<div class="product-info">
-
-<div class="product-title">
-Compresivo Tribal Morado
-</div>
-
-<div class="old-price" id="old1"></div>
-
-<div class="price" id="price1">
-$29.500 ARS
-</div>
-
-<select id="size1">
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-</select>
-
-<button class="btn cart-btn"
-onclick="addToCart('Compresivo Tribal Morado',29500,'size1')">
-Agregar al Carrito
-</button>
-
-<button class="btn wa-btn"
-onclick="buyNow('Compresivo Tribal Morado',29500,'size1')">
-Comprar por WhatsApp
-</button>
-
-</div>
-</div>
-
-<!-- BLANCO -->
-<div class="product-card">
-
-<div class="slider">
-
-<button class="slide-btn left" onclick="prevSlide(2)">
-❮
-</button>
-
-<div class="slides" id="slider2">
-<img src="compresblanco.png">
-<img src="compresblanco1.png">
-</div>
-
-<button class="slide-btn right" onclick="nextSlide(2)">
-❯
-</button>
-
-</div>
-
-<div class="product-info">
-
-<div class="product-title">
-Compresivo Tribal Blanco
-</div>
-
-<div class="old-price" id="old2"></div>
-
-<div class="price" id="price2">
-$29.500 ARS
-</div>
-
-<select id="size2">
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-</select>
-
-<button class="btn cart-btn"
-onclick="addToCart('Compresivo Tribal Blanco',29500,'size2')">
-Agregar al Carrito
-</button>
-
-<button class="btn wa-btn"
-onclick="buyNow('Compresivo Tribal Blanco',29500,'size2')">
-Comprar por WhatsApp
-</button>
-
-</div>
-</div>
-
-<!-- BASICO -->
-<div class="product-card">
-
-<div class="slider">
-
-<button class="slide-btn left" onclick="prevSlide(3)">
-❮
-</button>
-
-<div class="slides" id="slider3">
-<img src="compresbasico.png">
-<img src="compresbasico1.png">
-</div>
-
-<button class="slide-btn right" onclick="nextSlide(3)">
-❯
-</button>
-
-</div>
-
-<div class="product-info">
-
-<div class="product-title">
-Compresivo Básico
-</div>
-
-<div class="old-price" id="old3"></div>
-
-<div class="price" id="price3">
-$22.500 ARS
-</div>
-
-<select id="size3">
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-</select>
-
-<button class="btn cart-btn"
-onclick="addToCart('Compresivo Básico',22500,'size3')">
-Agregar al Carrito
-</button>
-
-<button class="btn wa-btn"
-onclick="buyNow('Compresivo Básico',22500,'size3')">
-Comprar por WhatsApp
-</button>
-
-</div>
-</div>
-
 </div>
 
 </section>
 
-<!-- MUSCULOSAS -->
 <section>
 
 <h2 class="section-title">
@@ -662,7 +601,6 @@ Próximamente...
 
 </section>
 
-<!-- SOBRE NOSOTROS -->
 <section>
 
 <img src="mockup.png" class="mockup">
@@ -672,6 +610,7 @@ SOBRE NOSOTROS
 </h2>
 
 <p class="about">
+
 Somos una marca ubicada en la capital de Formosa, dedicada a hacer ropa para gente que entrena duro y necesita vestir luciendo sus resultados.
 
 <br><br>
@@ -680,12 +619,12 @@ Nos especializamos en ropa que no solo se adapta a tu cuerpo, sino que también 
 
 <br><br>
 
-Cuando escuches música pesada, ya sea Rock o Metal, te acordarás de nosotros.
+Acuérdate Cuando escuches música pesada, como Rock o Metal.
+
 </p>
 
 </section>
 
-<!-- OPINIONES -->
 <section>
 
 <h2 class="section-title">
@@ -718,7 +657,6 @@ Opiniones
 
 </section>
 
-<!-- REDES -->
 <section>
 
 <h2 class="section-title">
@@ -726,8 +664,10 @@ Nuestras Redes
 </h2>
 
 <div class="socials">
+
 <div>Instagram: @blazeborn.ar</div>
 <div>TikTok: @blazeborn.ar</div>
+
 </div>
 
 </section>
@@ -740,9 +680,7 @@ Nuestras Redes
 class="whatsapp-float"
 href="https://wa.me/5493704509580"
 target="_blank">
-
 ☎
-
 </a>
 
 <script>
@@ -757,7 +695,7 @@ const validCodes = [
 "RIVATOMY"
 ];
 
-const currentSlides = [0,0,0,0];
+const currentSlides = [0];
 
 function updateSlider(index){
 
@@ -843,17 +781,11 @@ return price;
 
 function updatePrices(){
 
-const prices = [
-29500,
-29500,
-29500,
-22500
-];
+const prices = [29500];
 
 for(let i=0;i<prices.length;i++){
 
-const originalPrice =
-prices[i];
+const originalPrice = prices[i];
 
 const finalPrice =
 getDiscountedPrice(originalPrice);
