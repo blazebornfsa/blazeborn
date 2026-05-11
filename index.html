@@ -173,6 +173,12 @@ font-size:1.2rem;
 font-weight:700;
 }
 
+.old-price{
+color:#777;
+text-decoration:line-through;
+font-size:0.9rem;
+}
+
 .price{
 color:var(--red);
 font-size:1.1rem;
@@ -365,12 +371,10 @@ box-shadow:0 0 15px rgba(37,211,102,0.5);
 
 <body>
 
-<!-- BOTON CARRITO -->
 <div class="cart-floating" onclick="toggleCart()">
 🛒
 </div>
 
-<!-- PANEL CARRITO -->
 <div class="cart-panel" id="cartPanel">
 
 <button class="close-cart" onclick="toggleCart()">
@@ -393,7 +397,6 @@ Pagar Carrito por WhatsApp
 
 </div>
 
-<!-- HEADER -->
 <header>
 
 <img src="blazelogo.png" class="logo">
@@ -412,7 +415,6 @@ Ropa diseñada para verte estético en el gym y en la calle.
 
 </header>
 
-<!-- PRODUCTOS -->
 <section>
 
 <p class="offer-text">
@@ -445,10 +447,8 @@ Aplicar Código
 </button>
 
 <div class="slides" id="slider0">
-
 <img src="compresrojo.png">
 <img src="compresrojo1.png">
-
 </div>
 
 <button class="slide-btn right" onclick="nextSlide(0)">
@@ -462,6 +462,8 @@ Aplicar Código
 <div class="product-title">
 Compresivo Tribal Rojo
 </div>
+
+<div class="old-price" id="old0"></div>
 
 <div class="price" id="price0">
 $29.500 ARS
@@ -497,10 +499,8 @@ Comprar por WhatsApp
 </button>
 
 <div class="slides" id="slider1">
-
 <img src="compresmorado.png">
 <img src="compresmorado1.png">
-
 </div>
 
 <button class="slide-btn right" onclick="nextSlide(1)">
@@ -514,6 +514,8 @@ Comprar por WhatsApp
 <div class="product-title">
 Compresivo Tribal Morado
 </div>
+
+<div class="old-price" id="old1"></div>
 
 <div class="price" id="price1">
 $29.500 ARS
@@ -549,10 +551,8 @@ Comprar por WhatsApp
 </button>
 
 <div class="slides" id="slider2">
-
 <img src="compresblanco.png">
 <img src="compresblanco1.png">
-
 </div>
 
 <button class="slide-btn right" onclick="nextSlide(2)">
@@ -566,6 +566,8 @@ Comprar por WhatsApp
 <div class="product-title">
 Compresivo Tribal Blanco
 </div>
+
+<div class="old-price" id="old2"></div>
 
 <div class="price" id="price2">
 $29.500 ARS
@@ -601,10 +603,8 @@ Comprar por WhatsApp
 </button>
 
 <div class="slides" id="slider3">
-
 <img src="compresbasico.png">
 <img src="compresbasico1.png">
-
 </div>
 
 <button class="slide-btn right" onclick="nextSlide(3)">
@@ -618,6 +618,8 @@ Comprar por WhatsApp
 <div class="product-title">
 Compresivo Básico
 </div>
+
+<div class="old-price" id="old3"></div>
 
 <div class="price" id="price3">
 $22.500 ARS
@@ -694,30 +696,22 @@ Opiniones
 
 <div class="review">
 <div class="stars">★★★★★</div>
-<p>
-“La calidad es increíble. La tela ajusta perfecto y se nota muchísimo el físico.”
-</p>
+<p>“La calidad es increíble. La tela ajusta perfecto y se nota muchísimo el físico.”</p>
 </div>
 
 <div class="review">
 <div class="stars">★★★★★</div>
-<p>
-“Compré el tribal rojo y literalmente todos me preguntan dónde lo conseguí.”
-</p>
+<p>“Compré el tribal rojo y literalmente todos me preguntan dónde lo conseguí.”</p>
 </div>
 
 <div class="review">
 <div class="stars">★★★★★</div>
-<p>
-“Muy cómodo para entrenar y usar en la calle. Se siente premium.”
-</p>
+<p>“Muy cómodo para entrenar y usar en la calle. Se siente premium.”</p>
 </div>
 
 <div class="review">
 <div class="stars">★★★★★</div>
-<p>
-“Excelente atención y el envío llegó rapidísimo. Recomendado.”
-</p>
+<p>“Excelente atención y el envío llegó rapidísimo. Recomendado.”</p>
 </div>
 
 </div>
@@ -732,25 +726,16 @@ Nuestras Redes
 </h2>
 
 <div class="socials">
-
-<div>
-Instagram: @blazeborn.ar
-</div>
-
-<div>
-TikTok: @blazeborn.ar
-</div>
-
+<div>Instagram: @blazeborn.ar</div>
+<div>TikTok: @blazeborn.ar</div>
 </div>
 
 </section>
 
-<!-- FOOTER -->
 <footer>
 © BlazeBorn 2025 - Todos los derechos reservados
 </footer>
 
-<!-- BOTON WHATSAPP -->
 <a
 class="whatsapp-float"
 href="https://wa.me/5493704509580"
@@ -867,12 +852,34 @@ const prices = [
 
 for(let i=0;i<prices.length;i++){
 
-const finalPrice =
-getDiscountedPrice(prices[i]);
+const originalPrice =
+prices[i];
 
-document.querySelectorAll(".price")[i]
-.innerHTML =
+const finalPrice =
+getDiscountedPrice(originalPrice);
+
+const oldPriceElement =
+document.getElementById(`old${i}`);
+
+const priceElement =
+document.getElementById(`price${i}`);
+
+if(activeDiscount !== ""){
+
+oldPriceElement.innerHTML =
+`$${originalPrice.toLocaleString()} ARS`;
+
+priceElement.innerHTML =
 `$${finalPrice.toLocaleString()} ARS`;
+
+}else{
+
+oldPriceElement.innerHTML = "";
+
+priceElement.innerHTML =
+`$${originalPrice.toLocaleString()} ARS`;
+
+}
 
 }
 
