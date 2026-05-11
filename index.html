@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Blaze - Fitness & Streetwear</title>
+<title>BlazeBorn - Fitness & Streetwear</title>
 
 <link rel="icon" type="image/png" href="favicon.png">
 
@@ -114,6 +114,8 @@ border-color:var(--red);
 box-shadow:0 0 20px rgba(255,0,0,0.25);
 }
 
+/* SLIDER */
+
 .slider{
 position:relative;
 overflow:hidden;
@@ -169,12 +171,6 @@ gap:12px;
 .product-title{
 font-size:1.2rem;
 font-weight:700;
-}
-
-.old-price{
-color:#777;
-text-decoration:line-through;
-font-size:0.9rem;
 }
 
 .price{
@@ -283,6 +279,8 @@ color:#888;
 background:#050505;
 }
 
+/* CARRITO */
+
 .cart-floating{
 position:fixed;
 top:20px;
@@ -342,6 +340,8 @@ font-weight:700;
 color:var(--green);
 }
 
+/* WHATSAPP */
+
 .whatsapp-float{
 position:fixed;
 bottom:20px;
@@ -365,10 +365,12 @@ box-shadow:0 0 15px rgba(37,211,102,0.5);
 
 <body>
 
+<!-- BOTON CARRITO -->
 <div class="cart-floating" onclick="toggleCart()">
 🛒
 </div>
 
+<!-- PANEL CARRITO -->
 <div class="cart-panel" id="cartPanel">
 
 <button class="close-cart" onclick="toggleCart()">
@@ -391,6 +393,7 @@ Pagar Carrito por WhatsApp
 
 </div>
 
+<!-- HEADER -->
 <header>
 
 <img src="blazelogo.png" class="logo">
@@ -409,6 +412,7 @@ Ropa diseñada para verte estético en el gym y en la calle.
 
 </header>
 
+<!-- PRODUCTOS -->
 <section>
 
 <p class="offer-text">
@@ -423,7 +427,7 @@ Remeras de Compresión
 
 <input type="text" id="discountCode" placeholder="Código de descuento">
 
-<button class="btn apply-btn" onclick="applyDiscount()">
+<button class="btn apply-btn">
 Aplicar Código
 </button>
 
@@ -459,9 +463,7 @@ Aplicar Código
 Compresivo Tribal Rojo
 </div>
 
-<div class="old-price" id="old0"></div>
-
-<div class="price" id="price0">
+<div class="price">
 $29.500 ARS
 </div>
 
@@ -513,9 +515,7 @@ Comprar por WhatsApp
 Compresivo Tribal Morado
 </div>
 
-<div class="old-price" id="old1"></div>
-
-<div class="price" id="price1">
+<div class="price">
 $29.500 ARS
 </div>
 
@@ -567,9 +567,7 @@ Comprar por WhatsApp
 Compresivo Tribal Blanco
 </div>
 
-<div class="old-price" id="old2"></div>
-
-<div class="price" id="price2">
+<div class="price">
 $29.500 ARS
 </div>
 
@@ -621,9 +619,7 @@ Comprar por WhatsApp
 Compresivo Básico
 </div>
 
-<div class="old-price" id="old3"></div>
-
-<div class="price" id="price3">
+<div class="price">
 $22.500 ARS
 </div>
 
@@ -651,10 +647,122 @@ Comprar por WhatsApp
 
 </section>
 
+<!-- MUSCULOSAS -->
+<section>
+
+<h2 class="section-title">
+Musculosas
+</h2>
+
+<p style="color:#888;">
+Próximamente...
+</p>
+
+</section>
+
+<!-- SOBRE NOSOTROS -->
+<section>
+
+<img src="mockup.png" class="mockup">
+
+<h2 class="section-title">
+SOBRE NOSOTROS
+</h2>
+
+<p class="about">
+Somos una marca ubicada en la capital de Formosa, dedicada a hacer ropa para gente que entrena duro y necesita vestir luciendo sus resultados.
+
+<br><br>
+
+Nos especializamos en ropa que no solo se adapta a tu cuerpo, sino que también te hace lucir estético tanto en el gimnasio como en la calle.
+
+<br><br>
+
+Cuando escuches música pesada, ya sea Rock o Metal, te acordarás de nosotros.
+</p>
+
+</section>
+
+<!-- OPINIONES -->
+<section>
+
+<h2 class="section-title">
+Opiniones
+</h2>
+
+<div class="reviews">
+
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>
+“La calidad es increíble. La tela ajusta perfecto y se nota muchísimo el físico.”
+</p>
+</div>
+
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>
+“Compré el tribal rojo y literalmente todos me preguntan dónde lo conseguí.”
+</p>
+</div>
+
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>
+“Muy cómodo para entrenar y usar en la calle. Se siente premium.”
+</p>
+</div>
+
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>
+“Excelente atención y el envío llegó rapidísimo. Recomendado.”
+</p>
+</div>
+
+</div>
+
+</section>
+
+<!-- REDES -->
+<section>
+
+<h2 class="section-title">
+Nuestras Redes
+</h2>
+
+<div class="socials">
+
+<div>
+Instagram: @blazeborn.ar
+</div>
+
+<div>
+TikTok: @blazeborn.ar
+</div>
+
+</div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+© BlazeBorn 2025 - Todos los derechos reservados
+</footer>
+
+<!-- BOTON WHATSAPP -->
+<a
+class="whatsapp-float"
+href="https://wa.me/5493704509580"
+target="_blank">
+
+☎
+
+</a>
+
 <script>
 
 let cart = [];
-let activeDiscount = "";
 
 const currentSlides = [0,0,0,0];
 
