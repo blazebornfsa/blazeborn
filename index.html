@@ -427,7 +427,7 @@ Remeras de Compresión
 
 <input type="text" id="discountCode" placeholder="Código de descuento">
 
-<button class="btn apply-btn">
+<button class="btn apply-btn" onclick="applyDiscount()">
 Aplicar Código
 </button>
 
@@ -463,7 +463,7 @@ Aplicar Código
 Compresivo Tribal Rojo
 </div>
 
-<div class="price">
+<div class="price" id="price0">
 $29.500 ARS
 </div>
 
@@ -515,7 +515,7 @@ Comprar por WhatsApp
 Compresivo Tribal Morado
 </div>
 
-<div class="price">
+<div class="price" id="price1">
 $29.500 ARS
 </div>
 
@@ -567,7 +567,7 @@ Comprar por WhatsApp
 Compresivo Tribal Blanco
 </div>
 
-<div class="price">
+<div class="price" id="price2">
 $29.500 ARS
 </div>
 
@@ -619,7 +619,7 @@ Comprar por WhatsApp
 Compresivo Básico
 </div>
 
-<div class="price">
+<div class="price" id="price3">
 $22.500 ARS
 </div>
 
@@ -763,6 +763,14 @@ target="_blank">
 <script>
 
 let cart = [];
+let activeDiscount = "";
+
+const validCodes = [
+"NAVARRETE",
+"NATY",
+"THELONELYONE",
+"RIVATOMY"
+];
 
 const currentSlides = [0,0,0,0];
 
@@ -809,15 +817,79 @@ document
 
 }
 
+function applyDiscount(){
+
+const code =
+document
+.getElementById("discountCode")
+.value
+.trim()
+.toUpperCase();
+
+if(validCodes.includes(code)){
+
+activeDiscount = code;
+
+alert("Código aplicado correctamente.");
+
+updatePrices();
+
+}else{
+
+activeDiscount = "";
+
+alert("Código inválido.");
+
+updatePrices();
+
+}
+
+}
+
+function getDiscountedPrice(price){
+
+if(activeDiscount !== ""){
+return Math.round(price * 0.9);
+}
+
+return price;
+
+}
+
+function updatePrices(){
+
+const prices = [
+29500,
+29500,
+29500,
+22500
+];
+
+for(let i=0;i<prices.length;i++){
+
+const finalPrice =
+getDiscountedPrice(prices[i]);
+
+document.querySelectorAll(".price")[i]
+.innerHTML =
+`$${finalPrice.toLocaleString()} ARS`;
+
+}
+
+}
+
 function addToCart(name,price,sizeId){
 
 const size =
 document.getElementById(sizeId).value;
 
+const finalPrice =
+getDiscountedPrice(price);
+
 cart.push({
 name,
 size,
-price
+price:finalPrice
 });
 
 renderCart();
@@ -860,12 +932,16 @@ function buyNow(name,price,sizeId){
 const size =
 document.getElementById(sizeId).value;
 
+const finalPrice =
+getDiscountedPrice(price);
+
 let message =
 `¡Hola, Quiero hacer mi pedido!
 
 -Producto: ${name}
 -Talle: ${size}
--TOTAL: $${price.toLocaleString()} ARS`;
+-Código canjeado: ${activeDiscount || "Ninguno"}
+-TOTAL: $${finalPrice.toLocaleString()} ARS`;
 
 window.open(
 `https://wa.me/5493704509580?text=${encodeURIComponent(message)}`,
@@ -896,6 +972,9 @@ message +=
 });
 
 message +=
+`%0ACódigo canjeado: ${activeDiscount || "Ninguno"}`;
+
+message +=
 `%0ATOTAL A PAGAR: $${total.toLocaleString()} ARS`;
 
 window.open(
@@ -908,4 +987,4 @@ window.open(
 </script>
 
 </body>
-</html>
+  </html>
