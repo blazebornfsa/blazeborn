@@ -125,13 +125,13 @@ height:340px;
 
 .slides{
 display:flex;
-width:200%;
+width:100%;
 height:100%;
 transition:0.4s;
 }
 
 .slides img{
-width:100%;
+min-width:100%;
 height:340px;
 object-fit:cover;
 flex-shrink:0;
@@ -371,12 +371,10 @@ box-shadow:0 0 15px rgba(37,211,102,0.5);
 
 <body>
 
-<!-- BOTON CARRITO -->
 <div class="cart-floating" onclick="toggleCart()">
 🛒
 </div>
 
-<!-- PANEL CARRITO -->
 <div class="cart-panel" id="cartPanel">
 
 <button class="close-cart" onclick="toggleCart()">
@@ -399,7 +397,6 @@ Pagar Carrito por WhatsApp
 
 </div>
 
-<!-- HEADER -->
 <header>
 
 <img src="blazelogo.png" class="logo">
@@ -418,7 +415,6 @@ Ropa diseñada para verte estético en el gym y en la calle.
 
 </header>
 
-<!-- PRODUCTOS -->
 <section>
 
 <p class="offer-text">
@@ -453,7 +449,7 @@ Aplicar Código
 <div class="slides" id="slider0">
 
 <img src="compresrojo.png">
-<img src="compresrojo1.png">
+<img src="compresrojo2.png">
 
 </div>
 
@@ -661,110 +657,6 @@ Comprar por WhatsApp
 
 </section>
 
-<!-- MUSCULOSAS -->
-<section>
-
-<h2 class="section-title">
-Musculosas
-</h2>
-
-<p style="color:#888;">
-Próximamente...
-</p>
-
-</section>
-
-<!-- SOBRE NOSOTROS -->
-<section>
-
-<img src="mockup.png" class="mockup">
-
-<h2 class="section-title">
-SOBRE NOSOTROS
-</h2>
-
-<p class="about">
-Somos una marca ubicada en la capital de Formosa, dedicada a hacer ropa para gente que entrena duro y necesita vestir luciendo sus resultados.
-
-<br><br>
-
-Nos especializamos en ropa que no solo se adapta a tu cuerpo, sino que también te hace lucir estético tanto en el gimnasio como en la calle.
-
-<br><br>
-
-Cuando escuches música pesada, ya sea Rock o Metal, te acordarás de nosotros.
-</p>
-
-</section>
-
-<!-- OPINIONES -->
-<section>
-
-<h2 class="section-title">
-Opiniones
-</h2>
-
-<div class="reviews">
-
-<div class="review">
-<div class="stars">★★★★★</div>
-<p>
-“La calidad es increíble.”
-</p>
-</div>
-
-<div class="review">
-<div class="stars">★★★★★</div>
-<p>
-“El tribal rojo está tremendo.”
-</p>
-</div>
-
-<div class="review">
-<div class="stars">★★★★★</div>
-<p>
-“Muy cómodo para entrenar.”
-</p>
-</div>
-
-<div class="review">
-<div class="stars">★★★★★</div>
-<p>
-“Excelente atención.”
-</p>
-</div>
-
-</div>
-
-</section>
-
-<!-- REDES -->
-<section>
-
-<h2 class="section-title">
-Nuestras Redes
-</h2>
-
-<div class="socials">
-<div>Instagram: @blazeborn.ar</div>
-<div>TikTok: @blazeborn.ar</div>
-</div>
-
-</section>
-
-<!-- FOOTER -->
-<footer>
-© Blaze 2025 - Todos los derechos reservados
-</footer>
-
-<!-- BOTON WHATSAPP -->
-<a
-class="whatsapp-float"
-href="https://wa.me/5493704509580"
-target="_blank">
-☎
-</a>
-
 <script>
 
 let cart = [];
@@ -772,31 +664,13 @@ let activeDiscount = "";
 
 const currentSlides = [0,0,0,0];
 
-const validCodes = [
-"NAVARRETE",
-"NATY",
-"THELONELYONE",
-"RIVATOMY"
-];
-
-const originalPrices = [
-29500,
-29500,
-29500,
-22500
-];
-
-function formatPrice(price){
-return `$${price.toLocaleString()} ARS`;
-}
-
 function updateSlider(index){
 
 const slider =
 document.getElementById(`slider${index}`);
 
 slider.style.transform =
-`translateX(-${currentSlides[index] * 50}%)`;
+`translateX(-${currentSlides[index] * 100}%)`;
 
 }
 
@@ -824,70 +698,12 @@ updateSlider(index);
 
 }
 
-function applyDiscount(){
+function toggleCart(){
 
-const code =
-document.getElementById("discountCode")
-.value
-.trim()
-.toUpperCase();
-
-if(validCodes.includes(code)){
-
-activeDiscount = code;
-
-updatePrices();
-
-alert("Código aplicado correctamente.");
-
-}else{
-
-activeDiscount = "";
-
-updatePrices();
-
-alert("Código inválido.");
-
-}
-
-}
-
-function updatePrices(){
-
-for(let i = 0; i < originalPrices.length; i++){
-
-let original = originalPrices[i];
-
-if(activeDiscount !== ""){
-
-let discounted = original * 0.9;
-
-document.getElementById(`old${i}`).innerHTML =
-formatPrice(original);
-
-document.getElementById(`price${i}`).innerHTML =
-formatPrice(discounted);
-
-}else{
-
-document.getElementById(`old${i}`).innerHTML = "";
-
-document.getElementById(`price${i}`).innerHTML =
-formatPrice(original);
-
-}
-
-}
-
-}
-
-function getDiscountedPrice(price){
-
-if(activeDiscount !== ""){
-return price * 0.9;
-}
-
-return price;
+document
+.getElementById("cartPanel")
+.classList
+.toggle("active");
 
 }
 
@@ -899,7 +715,7 @@ document.getElementById(sizeId).value;
 cart.push({
 name,
 size,
-price:getDiscountedPrice(price)
+price
 });
 
 renderCart();
@@ -926,23 +742,14 @@ cartItems.innerHTML += `
 <div class="cart-item">
 <strong>${item.name}</strong><br>
 Talle: ${item.size}<br>
-${formatPrice(item.price)}
+$${item.price.toLocaleString()} ARS
 </div>
 `;
 
 });
 
 cartTotal.innerHTML =
-`TOTAL: ${formatPrice(total)}`;
-
-}
-
-function toggleCart(){
-
-document
-.getElementById("cartPanel")
-.classList
-.toggle("active");
+`TOTAL: $${total.toLocaleString()} ARS`;
 
 }
 
@@ -951,17 +758,12 @@ function buyNow(name,price,sizeId){
 const size =
 document.getElementById(sizeId).value;
 
-const finalPrice =
-getDiscountedPrice(price);
-
 let message =
 `¡Hola, Quiero hacer mi pedido!
 
 -Producto: ${name}
 -Talle: ${size}
--Precio: ${formatPrice(price)}
--Código canjeado: ${activeDiscount || "Ninguno"}
--TOTAL: ${formatPrice(finalPrice)}`;
+-TOTAL: $${price.toLocaleString()} ARS`;
 
 window.open(
 `https://wa.me/5493704509580?text=${encodeURIComponent(message)}`,
@@ -987,15 +789,12 @@ cart.forEach(item=>{
 total += item.price;
 
 message +=
-`- ${item.name} | Talle: ${item.size} | ${formatPrice(item.price)}%0A`;
+`- ${item.name} | Talle: ${item.size} | $${item.price.toLocaleString()} ARS%0A`;
 
 });
 
 message +=
-`%0ACódigo canjeado: ${activeDiscount || "Ninguno"}`;
-
-message +=
-`%0ATOTAL A PAGAR: ${formatPrice(total)}`;
+`%0ATOTAL A PAGAR: $${total.toLocaleString()} ARS`;
 
 window.open(
 `https://wa.me/5493704509580?text=${message}`,
