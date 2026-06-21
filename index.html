@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BlazeBorn - Fitness & Streetwear</title>
+
+<link rel="icon" type="image/png" href="favicon.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Montserrat',sans-serif;
+}
+
+body{
+background:#000;
+color:white;
+overflow-x:hidden;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+:root{
+--red:#ff0000;
+--green:#00ff73;
+}
+
+header{
+width:100%;
+padding:40px 20px;
+display:flex;
+flex-direction:column;
+align-items:center;
+text-align:center;
+border-bottom:2px solid var(--red);
+background:linear-gradient(to bottom,#000,#080808);
+}
+
+.logo{
+width:50%;
+max-width:450px;
+min-width:220px;
+margin-bottom:20px;
+}
+
+h1{
+font-size:clamp(2rem,5vw,4rem);
+font-weight:900;
+letter-spacing:2px;
+margin-bottom:10px;
+}
+
+.subtitle{
+color:#ccc;
+margin-bottom:10px;
+}
+
+.social-subtitle{
+color:var(--green);
+font-weight:700;
+}
+
+section{
+max-width:1300px;
+margin:auto;
+padding:60px 20px;
+}
+
+.section-title{
+font-size:2rem;
+border-left:4px solid var(--red);
+padding-left:15px;
+margin-bottom:30px;
+}
+
+.products-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:25px;
+}
+
+.product-card{
+background:#0f0f0f;
+border:1px solid #222;
+border-radius:18px;
+overflow:hidden;
+transition:0.3s;
+}
+
+.product-card:hover{
+transform:translateY(-5px);
+border-color:var(--red);
+box-shadow:0 0 20px rgba(255,0,0,0.25);
+}
+
+/* SLIDER */
+
+.slider{
+position:relative;
+overflow:hidden;
+width:100%;
+height:340px;
+}
+
+.slides{
+display:flex;
+transition:0.4s;
+height:100%;
+}
+
+.slides img{
+width:100%;
+min-width:100%;
+height:340px;
+object-fit:cover;
+background:#111;
+}
+
+.slide-btn{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+width:40px;
+height:40px;
+border:none;
+border-radius:50%;
+background:rgba(0,0,0,0.6);
+color:white;
+font-size:1rem;
+cursor:pointer;
+z-index:5;
+}
+
+.slide-btn.left{
+left:10px;
+}
+
+.slide-btn.right{
+right:10px;
+}
+
+.product-info{
+padding:20px;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.product-title{
+font-size:1.2rem;
+font-weight:700;
+}
+
+.price{
+color:var(--red);
+font-size:1.1rem;
+font-weight:700;
+}
+
+.old-price{
+color:#888;
+font-size:0.6rem;
+text-decoration:line-through;
+display:none;
+}
+
+select{
+padding:12px;
+border:none;
+border-radius:10px;
+background:#1a1a1a;
+color:white;
+}
+
+.btn{
+border:none;
+padding:13px;
+border-radius:12px;
+font-weight:700;
+cursor:pointer;
+transition:0.3s;
+}
+
+.cart-btn{
+background:var(--red);
+color:white;
+}
+
+.wa-btn{
+background:#25d366;
+color:white;
+}
+
+.cart-btn:hover,
+.wa-btn:hover{
+opacity:0.85;
+}
+
+/* DESCUENTO */
+
+.discount-box{
+display:flex;
+gap:15px;
+margin-bottom:35px;
+flex-wrap:wrap;
+}
+
+.discount-box input{
+flex:1;
+min-width:220px;
+padding:12px;
+border:none;
+border-radius:10px;
+background:#1a1a1a;
+color:white;
+}
+
+.apply-btn{
+background:var(--red);
+color:white;
+border:none;
+padding:12px 18px;
+border-radius:10px;
+font-weight:700;
+cursor:pointer;
+}
+
+/* GUIA TALLES */
+
+.size-guide-btn{
+background:#1a1a1a;
+color:white;
+border:1px solid var(--red);
+}
+
+.size-guide-btn:hover{
+background:var(--red);
+}
+
+.modal-overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+z-index:2000;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.modal-overlay.active{
+display:flex;
+}
+
+.modal-box{
+background:#f4f4f4;
+color:#111;
+border-radius:20px;
+padding:20px;
+max-width:700px;
+width:100%;
+max-height:90vh;
+overflow-y:auto;
+position:relative;
+text-align:center;
+}
+
+.modal-close{
+position:absolute;
+top:15px;
+right:15px;
+width:40px;
+height:40px;
+border:none;
+border-radius:50%;
+background:#000;
+color:white;
+font-size:1.2rem;
+font-weight:700;
+cursor:pointer;
+z-index:5;
+}
+
+.size-guide-img{
+width:100%;
+border-radius:12px;
+display:block;
+}
+
+/* AVISO DESCUENTO */
+
+.discount-alert-overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.75);
+z-index:3000;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.discount-alert-overlay.active{
+display:flex;
+}
+
+.discount-alert-box{
+background:#000;
+border:2px solid var(--green);
+border-radius:16px;
+padding:35px 30px;
+max-width:380px;
+width:100%;
+text-align:center;
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+.discount-alert-box p{
+color:white;
+font-size:1.1rem;
+font-weight:500;
+line-height:1.6;
+}
+
+.discount-alert-ok{
+background:var(--green);
+color:#000;
+border:none;
+padding:13px 30px;
+border-radius:10px;
+font-weight:700;
+font-size:1rem;
+cursor:pointer;
+align-self:center;
+}
+
+.discount-alert-ok:hover{
+opacity:0.85;
+}
+
+/* CARRITO */
+
+.cart-floating{
+position:fixed;
+top:20px;
+right:20px;
+width:60px;
+height:60px;
+border-radius:50%;
+background:var(--red);
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:1.5rem;
+cursor:pointer;
+z-index:999;
+}
+
+.cart-panel{
+position:fixed;
+top:0;
+right:-400px;
+width:350px;
+height:100%;
+background:#0b0b0b;
+border-left:2px solid var(--red);
+transition:0.4s;
+z-index:1000;
+padding:20px;
+overflow-y:auto;
+}
+
+.cart-panel.active{
+right:0;
+}
+
+.close-cart{
+width:45px;
+height:45px;
+border-radius:50%;
+border:none;
+background:var(--red);
+color:white;
+font-size:1.4rem;
+cursor:pointer;
+margin-bottom:20px;
+}
+
+.cart-item{
+border-bottom:1px solid #222;
+padding:12px 0;
+}
+
+.cart-total{
+margin-top:20px;
+font-size:1.2rem;
+font-weight:700;
+color:var(--green);
+}
+
+/* MOCKUP */
+
+.mockup{
+width:100%;
+border-radius:20px;
+border:2px solid var(--red);
+margin-bottom:30px;
+}
+
+.about{
+line-height:1.8;
+color:#ccc;
+}
+
+/* OPINIONES */
+
+.reviews{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.review{
+background:#0f0f0f;
+border:1px solid #222;
+padding:20px;
+border-radius:15px;
+}
+
+.stars{
+color:gold;
+margin-bottom:10px;
+}
+
+/* REDES */
+
+.socials{
+display:flex;
+flex-direction:column;
+gap:15px;
+font-size:1.1rem;
+}
+
+/* FOOTER */
+
+footer{
+text-align:center;
+padding:30px 20px;
+border-top:2px solid var(--red);
+color:#888;
+background:#050505;
+}
+
+/* WHATSAPP */
+
+.whatsapp-float{
+position:fixed;
+bottom:20px;
+right:20px;
+width:60px;
+height:60px;
+border-radius:50%;
+background:#25d366;
+display:flex;
+justify-content:center;
+align-items:center;
+text-decoration:none;
+color:white;
+font-size:1.8rem;
+z-index:999;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- CARRITO -->
+
+<div class="cart-floating" onclick="toggleCart()">
+<img src="carrito.png" style="width:34px;height:34px;object-fit:contain;">
+</div>
+
+<div class="cart-panel" id="cartPanel">
+
+<button class="close-cart" onclick="toggleCart()">
+←
+</button>
+
+<h2 style="margin-bottom:20px;">
+Tu Carrito
+</h2>
+
+<div id="cartItems"></div>
+
+<div class="cart-total" id="cartTotal">
+TOTAL: $0 ARS
+</div>
+
+<button class="btn wa-btn" style="width:100%;margin-top:20px;" onclick="checkoutWhatsApp()">
+COMPRAR YA
+</button>
+
+</div>
+
+<!-- MODAL DE PAGO -->
+
+<div class="discount-alert-overlay" id="payModal">
+<div class="discount-alert-box" style="max-width:420px;gap:16px;">
+
+<h3 style="color:white;font-size:1.2rem;font-weight:900;letter-spacing:1px;">
+💳 RESUMEN DE COMPRA
+</h3>
+
+<p id="payProductName" style="color:#ccc;font-size:0.95rem;white-space:pre-line;text-align:left;"></p>
+
+<p style="color:white;font-size:1rem;">
+<span id="payOriginalTotal" style="display:none;color:#888;font-size:0.6rem;text-decoration:line-through;margin-right:6px;"></span>
+Total a pagar: <span id="payTotal" style="color:var(--green);font-weight:700;"></span>
+</p>
+
+<p style="color:#aaa;font-size:0.85rem;line-height:1.6;">
+Hacé clic en <strong style="color:white;">Pagar con Transferencia</strong>, completá la transferencia a nuestro alias <strong style="color:var(--green);">blazeborn.ar</strong> por el monto indicado, y luego confirmá tu pedido por WhatsApp adjuntando el comprobante.
+</p>
+
+<div style="display:flex;flex-direction:column;gap:6px;">
+<span style="color:var(--green);font-size:0.8rem;font-weight:700;">Aplicar código de descuento</span>
+<div style="display:flex;gap:10px;">
+<input type="text" id="modalDiscountCode" placeholder="Ingresá tu código"
+style="flex:1;padding:10px;border:none;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;">
+<button onclick="applyModalDiscount()"
+style="background:var(--green);color:#000;border:none;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.85rem;">
+Aplicar
+</button>
+</div>
+</div>
+
+<button onclick="openTransferModal()"
+style="background:#009ee3;color:white;border:none;padding:13px 20px;border-radius:12px;font-weight:700;font-size:1rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;cursor:pointer;">
+Pagar con Transferencia
+<div style="display:flex;gap:8px;align-items:center;justify-content:center;">
+<img src="pago.png" style="width:24px;height:24px;object-fit:contain;">
+<img src="pago1.png" style="width:24px;height:24px;object-fit:contain;">
+<img src="pago2.png" style="width:24px;height:24px;object-fit:contain;">
+<img src="pago3.png" style="width:24px;height:24px;object-fit:contain;">
+</div>
+</button>
+
+<button onclick="closePayModal()"
+style="background:transparent;border:1px solid #ff0000;color:#ff0000;padding:10px;border-radius:10px;cursor:pointer;font-size:0.9rem;width:100%;">
+Cancelar
+</button>
+
+</div>
+</div>
+
+<!-- DATOS DE TRANSFERENCIA -->
+
+<div class="discount-alert-overlay" id="transferModal">
+<div class="discount-alert-box" style="max-width:400px;gap:18px;text-align:left;">
+
+<h3 style="color:white;font-size:1.1rem;font-weight:900;text-align:center;letter-spacing:1px;">
+💳 DATOS PARA TRANSFERIR
+</h3>
+
+<div style="display:flex;flex-direction:column;gap:12px;">
+
+<div>
+<span style="color:var(--green);font-size:0.75rem;font-weight:700;">ALIAS</span><br>
+<span style="color:white;font-size:1rem;font-weight:700;letter-spacing:1px;">blazeborn.ar</span>
+<button onclick="copyText('blazeborn.ar', this)"
+style="margin-left:10px;background:#1a1a1a;border:1px solid #444;color:#aaa;padding:4px 10px;border-radius:8px;font-size:0.75rem;cursor:pointer;">
+Copiar
+</button>
+</div>
+
+<div>
+<span style="color:var(--green);font-size:0.75rem;font-weight:700;">CVU</span><br>
+<span style="color:white;font-size:0.95rem;font-weight:700;letter-spacing:1px;">0000003100066889905144</span>
+<button onclick="copyText('0000003100066889905144', this)"
+style="margin-left:10px;background:#1a1a1a;border:1px solid #444;color:#aaa;padding:4px 10px;border-radius:8px;font-size:0.75rem;cursor:pointer;">
+Copiar
+</button>
+</div>
+
+<div>
+<span style="color:var(--green);font-size:0.75rem;font-weight:700;">A NOMBRE DE</span><br>
+<span style="color:white;font-size:1rem;font-weight:700;">Matías Emanuel Cherñac</span>
+</div>
+
+</div>
+
+<a id="payWALink" href="#" target="_blank"
+style="display:block;text-align:center;background:transparent;color:#25d366;text-decoration:none;padding:8px 16px;border-radius:10px;border:1px solid #25d366;font-weight:600;font-size:0.9rem;width:100%;">
+✅ Confirmar pedido por WhatsApp
+</a>
+
+<button onclick="closeTransferModal(); closePayModal();"
+style="background:var(--green);color:#000;border:none;padding:13px;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;width:100%;margin-top:5px;">
+OK
+</button>
+
+</div>
+</div>
+
+<!-- AVISO DESCUENTO -->
+
+<div class="discount-alert-overlay" id="discountAlert">
+<div class="discount-alert-box">
+<p>✅ ¡Código de descuento aplicado correctamente!</p>
+<button class="discount-alert-ok" onclick="closeDiscountAlert()">OK</button>
+</div>
+</div>
+
+<!-- AVISO CÓDIGO INVÁLIDO -->
+
+<div class="discount-alert-overlay" id="invalidAlert">
+<div class="discount-alert-box" style="border-color:#ff0000;">
+<p>❌ Código inválido.</p>
+<button class="discount-alert-ok" style="background:#ff0000;" onclick="closeInvalidAlert()">OK</button>
+</div>
+</div>
+
+<!-- GUIA DE TALLES -->
+
+<div class="modal-overlay" id="sizeGuideModal">
+
+<div class="modal-box">
+
+<button class="modal-close" onclick="closeSizeGuide()">
+✕
+</button>
+
+<img src="tallecompres.jpg" class="size-guide-img">
+
+</div>
+</div>
+
+<!-- HEADER -->
+
+<header>
+
+<img src="blazelogo.png" class="logo">
+
+<h1>
+FITNESS & STREETWEAR
+</h1>
+
+<p class="subtitle">
+Ropa diseñada para verte estético en el gym y en la calle.
+</p>
+
+<p class="social-subtitle">
+¡Para enterarte de todo lo mejor seguinos en nuestras redes!
+</p>
+
+</header>
+
+<!-- PRODUCTOS -->
+
+<section>
+
+<h2 class="section-title">
+Remeras de Compresión
+</h2>
+
+<div class="products-grid">
+
+<!-- ROJO -->
+
+<div class="product-card">
+
+<div class="slider">
+
+<button class="slide-btn left" onclick="prevSlide(0)">❮</button>
+
+<div class="slides" id="slider0">
+<img src="compresrojo.jpg">
+<img src="compresrojo1.jpg">
+</div>
+
+<button class="slide-btn right" onclick="nextSlide(0)">❯</button>
+
+</div>
+
+<div class="product-info">
+
+<div class="product-title">
+Compresivo Tribal Rojo
+</div>
+
+<div class="old-price" id="old0"></div>
+<div class="price" id="price0">
+$30.000 ARS
+</div>
+
+<select id="size0">
+<option>S</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+</select>
+
+<button class="btn size-guide-btn" onclick="openSizeGuide()">
+Ver Guía de Talles
+</button>
+
+<button class="btn cart-btn"
+onclick="addToCart('Compresivo Tribal Rojo',30000,'size0')">
+Agregar al Carrito
+</button>
+
+<button class="btn wa-btn"
+onclick="buyNow('Compresivo Tribal Rojo',30000,'size0')">
+COMPRAR YA
+</button>
+
+</div>
+</div>
+
+<!-- MORADO -->
+
+<div class="product-card">
+
+<div class="slider">
+
+<button class="slide-btn left" onclick="prevSlide(1)">❮</button>
+
+<div class="slides" id="slider1">
+<img src="compresmorado.jpg">
+<img src="compresmorado1.jpg">
+</div>
+
+<button class="slide-btn right" onclick="nextSlide(1)">❯</button>
+
+</div>
+
+<div class="product-info">
+
+<div class="product-title">
+Compresivo Tribal Morado
+</div>
+
+<div class="old-price" id="old1"></div>
+<div class="price" id="price1">
+$30.000 ARS
+</div>
+
+<select id="size1">
+<option>S</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+</select>
+
+<button class="btn size-guide-btn" onclick="openSizeGuide()">
+Ver Guía de Talles
+</button>
+
+<button class="btn cart-btn"
+onclick="addToCart('Compresivo Tribal Morado',30000,'size1')">
+Agregar al Carrito
+</button>
+
+<button class="btn wa-btn"
+onclick="buyNow('Compresivo Tribal Morado',30000,'size1')">
+COMPRAR YA
+</button>
+
+</div>
+</div>
+
+<!-- BLANCO -->
+
+<div class="product-card">
+
+<div class="slider">
+
+<button class="slide-btn left" onclick="prevSlide(2)">❮</button>
+
+<div class="slides" id="slider2">
+<img src="compresblanco.jpg">
+<img src="compresblanco1.jpg">
+</div>
+
+<button class="slide-btn right" onclick="nextSlide(2)">❯</button>
+
+</div>
+
+<div class="product-info">
+
+<div class="product-title">
+Compresivo Tribal Blanco
+</div>
+
+<div class="old-price" id="old2"></div>
+<div class="price" id="price2">
+$30.000 ARS
+</div>
+
+<select id="size2">
+<option>S</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+</select>
+
+<button class="btn size-guide-btn" onclick="openSizeGuide()">
+Ver Guía de Talles
+</button>
+
+<button class="btn cart-btn"
+onclick="addToCart('Compresivo Tribal Blanco',30000,'size2')">
+Agregar al Carrito
+</button>
+
+<button class="btn wa-btn"
+onclick="buyNow('Compresivo Tribal Blanco',30000,'size2')">
+COMPRAR YA
+</button>
+
+</div>
+</div>
+
+<!-- BASICO -->
+
+<div class="product-card">
+
+<div class="slider">
+
+<button class="slide-btn left" onclick="prevSlide(3)">❮</button>
+
+<div class="slides" id="slider3">
+<img src="compresbasico.jpg">
+<img src="compresbasico1.jpg">
+</div>
+
+<button class="slide-btn right" onclick="nextSlide(3)">❯</button>
+
+</div>
+
+<div class="product-info">
+
+<div class="product-title">
+Compresivo Básico
+</div>
+
+<div class="old-price" id="old3"></div>
+<div class="price" id="price3">
+$25.000 ARS
+</div>
+
+<select id="size3">
+<option>S</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+</select>
+
+<button class="btn size-guide-btn" onclick="openSizeGuide()">
+Ver Guía de Talles
+</button>
+
+<button class="btn cart-btn"
+onclick="addToCart('Compresivo Básico',25000,'size3')">
+Agregar al Carrito
+</button>
+
+<button class="btn wa-btn"
+onclick="buyNow('Compresivo Básico',25000,'size3')">
+COMPRAR YA
+</button>
+
+</div>
+</div>
+
+<!-- BERSERK -->
+
+<div class="product-card">
+
+<div class="slider">
+
+<button class="slide-btn left" onclick="prevSlide(4)">❮</button>
+
+<div class="slides" id="slider4">
+<img src="berserk.jpg">
+<img src="berserk1.jpg">
+</div>
+
+<button class="slide-btn right" onclick="nextSlide(4)">❯</button>
+
+</div>
+
+<div class="product-info">
+
+<div class="product-title">
+Compresivo de Berserk
+</div>
+
+<div class="old-price" id="old4"></div>
+<div class="price" id="price4">
+$25.000 ARS
+</div>
+
+<select id="size4">
+<option>S</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+</select>
+
+<button class="btn size-guide-btn" onclick="openSizeGuide()">
+Ver Guía de Talles
+</button>
+
+<button class="btn cart-btn"
+onclick="addToCart('Compresivo de Berserk',25000,'size4')">
+Agregar al Carrito
+</button>
+
+<button class="btn wa-btn"
+onclick="buyNow('Compresivo de Berserk',25000,'size4')">
+COMPRAR YA
+</button>
+
+</div>
+</div>
+
+<!-- CLASICO -->
+
+<div class="product-card">
+
+<div class="slider">
+
+<button class="slide-btn left" onclick="prevSlide(5)">❮</button>
+
+<div class="slides" id="slider5">
+<img src="clasico.jpg">
+<img src="clasico1.jpg">
+</div>
+
+<button class="slide-btn right" onclick="nextSlide(5)">❯</button>
+
+</div>
+
+<div class="product-info">
+
+<div class="product-title">
+Compresivo Clásico
+</div>
+
+<div class="old-price" id="old5"></div>
+<div class="price" id="price5">
+$25.000 ARS
+</div>
+
+<select id="size5">
+<option>S</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+</select>
+
+<button class="btn size-guide-btn" onclick="openSizeGuide()">
+Ver Guía de Talles
+</button>
+
+<button class="btn cart-btn"
+onclick="addToCart('Compresivo Clásico',25000,'size5')">
+Agregar al Carrito
+</button>
+
+<button class="btn wa-btn"
+onclick="buyNow('Compresivo Clásico',25000,'size5')">
+COMPRAR YA
+</button>
+
+</div>
+</div>
+
+</div>
+
+</section>
+
+<!-- MUSCULOSAS -->
+
+<section>
+
+<h2 class="section-title">
+Musculosas
+</h2>
+
+<p style="color:#888;">
+Próximamente...
+</p>
+
+</section>
+
+<!-- SOBRE NOSOTROS -->
+
+<section>
+
+<img src="mockup.jpg" class="mockup">
+
+<h2 class="section-title">
+SOBRE NOSOTROS
+</h2>
+
+<p class="about">
+
+Somos una marca ubicada en la capital de Formosa, dedicada a hacer ropa para gente que entrena duro y necesita vestir luciendo sus resultados.
+
+<br><br>
+
+Nos especializamos en ropa que no solo se adapta a tu cuerpo, sino que también te hace lucir estético tanto en el gimnasio como en la calle.
+
+<br><br>
+
+Cuando escuches música pesada, ya sea Rock o Metal, te acordarás de nosotros.
+
+</p>
+
+</section>
+
+<!-- OPINIONES -->
+
+<section>
+
+<h2 class="section-title">
+Opiniones
+</h2>
+
+<div class="reviews">
+
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>“La calidad es increíble. La tela ajusta perfecto y se nota muchísimo el físico.”</p>
+</div>
+
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>“Compré el tribal rojo y literalmente todos me preguntan dónde lo conseguí.”</p>
+</div>
+
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>“Muy cómodo para entrenar y usar en la calle. Se siente premium.”</p>
+</div>
+
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>“Excelente atención y el envío llegó rapidísimo. Recomendado.”</p>
+</div>
+
+</div>
+
+</section>
+
+<!-- REDES -->
+
+<section>
+
+<h2 class="section-title">
+Nuestras Redes
+</h2>
+
+<div class="socials">
+
+<div>Instagram: @blazeborn.ar</div>
+<div>TikTok: @blazeborn.ar</div>
+
+</div>
+
+</section>
+
+<footer>
+© BlazeBorn 2025 - Todos los derechos reservados
+</footer>
+
+<a
+class="whatsapp-float"
+href="https://wa.me/5493704509580"
+target="_blank">
+<img src="wsp.png" style="width:38px;height:38px;object-fit:contain;">
+</a>
+
+<script>
+
+let cart = [];
+let activeDiscount = "";
+
+const validCodes = [
+"NAVARRETE",
+"NATY",
+"IVANMG",
+"THELONELYONE",
+"RIVATOMY",
+"SUAR"
+];
+
+const basePrices = [30000,30000,30000,25000,25000,25000];
+
+function applyDiscount(){
+
+if(activeDiscount !== ""){
+alert("Ya tenés un código aplicado. Solo se puede usar un código por compra.");
+return;
+}
+
+const code =
+document
+.getElementById("discountCode")
+.value
+.trim()
+.toUpperCase();
+
+if(validCodes.includes(code)){
+activeDiscount = code;
+updatePrices();
+document.getElementById("discountAlert").classList.add("active");
+}else{
+document.getElementById("invalidAlert").classList.add("active");
+}
+
+}
+
+function applyModalDiscount(){
+
+if(activeDiscount !== ""){
+alert("Ya tenés un código aplicado. Solo se puede usar uno por compra.");
+return;
+}
+
+const code =
+document
+.getElementById("modalDiscountCode")
+.value
+.trim()
+.toUpperCase();
+
+if(validCodes.includes(code)){
+activeDiscount = code;
+updatePrices();
+document.getElementById("discountAlert").classList.add("active");
+// Refresh the pay modal totals
+if(currentPayData){
+openPayModal(
+currentPayData.name,
+currentPayData.size,
+currentPayData.baseTotal,
+currentPayData.resumen,
+currentPayData.isCart
+);
+}
+}else{
+document.getElementById("invalidAlert").classList.add("active");
+}
+
+}
+
+function getDiscountedPrice(price){
+if(activeDiscount !== ""){
+return Math.round(price * 0.9);
+}
+return price;
+}
+
+function updatePrices(){
+for(let i=0;i<basePrices.length;i++){
+const original = basePrices[i];
+const finalPrice = getDiscountedPrice(original);
+const oldEl = document.getElementById(`old${i}`);
+const priceEl = document.getElementById(`price${i}`);
+
+if(activeDiscount !== ""){
+oldEl.style.display = "block";
+oldEl.innerHTML = `$${original.toLocaleString()} ARS`;
+}else{
+oldEl.style.display = "none";
+oldEl.innerHTML = "";
+}
+
+priceEl.innerHTML = `$${finalPrice.toLocaleString()} ARS`;
+}
+renderCart();
+}
+
+const currentSlides = [0,0,0,0,0,0];
+
+function updateSlider(index){
+
+const slider =
+document.getElementById(`slider${index}`);
+
+slider.style.transform =
+`translateX(-${currentSlides[index] * 100}%)`;
+
+}
+
+function nextSlide(index){
+
+currentSlides[index]++;
+
+if(currentSlides[index] > 1){
+currentSlides[index] = 0;
+}
+
+updateSlider(index);
+
+}
+
+function prevSlide(index){
+
+currentSlides[index]--;
+
+if(currentSlides[index] < 0){
+currentSlides[index] = 1;
+}
+
+updateSlider(index);
+
+}
+
+function toggleCart(){
+
+document
+.getElementById("cartPanel")
+.classList
+.toggle("active");
+
+}
+
+function closeDiscountAlert(){
+document.getElementById("discountAlert").classList.remove("active");
+}
+
+function closeInvalidAlert(){
+document.getElementById("invalidAlert").classList.remove("active");
+}
+
+function openSizeGuide(){
+
+document
+.getElementById("sizeGuideModal")
+.classList
+.add("active");
+
+}
+
+function closeSizeGuide(){
+
+document
+.getElementById("sizeGuideModal")
+.classList
+.remove("active");
+
+}
+
+function addToCart(name,price,sizeId){
+
+const size =
+document.getElementById(sizeId).value;
+
+const key = `${name}||${size}`;
+const existing = cart.find(i => i.key === key);
+
+if(existing){
+existing.qty++;
+}else{
+cart.push({key, name, size, basePrice:price, qty:1});
+}
+
+renderCart();
+
+}
+
+function changeQty(key, delta){
+
+const idx = cart.findIndex(i => i.key === key);
+if(idx === -1) return;
+
+const item = cart[idx];
+
+if(item.qty + delta <= 0){
+if(cart.length === 1){
+if(!confirm("¿Querés eliminar todos los productos del carrito?")){
+return;
+}
+}
+cart.splice(idx, 1);
+}else{
+item.qty += delta;
+}
+
+renderCart();
+
+}
+
+function renderCart(){
+
+const cartItems =
+document.getElementById("cartItems");
+
+const cartTotal =
+document.getElementById("cartTotal");
+
+cartItems.innerHTML = "";
+
+let total = 0;
+
+cart.forEach(item=>{
+
+const finalPrice = getDiscountedPrice(item.basePrice);
+total += finalPrice * item.qty;
+
+cartItems.innerHTML += `
+<div class="cart-item">
+<strong>${item.name}</strong><br>
+Talle: ${item.size}<br>
+$${finalPrice.toLocaleString()} ARS c/u<br>
+<div style="display:flex;align-items:center;gap:12px;margin-top:8px;">
+<button onclick="changeQty('${item.key}',-1)" style="width:32px;height:32px;border-radius:50%;border:none;background:#ff0000;color:white;font-size:1.1rem;font-weight:700;cursor:pointer;line-height:1;">−</button>
+<span style="font-size:1rem;font-weight:700;">${item.qty}</span>
+<button onclick="changeQty('${item.key}',1)" style="width:32px;height:32px;border-radius:50%;border:none;background:#00ff73;color:#000;font-size:1.1rem;font-weight:700;cursor:pointer;line-height:1;">+</button>
+<span style="color:#aaa;font-size:0.9rem;">= $${(finalPrice * item.qty).toLocaleString()} ARS</span>
+</div>
+</div>
+`;
+
+});
+
+cartTotal.innerHTML =
+`TOTAL: $${total.toLocaleString()} ARS`;
+
+}
+
+function buyNow(name,price,sizeId){
+
+const size =
+document.getElementById(sizeId).value;
+
+openPayModal(name, size, price, null, false);
+
+}
+
+function checkoutWhatsApp(){
+
+if(cart.length === 0){
+alert("Tu carrito está vacío.");
+return;
+}
+
+let baseTotal = 0;
+let resumen = "";
+
+cart.forEach(item=>{
+baseTotal += item.basePrice * item.qty;
+resumen += `${item.name} x${item.qty} (Talle: ${item.size})\n`;
+});
+
+openPayModal("Carrito", null, baseTotal, resumen, true);
+
+}
+
+let currentPayData = null;
+
+function openPayModal(name, size, baseTotal, resumen, isCart){
+
+currentPayData = {name, size, baseTotal, resumen, isCart};
+
+const total = getDiscountedPrice(baseTotal);
+
+// Build product name display
+let productDisplay = "";
+if(isCart && cart.length > 0){
+cart.forEach(item => {
+const orig = item.basePrice;
+const disc = getDiscountedPrice(orig);
+const hasDisc = activeDiscount !== "" && disc !== orig;
+const lineOrig = hasDisc ? ` (antes $${(orig * item.qty).toLocaleString()})` : "";
+productDisplay += `${item.name} x${item.qty} (Talle: ${item.size}) — $${(disc * item.qty).toLocaleString()} ARS${lineOrig}\n`;
+});
+}else{
+productDisplay = `${name} | Talle: ${size}`;
+}
+
+document.getElementById("payProductName").innerText = productDisplay;
+
+const origEl = document.getElementById("payOriginalTotal");
+if(activeDiscount !== "" && total !== baseTotal){
+origEl.style.display = "inline";
+origEl.innerText = `$${baseTotal.toLocaleString()} ARS`;
+}else{
+origEl.style.display = "none";
+origEl.innerText = "";
+}
+
+document.getElementById("payTotal").innerText =
+`$${total.toLocaleString()} ARS`;
+
+const waMessage = isCart
+? `¡Hola! Acabo de realizar el pago de $${total.toLocaleString()} ARS por los siguientes productos:\n\n${productDisplay}Código canjeado: ${activeDiscount || "Ninguno"}\n\nAdjunto el comprobante de pago. ¡Gracias!`
+: `¡Hola! Acabo de realizar el pago de $${total.toLocaleString()} ARS por:\n\n- Producto: ${name}\n- Talle: ${size}\n- Código canjeado: ${activeDiscount || "Ninguno"}\n\nAdjunto el comprobante de pago. ¡Gracias!`;
+
+document.getElementById("payWALink").href =
+`https://wa.me/5493704509580?text=${encodeURIComponent(waMessage)}`;
+
+document.getElementById("modalDiscountCode").value = "";
+
+document.getElementById("payModal").classList.add("active");
+
+}
+
+function closePayModal(){
+document.getElementById("payModal").classList.remove("active");
+currentPayData = null;
+}
+
+function openTransferModal(){
+document.getElementById("transferModal").classList.add("active");
+}
+
+function closeTransferModal(){
+document.getElementById("transferModal").classList.remove("active");
+}
+
+function copyText(text, btn){
+navigator.clipboard.writeText(text).then(()=>{
+btn.innerText = "¡Copiado!";
+btn.style.color = "var(--green)";
+btn.style.borderColor = "var(--green)";
+setTimeout(()=>{
+btn.innerText = "Copiar";
+btn.style.color = "#aaa";
+btn.style.borderColor = "#444";
+}, 2000);
+});
+}
+
+</script>
+
+</body>
+</html>
