@@ -243,22 +243,27 @@ display:flex;align-items:center;justify-content:center;
 .modal-img-slider{
 position:relative;
 width:100%;
+min-height:280px;
 max-height:55vh;
 overflow:hidden;
+background:#0a0a0a;
 }
 
 .modal-slides{
 display:flex;
 transition:transform 0.4s ease;
-height:100%;
+width:100%;
+min-height:280px;
 }
 
 .modal-slides img{
 width:100%;
 min-width:100%;
+min-height:280px;
 max-height:55vh;
 object-fit:contain;
 background:#0a0a0a;
+flex-shrink:0;
 }
 
 .modal-slide-btn{
