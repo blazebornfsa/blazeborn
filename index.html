@@ -196,7 +196,22 @@ width:100%;height:100%;
 background:#000;
 z-index:2000;
 flex-direction:column;
-overflow-y:auto;
+overflow-y:scroll;
+scrollbar-width:thin;
+scrollbar-color:#ff0000 #1a1a1a;
+}
+
+.product-modal-overlay::-webkit-scrollbar{
+width:6px;
+}
+
+.product-modal-overlay::-webkit-scrollbar-track{
+background:#1a1a1a;
+}
+
+.product-modal-overlay::-webkit-scrollbar-thumb{
+background:var(--red);
+border-radius:3px;
 }
 
 .product-modal-overlay.active{
@@ -324,6 +339,33 @@ transition:0.2s;
 .size-btn.active{
 border-color:var(--red);
 background:var(--red);
+}
+
+.size-btn.soldout{
+border-color:#444;
+color:#555;
+background:#111;
+position:relative;
+cursor:pointer;
+text-decoration:line-through;
+}
+
+.size-btn.soldout::after{
+content:"✕";
+position:absolute;
+top:-6px;
+right:-6px;
+font-size:0.6rem;
+color:#ff0000;
+font-weight:900;
+}
+
+.size-soldout-msg{
+color:#ff0000;
+font-size:0.75rem;
+margin-top:6px;
+min-height:1rem;
+display:none;
 }
 
 .modal-actions{
@@ -660,10 +702,462 @@ font-size:1.8rem;
 z-index:999;
 }
 
+/* HAMBURGER MENU */
+
+.hamburger-btn{
+position:fixed;
+top:20px;
+left:20px;
+width:48px;
+height:48px;
+border-radius:12px;
+border:1px solid var(--red);
+background:#0f0f0f;
+color:white;
+font-size:1.3rem;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:1100;
+transition:0.2s;
+}
+
+.hamburger-btn:hover{
+background:var(--red);
+}
+
+.hamburger-menu{
+position:fixed;
+top:0;
+left:-280px;
+width:260px;
+height:100%;
+background:#0b0b0b;
+border-right:2px solid var(--red);
+transition:0.35s cubic-bezier(0.4,0,0.2,1);
+z-index:1050;
+padding:80px 20px 30px;
+display:flex;
+flex-direction:column;
+gap:8px;
+overflow-y:auto;
+}
+
+.hamburger-menu.active{
+left:0;
+}
+
+.menu-title{
+color:#555;
+font-size:0.7rem;
+font-weight:700;
+letter-spacing:2px;
+text-transform:uppercase;
+margin:16px 0 8px;
+padding-left:4px;
+}
+
+.menu-item{
+display:flex;
+align-items:center;
+gap:12px;
+padding:13px 16px;
+border-radius:12px;
+cursor:pointer;
+font-size:0.95rem;
+font-weight:600;
+color:#ccc;
+border:none;
+background:transparent;
+width:100%;
+text-align:left;
+transition:0.2s;
+}
+
+.menu-item:hover{
+background:#1a1a1a;
+color:white;
+}
+
+.menu-item .menu-icon{
+width:20px;
+text-align:center;
+font-size:1.1rem;
+}
+
+.menu-divider{
+height:1px;
+background:#1e1e1e;
+margin:8px 0;
+}
+
+/* THEME TOGGLE dentro del menú */
+
+.theme-toggle-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:13px 16px;
+border-radius:12px;
+cursor:pointer;
+}
+
+.theme-toggle-row:hover{
+background:#1a1a1a;
+}
+
+.toggle-switch{
+width:44px;
+height:24px;
+background:#333;
+border-radius:12px;
+position:relative;
+transition:0.3s;
+flex-shrink:0;
+}
+
+.toggle-switch::after{
+content:"";
+position:absolute;
+top:3px;
+left:3px;
+width:18px;
+height:18px;
+border-radius:50%;
+background:#888;
+transition:0.3s;
+}
+
+.toggle-switch.light-on{
+background:var(--red);
+}
+
+.toggle-switch.light-on::after{
+left:23px;
+background:white;
+}
+
+/* SEARCH */
+
+.search-wrapper{
+position:relative;
+display:flex;
+align-items:center;
+margin-top:16px;
+}
+
+.search-icon-btn{
+position:absolute;
+right:0;
+top:50%;
+transform:translateY(-50%);
+background:none;
+border:none;
+color:#888;
+font-size:1.2rem;
+cursor:pointer;
+padding:8px 12px;
+transition:0.2s;
+}
+
+.search-icon-btn:hover{
+color:var(--red);
+}
+
+.search-input{
+width:0;
+padding:0;
+border:none;
+border-radius:12px;
+background:#1a1a1a;
+color:white;
+font-size:0.9rem;
+font-family:'Montserrat',sans-serif;
+transition:0.35s cubic-bezier(0.4,0,0.2,1);
+outline:none;
+opacity:0;
+}
+
+.search-input.open{
+width:100%;
+padding:11px 42px 11px 14px;
+border:1px solid #333;
+opacity:1;
+}
+
+.search-input::placeholder{
+color:#555;
+}
+
+.search-results{
+position:absolute;
+top:calc(100% + 6px);
+left:0;
+right:0;
+background:#111;
+border:1px solid #2a2a2a;
+border-radius:14px;
+overflow:hidden;
+z-index:200;
+display:none;
+}
+
+.search-results.visible{
+display:block;
+}
+
+.search-result-item{
+display:flex;
+align-items:center;
+gap:12px;
+padding:10px 14px;
+cursor:pointer;
+transition:0.15s;
+border-bottom:1px solid #1e1e1e;
+}
+
+.search-result-item:last-child{
+border-bottom:none;
+}
+
+.search-result-item:hover{
+background:#1c1c1c;
+}
+
+.search-result-thumb{
+width:40px;
+height:40px;
+object-fit:cover;
+border-radius:8px;
+flex-shrink:0;
+}
+
+.search-result-name{
+font-size:0.85rem;
+font-weight:600;
+color:#ddd;
+}
+
+.search-result-price{
+font-size:0.75rem;
+color:var(--red);
+font-weight:700;
+}
+
+.search-no-results{
+padding:14px;
+color:#555;
+font-size:0.85rem;
+text-align:center;
+}
+
+/* MENU BACKDROP */
+
+.menu-backdrop{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.5);
+z-index:1040;
+}
+
+.menu-backdrop.active{
+display:block;
+}
+
+/* LIGHT THEME */
+
+body.light-theme{
+background:#fff;
+color:#111;
+}
+
+body.light-theme header{
+background:linear-gradient(to bottom,#fff,#f5f5f5);
+}
+
+body.light-theme .product-card{
+background:#f5f5f5;
+border-color:#e0e0e0;
+}
+
+body.light-theme .card-label{
+background:#f5f5f5;
+}
+
+body.light-theme .card-name{
+color:#111;
+}
+
+body.light-theme .cart-panel{
+background:#f5f5f5;
+}
+
+body.light-theme .cart-item{
+border-color:#ddd;
+}
+
+body.light-theme .hamburger-btn{
+background:#f0f0f0;
+color:#111;
+}
+
+body.light-theme .hamburger-menu{
+background:#f5f5f5;
+border-color:#000;
+}
+
+body.light-theme .menu-item{
+color:#333;
+}
+
+body.light-theme .menu-item:hover{
+background:#e5e5e5;
+color:#000;
+}
+
+body.light-theme .theme-toggle-row:hover{
+background:#e5e5e5;
+}
+
+body.light-theme .menu-divider{
+background:#ddd;
+}
+
+body.light-theme .search-input{
+background:#ececec;
+color:#111;
+border-color:#ccc;
+}
+
+body.light-theme .search-results{
+background:#fff;
+border-color:#ddd;
+}
+
+body.light-theme .search-result-item:hover{
+background:#f0f0f0;
+}
+
+body.light-theme .search-result-name{
+color:#222;
+}
+
+body.light-theme .review{
+background:#f5f5f5;
+border-color:#e0e0e0;
+}
+
+body.light-theme footer{
+background:#f0f0f0;
+color:#555;
+}
+
+body.light-theme .modal-close-top{
+background:rgba(255,255,255,0.9);
+}
+
+body.light-theme .modal-close-btn{
+background:#eee;
+color:#111;
+border-color:#ccc;
+}
+
+body.light-theme .modal-slides img{
+background:#f0f0f0;
+}
+
+body.light-theme .modal-product-overlay,
+body.light-theme .product-modal-overlay{
+background:#fff;
+}
+
+body.light-theme .modal-product-desc{
+color:#555;
+}
+
+body.light-theme .size-btn{
+background:#eee;
+border-color:#ccc;
+color:#111;
+}
+
+body.light-theme select{
+background:#ececec;
+color:#111;
+}
+
+body.light-theme .about{
+color:#444;
+}
+
+body.light-theme .subtitle{
+color:#555;
+}
+
+body.light-theme .search-no-results{
+color:#999;
+}
+
+body.light-theme .menu-title{
+color:#999;
+}
+body.light-theme #inlineSearchInput{
+background:#ececec;
+color:#111;
+border-color:#ccc;
+}
+
+body.light-theme #inlineSearchResults{
+background:#fff;
+border-color:#ddd;
+}
+
+
 </style>
 </head>
 
 <body>
+
+<!-- HAMBURGER BUTTON -->
+<button class="hamburger-btn" onclick="toggleMenu()" id="hamburgerBtn" aria-label="Menú">☰</button>
+
+<!-- MENU BACKDROP -->
+<div class="menu-backdrop" id="menuBackdrop" onclick="closeMenu()"></div>
+
+<!-- HAMBURGER MENU -->
+<div class="hamburger-menu" id="hamburgerMenu">
+
+  <span class="menu-title">Opciones</span>
+
+  <div class="theme-toggle-row" onclick="toggleTheme()">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="menu-icon">🌙</span>
+      <span id="themeLabel" style="font-size:0.95rem;font-weight:600;color:#ccc;">Tema claro</span>
+    </div>
+    <div class="toggle-switch" id="themeToggle"></div>
+  </div>
+
+  <div class="menu-divider"></div>
+
+  <span class="menu-title">Buscar productos</span>
+
+  <div class="search-wrapper" id="searchWrapper">
+    <input
+      class="search-input open"
+      id="searchInput"
+      type="text"
+      placeholder="Buscar en BlazeBorn..."
+      oninput="handleSearch()"
+      autocomplete="off"
+    >
+    <button class="search-icon-btn" onclick="clearSearch()">🔍</button>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+
+</div>
 
 <!-- CARRITO -->
 
@@ -774,6 +1268,7 @@ Cancelar
 <div>
 <div class="modal-size-label">Seleccioná tu talle:</div>
 <div class="modal-sizes" id="modalSizes"></div>
+<div class="size-soldout-msg" id="sizeSoldoutMsg">Este talle está agotado.</div>
 </div>
 
 <button class="btn size-guide-btn" onclick="openSizeGuide()" style="width:100%;">
@@ -787,6 +1282,16 @@ Agregar al Carrito
 <button class="btn wa-btn" onclick="modalBuyNow()" style="width:100%;">
 COMPRAR YA
 </button>
+</div>
+
+<!-- OPINIÓN EN MODAL -->
+<div id="modalReviewSection" style="display:none;border-top:1px solid #222;padding-top:20px;margin-top:8px;">
+<div style="font-size:0.75rem;font-weight:700;color:#888;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Opinión de cliente</div>
+<div style="background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;">
+<div style="color:gold;font-size:1rem;">★★★★★</div>
+<img src="opinion1.jpg" alt="Cliente usando BlazeBorn" style="width:100%;border-radius:10px;object-fit:cover;">
+<p style="color:#ccc;font-size:0.9rem;line-height:1.6;">"La calidad es increíble. La tela ajusta perfecto y se nota muchísimo el físico."</p>
+</div>
 </div>
 
 </div>
@@ -869,7 +1374,7 @@ OK
 ✕
 </button>
 
-<img src="tallecompres.jpg" class="size-guide-img">
+<img id="sizeGuideImg" src="tallecompres.jpg" class="size-guide-img">
 
 </div>
 </div>
@@ -894,9 +1399,43 @@ Ropa diseñada para verte estético en el gym y en la calle.
 
 </header>
 
+<!-- BUSCADOR INLINE -->
+
+<section style="padding-bottom:0;">
+<div style="position:relative;max-width:520px;">
+<input
+  id="inlineSearchInput"
+  type="text"
+  placeholder="🔍  Buscar productos..."
+  oninput="handleInlineSearch()"
+  onkeydown="if(event.key==='Enter') commitInlineSearch()"
+  autocomplete="off"
+  style="width:100%;padding:14px 48px 14px 18px;border-radius:14px;border:1px solid #2a2a2a;background:#111;color:white;font-size:0.95rem;font-family:'Montserrat',sans-serif;outline:none;transition:border-color 0.2s;"
+  onfocus="this.style.borderColor='var(--red)'"
+  onblur="this.style.borderColor='#2a2a2a'"
+>
+<button
+  id="inlineClearBtn"
+  onclick="clearInlineSearch()"
+  style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#888;font-size:1.1rem;cursor:pointer;line-height:1;padding:4px;"
+  title="Borrar búsqueda"
+>✕</button>
+<div id="inlineSearchResults" style="display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:#111;border:1px solid #2a2a2a;border-radius:14px;overflow:hidden;z-index:200;"></div>
+</div>
+</section>
+
+<!-- RESULTADOS DE BÚSQUEDA (oculto por defecto) -->
+<section id="secSearchResults" style="display:none;">
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;">
+<h2 class="section-title" id="searchResultsTitle" style="margin-bottom:0;border:none;padding:0;font-size:1.6rem;">Resultados</h2>
+<button onclick="clearInlineSearch()" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:9px 18px;border-radius:10px;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:'Montserrat',sans-serif;">✕ Ver todos los productos</button>
+</div>
+<div id="searchResultsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:25px;"></div>
+</section>
+
 <!-- PRODUCTOS -->
 
-<section>
+<section id="secCompresion">
 
 <h2 class="section-title">
 Remeras de Compresión
@@ -928,10 +1467,15 @@ Remeras de Compresión
 </div>
 
 <!-- BLANCO -->
-<div class="product-card" onclick="openProductModal(2)">
+<div class="product-card" onclick="openProductModal(2)" style="cursor:pointer;">
+<div style="position:relative;">
 <img src="compresblanco.jpg" class="card-thumb" alt="Compresivo Tribal Blanco">
+<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;">
+<span style="color:#ff0000;font-size:1.6rem;font-weight:900;letter-spacing:3px;text-shadow:0 0 10px rgba(255,0,0,0.7);">AGOTADO</span>
+</div>
+</div>
 <div class="card-label">
-<div class="card-name">Compresivo Tribal Blanco</div>
+<div class="card-name" style="color:#ff0000;font-weight:900;">AGOTADO</div>
 <div class="card-price" id="price2">$30.000 ARS</div>
 </div>
 </div>
@@ -974,15 +1518,96 @@ Remeras de Compresión
 
 <!-- MUSCULOSAS -->
 
-<section>
+<section id="secMusculosas">
 
 <h2 class="section-title">
 Musculosas
 </h2>
 
-<p style="color:#888;">
-Próximamente...
-</p>
+<div class="carousel-wrapper">
+
+<button class="carousel-arrow" onclick="muscuMove(-1)">❮</button>
+
+<div class="carousel-viewport" id="muscuViewport">
+<div class="products-grid" id="muscuGrid">
+
+<!-- TRIBAL -->
+<div class="product-card" onclick="openMuscuModal(0)">
+<div style="position:relative;">
+<img src="muscu.jpg" class="card-thumb" alt="Musculosa Tribal">
+<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;">
+<span style="color:#ff0000;font-size:1.6rem;font-weight:900;letter-spacing:3px;text-shadow:0 0 10px rgba(255,0,0,0.7);">AGOTADO</span>
+</div>
+</div>
+<div class="card-label">
+<div class="card-name" style="color:#ff0000;font-weight:900;">AGOTADO</div>
+</div>
+</div>
+
+<!-- MENTZER -->
+<div class="product-card" onclick="openMuscuModal(1)">
+<div style="position:relative;">
+<img src="mentzer.jpg" class="card-thumb" alt="Musculosa Mike Mentzer">
+<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;">
+<span style="color:#ff0000;font-size:1.6rem;font-weight:900;letter-spacing:3px;text-shadow:0 0 10px rgba(255,0,0,0.7);">AGOTADO</span>
+</div>
+</div>
+<div class="card-label">
+<div class="card-name" style="color:#ff0000;font-weight:900;">AGOTADO</div>
+</div>
+</div>
+
+<!-- KEVIN -->
+<div class="product-card" onclick="openMuscuModal(2)">
+<div style="position:relative;">
+<img src="kevin.jpg" class="card-thumb" alt="Musculosa Kevin Levrone">
+<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;">
+<span style="color:#ff0000;font-size:1.6rem;font-weight:900;letter-spacing:3px;text-shadow:0 0 10px rgba(255,0,0,0.7);">AGOTADO</span>
+</div>
+</div>
+<div class="card-label">
+<div class="card-name" style="color:#ff0000;font-weight:900;">AGOTADO</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<button class="carousel-arrow" onclick="muscuMove(1)">❯</button>
+
+</div>
+
+</section>
+
+<!-- CALZAS -->
+
+<section id="secCalzas">
+
+<h2 class="section-title">
+Calzas <span style="color:#aaa;font-weight:400;font-size:1.4rem;">(para mujeres)</span>
+</h2>
+
+<div class="carousel-wrapper">
+
+<button class="carousel-arrow" onclick="calzaMove(-1)">❮</button>
+
+<div class="carousel-viewport" id="calzaViewport">
+<div class="products-grid" id="calzaGrid">
+
+<!-- CALZA DE LYCRA -->
+<div class="product-card" onclick="openCalzaModal(0)">
+<img src="calza.jpg" class="card-thumb" alt="Calza de Lycra">
+<div class="card-label">
+<div class="card-name">Calza de Lycra</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<button class="carousel-arrow" onclick="calzaMove(1)">❯</button>
+
+</div>
 
 </section>
 
@@ -1098,7 +1723,8 @@ name: "Compresivo Tribal Blanco",
 desc: "Compresión total para entrenar al límite. Tela técnica que se adapta a tu físico y diseño tribal que no pasa desapercibido, dentro y fuera del gym.",
 imgs: ["compresblanco.jpg","compresblanco1.jpg"],
 price: 30000,
-idx: 2
+idx: 2,
+soldOut: true
 },
 {
 name: "Compresivo Básico",
@@ -1134,40 +1760,71 @@ currentProduct = p;
 modalSlideIndex = 0;
 selectedSize = "M";
 
-document.getElementById("modalTitle").innerText = p.name;
-document.getElementById("modalDesc").innerText = p.desc;
+document.getElementById("modalTitle").innerText = p.soldOut ? "AGOTADO" : p.name;
+document.getElementById("modalTitle").style.color = p.soldOut ? "#ff0000" : "white";
+document.getElementById("modalTitle").style.fontSize = p.soldOut ? "3rem" : "";
+document.getElementById("modalTitle").style.letterSpacing = p.soldOut ? "6px" : "";
+document.getElementById("modalDesc").innerText = p.soldOut ? "Este producto está temporalmente agotado. ¡Seguinos en redes para enterarte cuando vuelva!" : p.desc;
 
 const finalPrice = getDiscountedPrice(p.price);
 const oldEl = document.getElementById("modalOldPrice");
 const priceEl = document.getElementById("modalPrice");
 
-if(activeDiscount !== "" && finalPrice !== p.price){
+if(activeDiscount !== "" && finalPrice !== p.price && !p.soldOut){
 oldEl.style.display = "block";
 oldEl.innerText = `$${p.price.toLocaleString()} ARS`;
 }else{
 oldEl.style.display = "none";
 }
 
-priceEl.innerText = `$${finalPrice.toLocaleString()} ARS`;
+priceEl.innerText = p.soldOut ? "" : `$${finalPrice.toLocaleString()} ARS`;
 
 document.getElementById("modalImg0").src = p.imgs[0];
-document.getElementById("modalImg1").src = p.imgs[1];
+document.getElementById("modalImg1").src = "";
 document.getElementById("modalSlides").style.transform = "translateX(0)";
+document.querySelectorAll(".modal-slide-btn").forEach(b => b.style.display = "none");
 
 const sizesEl = document.getElementById("modalSizes");
 sizesEl.innerHTML = "";
+const soldoutMsg = document.getElementById("sizeSoldoutMsg");
+soldoutMsg.style.display = "none";
+
+const actionsEl = document.querySelector(".modal-actions");
+if(p.soldOut){
+actionsEl.style.display = "none";
+document.getElementById("modalSizes").style.display = "none";
+soldoutMsg.style.display = "none";
+}else{
+actionsEl.style.display = "flex";
+document.getElementById("modalSizes").style.display = "flex";
+const soldoutSizes = p.soldoutSizes || [];
 sizes.forEach(s => {
+const isSoldout = soldoutSizes.includes(s);
 const btn = document.createElement("button");
-btn.className = "size-btn" + (s === selectedSize ? " active" : "");
+btn.className = "size-btn" + (s === selectedSize && !isSoldout ? " active" : "") + (isSoldout ? " soldout" : "");
 btn.innerText = s;
 btn.onclick = () => {
+if(isSoldout){
+soldoutMsg.style.display = "block";
+sizesEl.querySelectorAll(".size-btn:not(.soldout)").forEach(b => b.classList.remove("active"));
+}else{
+soldoutMsg.style.display = "none";
 selectedSize = s;
 sizesEl.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active"));
 btn.classList.add("active");
+}
 };
 sizesEl.appendChild(btn);
 });
+// set default selected to first available size
+const firstAvail = sizes.find(s => !(soldoutSizes.includes(s)));
+if(firstAvail) selectedSize = firstAvail;
+}
 
+document.getElementById("modalReviewSection").style.display = "block";
+const sizeGuideBtnC = document.querySelector(".size-guide-btn");
+sizeGuideBtnC.style.display = "";
+sizeGuideBtnC.onclick = function(){ openSizeGuide("tallecompres.jpg"); };
 document.getElementById("productModal").classList.add("active");
 document.body.style.overflow = "hidden";
 }
@@ -1218,6 +1875,178 @@ if(Math.abs(diff) > 40) modalSlide(diff > 0 ? 1 : -1);
 }, {passive:true});
 });
 
+// MUSCULOSAS DATA
+
+const muscuProducts = [
+{
+name: "Musculosa Tribal",
+desc: "Diseño tribal, corte musculoso. Agotada por el momento, ¡vuelve pronto!",
+imgs: ["muscu.jpg"],
+soldOut: true
+},
+{
+name: "Musculosa Mike Mentzer",
+desc: "Tributo al maestro del Heavy Duty. Diseño exclusivo para los que entrenan con filosofía. Agotada por el momento.",
+imgs: ["mentzer.jpg"],
+soldOut: true
+},
+{
+name: "Musculosa Kevin Levrone",
+desc: "Tributo al Maryland Muscle Machine. Para los que saben lo que es llegar a la cima. Agotada por el momento.",
+imgs: ["kevin.jpg"],
+soldOut: true
+}
+];
+
+let muscuIndex = 0;
+const totalMuscu = 3;
+
+function muscuMove(direction){
+const visible = getVisibleCount();
+const maxIndex = Math.max(0, totalMuscu - visible);
+muscuIndex += direction;
+if(muscuIndex < 0) muscuIndex = maxIndex;
+if(muscuIndex > maxIndex) muscuIndex = 0;
+updateMuscuCarousel();
+}
+
+function updateMuscuCarousel(){
+const grid = document.getElementById("muscuGrid");
+if(!grid) return;
+const card = grid.querySelector(".product-card");
+if(!card) return;
+const cardWidth = card.offsetWidth;
+const gap = 25;
+grid.style.transform = `translateX(-${muscuIndex * (cardWidth + gap)}px)`;
+}
+
+// Muscu swipe
+let muscuTouchStart = 0;
+const muscuViewport = document.getElementById("muscuViewport");
+if(muscuViewport){
+muscuViewport.addEventListener("touchstart", e => { muscuTouchStart = e.changedTouches[0].screenX; }, {passive:true});
+muscuViewport.addEventListener("touchend", e => {
+const diff = muscuTouchStart - e.changedTouches[0].screenX;
+if(Math.abs(diff) > 40) muscuMove(diff > 0 ? 1 : -1);
+}, {passive:true});
+}
+
+function openMuscuModal(idx){
+const p = muscuProducts[idx];
+currentProduct = p;
+modalSlideIndex = 0;
+
+document.getElementById("modalTitle").innerText = "AGOTADO";
+document.getElementById("modalTitle").style.color = "#ff0000";
+document.getElementById("modalTitle").style.fontSize = "3rem";
+document.getElementById("modalTitle").style.letterSpacing = "6px";
+document.getElementById("modalDesc").innerText = p.desc;
+
+document.getElementById("modalOldPrice").style.display = "none";
+document.getElementById("modalPrice").innerText = "";
+
+document.getElementById("modalImg0").src = p.imgs[0];
+document.getElementById("modalImg1").src = "";
+document.getElementById("modalSlides").style.transform = "translateX(0)";
+document.querySelectorAll(".modal-slide-btn").forEach(b => b.style.display = "none");
+
+document.getElementById("modalSizes").innerHTML = "";
+document.getElementById("modalSizes").style.display = "none";
+document.getElementById("sizeSoldoutMsg").style.display = "none";
+document.querySelector(".modal-actions").style.display = "none";
+
+document.getElementById("modalReviewSection").style.display = "none";
+document.querySelector(".size-guide-btn").style.display = "none";
+document.getElementById("productModal").classList.add("active");
+document.body.style.overflow = "hidden";
+}
+
+// CALZAS DATA
+
+const calzaProducts = [
+{
+name: "Calza de Lycra",
+desc: "Diseñada para el entrenamiento femenino. Ajuste perfecto, tela de Lycra de alta compresión que se adapta a tu cuerpo y te acompaña en cada movimiento.",
+imgs: ["calza.jpg"],
+price: 0,
+soldOut: false,
+soldoutSizes: ["S","M"]
+}
+];
+
+let calzaIndex = 0;
+const totalCalza = 1;
+
+function calzaMove(direction){
+const visible = getVisibleCount();
+const maxIndex = Math.max(0, totalCalza - visible);
+calzaIndex += direction;
+if(calzaIndex < 0) calzaIndex = maxIndex;
+if(calzaIndex > maxIndex) calzaIndex = 0;
+updateCalzaCarousel();
+}
+
+function updateCalzaCarousel(){
+const grid = document.getElementById("calzaGrid");
+if(!grid) return;
+const card = grid.querySelector(".product-card");
+if(!card) return;
+const cardWidth = card.offsetWidth;
+const gap = 25;
+grid.style.transform = `translateX(-${calzaIndex * (cardWidth + gap)}px)`;
+}
+
+function openCalzaModal(idx){
+const p = calzaProducts[idx];
+currentProduct = p;
+modalSlideIndex = 0;
+selectedSize = "L";
+
+document.getElementById("modalTitle").innerText = p.name;
+document.getElementById("modalTitle").style.color = "white";
+document.getElementById("modalTitle").style.fontSize = "";
+document.getElementById("modalTitle").style.letterSpacing = "";
+document.getElementById("modalDesc").innerText = p.desc;
+document.getElementById("modalOldPrice").style.display = "none";
+document.getElementById("modalPrice").innerText = "";
+
+document.getElementById("modalImg0").src = p.imgs[0];
+document.getElementById("modalImg1").src = "";
+document.getElementById("modalSlides").style.transform = "translateX(0)";
+document.querySelectorAll(".modal-slide-btn").forEach(b => b.style.display = "none");
+
+const sizesEl = document.getElementById("modalSizes");
+sizesEl.innerHTML = "";
+sizesEl.style.display = "flex";
+const soldoutMsg = document.getElementById("sizeSoldoutMsg");
+soldoutMsg.style.display = "none";
+
+const calzaSizes = ["S","M","L","XL"];
+calzaSizes.forEach(s => {
+const isSoldout = p.soldoutSizes.includes(s);
+const btn = document.createElement("button");
+btn.className = "size-btn" + (s === selectedSize && !isSoldout ? " active" : "") + (isSoldout ? " soldout" : "");
+btn.innerText = s;
+btn.onclick = () => {
+if(isSoldout){
+soldoutMsg.style.display = "block";
+sizesEl.querySelectorAll(".size-btn:not(.soldout)").forEach(b => b.classList.remove("active"));
+}else{
+soldoutMsg.style.display = "none";
+selectedSize = s;
+sizesEl.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active"));
+btn.classList.add("active");
+}
+};
+sizesEl.appendChild(btn);
+});
+
+document.querySelector(".modal-actions").style.display = "flex";
+document.getElementById("modalReviewSection").style.display = "none";
+document.getElementById("productModal").classList.add("active");
+document.body.style.overflow = "hidden";
+}
+
 let carouselIndex = 0;
 const totalProducts = 6;
 
@@ -1257,9 +2086,11 @@ const visible = getVisibleCount();
 const maxIndex = Math.max(0, totalProducts - visible);
 if(carouselIndex > maxIndex) carouselIndex = 0;
 updateCarousel();
+updateMuscuCarousel();
+updateCalzaCarousel();
 });
 
-window.addEventListener("load", updateCarousel);
+window.addEventListener("load", ()=>{ updateCarousel(); updateMuscuCarousel(); updateCalzaCarousel(); });
 
 // SWIPE TÁCTIL
 
@@ -1398,22 +2229,14 @@ function closeInvalidAlert(){
 document.getElementById("invalidAlert").classList.remove("active");
 }
 
-function openSizeGuide(){
-
-document
-.getElementById("sizeGuideModal")
-.classList
-.add("active");
-
+function openSizeGuide(src){
+src = src || "tallecompres.jpg";
+document.getElementById("sizeGuideImg").src = src;
+document.getElementById("sizeGuideModal").classList.add("active");
 }
 
 function closeSizeGuide(){
-
-document
-.getElementById("sizeGuideModal")
-.classList
-.remove("active");
-
+document.getElementById("sizeGuideModal").classList.remove("active");
 }
 
 function addToCart(name,price,sizeId){
@@ -1597,6 +2420,220 @@ btn.style.borderColor = "#444";
 });
 }
 
+// ── HAMBURGER MENU ────────────────────────────────────────────
+
+function toggleMenu(){
+const menu = document.getElementById("hamburgerMenu");
+const backdrop = document.getElementById("menuBackdrop");
+menu.classList.toggle("active");
+backdrop.classList.toggle("active");
+}
+
+function closeMenu(){
+document.getElementById("hamburgerMenu").classList.remove("active");
+document.getElementById("menuBackdrop").classList.remove("active");
+}
+
+// ── THEME TOGGLE ──────────────────────────────────────────────
+
+let isLightTheme = false;
+
+function toggleTheme(){
+isLightTheme = !isLightTheme;
+const body = document.body;
+const toggle = document.getElementById("themeToggle");
+const label = document.getElementById("themeLabel");
+const logo = document.querySelector(".logo");
+
+if(isLightTheme){
+body.classList.add("light-theme");
+toggle.classList.add("light-on");
+label.textContent = "Tema oscuro";
+if(logo) logo.src = "blazelogo1.jpg";
+} else {
+body.classList.remove("light-theme");
+toggle.classList.remove("light-on");
+label.textContent = "Tema claro";
+if(logo) logo.src = "blazelogo.png";
+}
+}
+
+// ── SEARCH ────────────────────────────────────────────────────
+
+const searchCatalog = [
+{name:"Compresivo Tribal Rojo",   price:"$30.000 ARS",   img:"compresrojo.jpg",   fn:"openProductModal", arg:0},
+{name:"Compresivo Tribal Morado", price:"$30.000 ARS",   img:"compresmorado.jpg", fn:"openProductModal", arg:1},
+{name:"Compresivo Tribal Blanco", price:"$30.000 ARS",   img:"compresblanco.jpg", fn:"openProductModal", arg:2},
+{name:"Compresivo Básico",        price:"$25.000 ARS",   img:"compresbasico.jpg", fn:"openProductModal", arg:3},
+{name:"Compresivo de Berserk",    price:"$25.000 ARS",   img:"berserk.jpg",       fn:"openProductModal", arg:4},
+{name:"Compresivo Clásico",       price:"$25.000 ARS",   img:"clasico.jpg",       fn:"openProductModal", arg:5},
+{name:"Musculosa Tribal",         price:"Consultá precio", img:"muscu.jpg",       fn:"openMuscuModal",   arg:0},
+{name:"Musculosa Mike Mentzer",   price:"Consultá precio", img:"mentzer.jpg",     fn:"openMuscuModal",   arg:1},
+{name:"Musculosa Kevin Levrone",  price:"Consultá precio", img:"kevin.jpg",       fn:"openMuscuModal",   arg:2},
+{name:"Calza de Lycra",           price:"Consultá precio", img:"calza.jpg",       fn:"openCalzaModal",   arg:0},
+];
+
+let _lastSearchMatches = [];
+function handleSearch(){
+const query = document.getElementById("searchInput").value.trim().toLowerCase();
+const resultsEl = document.getElementById("searchResults");
+
+if(query.length === 0){
+resultsEl.innerHTML = "";
+resultsEl.classList.remove("visible");
+return;
+}
+
+const matches = searchCatalog.filter(p =>
+p.name.toLowerCase().includes(query)
+);
+_lastSearchMatches = matches;
+
+if(matches.length === 0){
+resultsEl.innerHTML = '<div class="search-no-results">Sin resultados para \"' + query + '\"</div>';
+resultsEl.classList.add("visible");
+return;
+}
+
+resultsEl.innerHTML = matches.map((p,i) =>
+'<div class="search-result-item" onclick="selectSearchResult(' + i + ')">' +
+'<img src="' + p.img + '" class="search-result-thumb" alt="' + p.name + '">' +
+'<div>' +
+'<div class="search-result-name">' + p.name + '</div>' +
+'<div class="search-result-price">' + p.price + '</div>' +
+'</div>' +
+'</div>'
+).join("");
+
+resultsEl.classList.add("visible");
+}
+
+function selectSearchResult(i){
+const p = _lastSearchMatches[i];
+document.getElementById("searchInput").value = "";
+document.getElementById("searchResults").classList.remove("visible");
+closeMenu();
+if(p) window[p.fn](p.arg);
+}
+
+function clearSearch(){
+document.getElementById("searchInput").value = "";
+document.getElementById("searchResults").innerHTML = "";
+document.getElementById("searchResults").classList.remove("visible");
+document.getElementById("searchInput").focus();
+}
+
+document.addEventListener("click", function(e){
+const wrapper = document.getElementById("searchWrapper");
+if(wrapper && !wrapper.contains(e.target)){
+document.getElementById("searchResults").classList.remove("visible");
+}
+});
+
+let _lastInlineMatches = [];
+
+function handleInlineSearch(){
+const query = document.getElementById("inlineSearchInput").value.trim().toLowerCase();
+const resultsEl = document.getElementById("inlineSearchResults");
+const clearBtn = document.getElementById("inlineClearBtn");
+if(clearBtn) clearBtn.style.display = query.length > 0 ? "block" : "none";
+
+if(query.length === 0){
+resultsEl.style.display = "none";
+resultsEl.innerHTML = "";
+return;
+}
+
+const matches = searchCatalog.filter(p => p.name.toLowerCase().includes(query));
+_lastInlineMatches = matches;
+
+if(matches.length === 0){
+resultsEl.innerHTML = '<div class="search-no-results">Sin resultados</div>';
+resultsEl.style.display = "block";
+return;
+}
+
+resultsEl.innerHTML = matches.map((p,i) =>
+'<div class="search-result-item" onclick="inlineSelectResult(' + i + ')">' +
+'<img src="' + p.img + '" class="search-result-thumb" alt="' + p.name + '">' +
+'<div>' +
+'<div class="search-result-name">' + p.name + '</div>' +
+'<div class="search-result-price">' + p.price + '</div>' +
+'</div>' +
+'</div>'
+).join("");
+resultsEl.style.display = "block";
+}
+
+function commitInlineSearch(){
+const query = document.getElementById("inlineSearchInput").value.trim();
+if(!query) return;
+document.getElementById("inlineSearchResults").style.display = "none";
+
+const matches = searchCatalog.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
+_lastInlineMatches = matches;
+
+["secCompresion","secMusculosas","secCalzas"].forEach(id => {
+const el = document.getElementById(id);
+if(el) el.style.display = "none";
+});
+
+const secResults = document.getElementById("secSearchResults");
+const grid = document.getElementById("searchResultsGrid");
+const title = document.getElementById("searchResultsTitle");
+
+if(matches.length === 0){
+title.textContent = 'Sin resultados para "' + query + '"';
+grid.innerHTML = '<p style="color:#666;font-size:0.95rem;">Probá con otro término.</p>';
+} else {
+title.textContent = matches.length + ' resultado' + (matches.length > 1 ? 's' : '') + ' para "' + query + '"';
+grid.innerHTML = matches.map((p,i) =>
+'<div class="product-card" onclick="inlineSelectResult(' + i + ')">' +
+'<img src="' + p.img + '" class="card-thumb" alt="' + p.name + '">' +
+'<div class="card-label">' +
+'<div class="card-name">' + p.name + '</div>' +
+'<div class="card-price">' + p.price + '</div>' +
+'</div>' +
+'</div>'
+).join("");
+}
+
+secResults.style.display = "block";
+secResults.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function inlineSelectResult(i){
+const p = _lastInlineMatches[i];
+if(p) window[p.fn](p.arg);
+}
+
+function clearInlineSearch(){
+const inp = document.getElementById("inlineSearchInput");
+if(inp){ inp.value = ""; }
+const clearBtn = document.getElementById("inlineClearBtn");
+if(clearBtn) clearBtn.style.display = "none";
+const res = document.getElementById("inlineSearchResults");
+if(res){ res.style.display = "none"; res.innerHTML = ""; }
+const secResults = document.getElementById("secSearchResults");
+if(secResults) secResults.style.display = "none";
+const grid = document.getElementById("searchResultsGrid");
+if(grid) grid.innerHTML = "";
+_lastInlineMatches = [];
+["secCompresion","secMusculosas","secCalzas"].forEach(id => {
+const el = document.getElementById(id);
+if(el) el.style.display = "";
+});
+if(inp) inp.focus();
+}
+
+document.addEventListener("click", function(e){
+const inp = document.getElementById("inlineSearchInput");
+const res = document.getElementById("inlineSearchResults");
+const btn = document.getElementById("inlineClearBtn");
+if(inp && res && !inp.contains(e.target) && !res.contains(e.target) && e.target !== btn){
+res.style.display = "none";
+}
+});
 </script>
 
 </body>
