@@ -186,8 +186,7 @@ font-size:0.95rem;
 font-weight:700;
 }
 
-/* PRODUCT MODAL */
-
+/* PRODUCT MODAL - MODIFICADO PARA RESOLVER EL SCROLL */
 .product-modal-overlay{
 display:none;
 position:fixed;
@@ -196,7 +195,7 @@ width:100%;height:100%;
 background:#000;
 z-index:2000;
 flex-direction:column;
-overflow:hidden;
+overflow-y:auto; /* Permite el scroll general del modal */
 }
 
 .product-modal-overlay.active{
@@ -229,6 +228,9 @@ display:flex;align-items:center;justify-content:center;
 position:relative;
 width:100%;
 aspect-ratio:1/1;
+max-height:60vh; /* Evita que la imagen cubra toda la pantalla en móviles */
+max-width:700px; /* Lo alinea estéticamente con la info de abajo */
+margin:0 auto;
 flex-shrink:0;
 overflow:hidden;
 background:#0a0a0a;
@@ -269,10 +271,8 @@ z-index:5;
 .modal-slide-btn.right{ right:12px; }
 
 .modal-product-info{
-overflow-y:scroll;
-scrollbar-width:thin;
-scrollbar-color:#ff0000 #1a1a1a;
-flex:1;
+overflow-y:visible; /* El scroll ahora lo maneja el contenedor padre */
+flex:none;
 padding:24px 20px 40px;
 display:flex;
 flex-direction:column;
@@ -280,19 +280,6 @@ gap:16px;
 max-width:700px;
 margin:0 auto;
 width:100%;
-}
-
-.modal-product-info::-webkit-scrollbar{
-width:6px;
-}
-
-.modal-product-info::-webkit-scrollbar-track{
-background:#1a1a1a;
-}
-
-.modal-product-info::-webkit-scrollbar-thumb{
-background:var(--red);
-border-radius:3px;
 }
 
 .modal-product-title{
