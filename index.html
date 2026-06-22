@@ -1780,9 +1780,9 @@ oldEl.style.display = "none";
 priceEl.innerText = p.soldOut ? "" : `$${finalPrice.toLocaleString()} ARS`;
 
 document.getElementById("modalImg0").src = p.imgs[0];
-document.getElementById("modalImg1").src = "";
+document.getElementById("modalImg1").src = p.imgs[1] || "";
 document.getElementById("modalSlides").style.transform = "translateX(0)";
-document.querySelectorAll(".modal-slide-btn").forEach(b => b.style.display = "none");
+document.querySelectorAll(".modal-slide-btn").forEach(b => b.style.display = p.imgs[1] ? "" : "none");
 
 const sizesEl = document.getElementById("modalSizes");
 sizesEl.innerHTML = "";
@@ -1946,9 +1946,9 @@ document.getElementById("modalOldPrice").style.display = "none";
 document.getElementById("modalPrice").innerText = "";
 
 document.getElementById("modalImg0").src = p.imgs[0];
-document.getElementById("modalImg1").src = "";
+document.getElementById("modalImg1").src = p.imgs[1] || "";
 document.getElementById("modalSlides").style.transform = "translateX(0)";
-document.querySelectorAll(".modal-slide-btn").forEach(b => b.style.display = "none");
+document.querySelectorAll(".modal-slide-btn").forEach(b => b.style.display = p.imgs[1] ? "" : "none");
 
 document.getElementById("modalSizes").innerHTML = "";
 document.getElementById("modalSizes").style.display = "none";
@@ -2011,9 +2011,9 @@ document.getElementById("modalOldPrice").style.display = "none";
 document.getElementById("modalPrice").innerText = "";
 
 document.getElementById("modalImg0").src = p.imgs[0];
-document.getElementById("modalImg1").src = "";
+document.getElementById("modalImg1").src = p.imgs[1] || "";
 document.getElementById("modalSlides").style.transform = "translateX(0)";
-document.querySelectorAll(".modal-slide-btn").forEach(b => b.style.display = "none");
+document.querySelectorAll(".modal-slide-btn").forEach(b => b.style.display = p.imgs[1] ? "" : "none");
 
 const sizesEl = document.getElementById("modalSizes");
 sizesEl.innerHTML = "";
