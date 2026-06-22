@@ -83,10 +83,22 @@ padding-left:15px;
 margin-bottom:30px;
 }
 
+.carousel-wrapper{
+position:relative;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.carousel-viewport{
+overflow:hidden;
+width:100%;
+}
+
 .products-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+display:flex;
 gap:25px;
+transition:transform 0.4s ease;
 }
 
 .product-card{
@@ -95,6 +107,8 @@ border:1px solid #222;
 border-radius:18px;
 overflow:hidden;
 transition:0.3s;
+flex:0 0 calc(25% - 19px);
+min-width:0;
 }
 
 .product-card:hover{
@@ -103,62 +117,220 @@ border-color:var(--red);
 box-shadow:0 0 20px rgba(255,0,0,0.25);
 }
 
-/* SLIDER */
-
-.slider{
-position:relative;
-overflow:hidden;
-width:100%;
-height:340px;
+.carousel-arrow{
+flex-shrink:0;
+width:44px;
+height:44px;
+border-radius:50%;
+border:1px solid var(--red);
+background:#0f0f0f;
+color:white;
+font-size:1.2rem;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:5;
+transition:0.2s;
 }
 
-.slides{
+.carousel-arrow:hover{
+background:var(--red);
+}
+
+.carousel-arrow:disabled{
+opacity:0.3;
+cursor:default;
+background:#0f0f0f;
+}
+
+@media (max-width:1024px){
+.product-card{
+flex:0 0 calc(33.333% - 17px);
+}
+}
+
+@media (max-width:680px){
+.product-card{
+flex:0 0 calc(50% - 13px);
+}
+}
+
+/* CATALOG CARDS */
+
+.product-card{
+cursor:pointer;
+}
+
+.card-thumb{
+width:100%;
+aspect-ratio:1/1;
+object-fit:cover;
+display:block;
+}
+
+.card-label{
+padding:12px;
+background:#0f0f0f;
+}
+
+.card-name{
+font-size:0.9rem;
+font-weight:700;
+margin-bottom:4px;
+}
+
+.card-price{
+color:var(--red);
+font-size:0.95rem;
+font-weight:700;
+}
+
+/* PRODUCT MODAL */
+
+.product-modal-overlay{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:#000;
+z-index:2000;
+flex-direction:column;
+overflow-y:auto;
+}
+
+.product-modal-overlay.active{
 display:flex;
-transition:0.4s;
+}
+
+.modal-close-top{
+position:sticky;
+top:0;
+z-index:10;
+display:flex;
+justify-content:flex-end;
+padding:15px 20px;
+background:rgba(0,0,0,0.85);
+backdrop-filter:blur(6px);
+}
+
+.modal-close-btn{
+width:44px;height:44px;
+border-radius:50%;
+border:1px solid #444;
+background:#111;
+color:white;
+font-size:1.3rem;
+cursor:pointer;
+display:flex;align-items:center;justify-content:center;
+}
+
+.modal-img-slider{
+position:relative;
+width:100%;
+max-height:55vh;
+overflow:hidden;
+}
+
+.modal-slides{
+display:flex;
+transition:transform 0.4s ease;
 height:100%;
 }
 
-.slides img{
+.modal-slides img{
 width:100%;
 min-width:100%;
-height:340px;
-object-fit:cover;
-background:#111;
+max-height:55vh;
+object-fit:contain;
+background:#0a0a0a;
 }
 
-.slide-btn{
+.modal-slide-btn{
 position:absolute;
 top:50%;
 transform:translateY(-50%);
-width:40px;
-height:40px;
-border:none;
+width:40px;height:40px;
 border-radius:50%;
+border:none;
 background:rgba(0,0,0,0.6);
 color:white;
-font-size:1rem;
+font-size:1.1rem;
 cursor:pointer;
 z-index:5;
 }
 
-.slide-btn.left{
-left:10px;
+.modal-slide-btn.left{ left:12px; }
+.modal-slide-btn.right{ right:12px; }
+
+.modal-product-info{
+padding:24px 20px 40px;
+display:flex;
+flex-direction:column;
+gap:16px;
+max-width:700px;
+margin:0 auto;
+width:100%;
 }
 
-.slide-btn.right{
-right:10px;
+.modal-product-title{
+font-size:1.6rem;
+font-weight:900;
 }
 
-.product-info{
-padding:20px;
+.modal-product-desc{
+color:#aaa;
+font-size:0.95rem;
+line-height:1.7;
+}
+
+.modal-old-price{
+color:#888;
+font-size:0.65rem;
+text-decoration:line-through;
+display:none;
+}
+
+.modal-price{
+color:var(--red);
+font-size:1.4rem;
+font-weight:700;
+}
+
+.modal-size-label{
+font-size:0.85rem;
+color:#aaa;
+margin-bottom:4px;
+}
+
+.modal-sizes{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.size-btn{
+padding:10px 18px;
+border-radius:10px;
+border:1px solid #444;
+background:#111;
+color:white;
+font-weight:700;
+cursor:pointer;
+font-size:0.95rem;
+transition:0.2s;
+}
+
+.size-btn.active{
+border-color:var(--red);
+background:var(--red);
+}
+
+.modal-actions{
 display:flex;
 flex-direction:column;
 gap:12px;
-}
-
-.product-title{
-font-size:1.2rem;
-font-weight:700;
+margin-top:4px;
 }
 
 .price{
@@ -572,6 +744,54 @@ Cancelar
 </div>
 </div>
 
+<!-- PRODUCT DETAIL MODAL -->
+
+<div class="product-modal-overlay" id="productModal">
+
+<div class="modal-close-top">
+<button class="modal-close-btn" onclick="closeProductModal()">✕</button>
+</div>
+
+<div class="modal-img-slider">
+<button class="modal-slide-btn left" onclick="modalSlide(-1)">❮</button>
+<div class="modal-slides" id="modalSlides">
+<img id="modalImg0" src="">
+<img id="modalImg1" src="">
+</div>
+<button class="modal-slide-btn right" onclick="modalSlide(1)">❯</button>
+</div>
+
+<div class="modal-product-info">
+
+<div class="modal-product-title" id="modalTitle"></div>
+<div class="modal-product-desc" id="modalDesc"></div>
+
+<div>
+<div class="modal-old-price" id="modalOldPrice"></div>
+<div class="modal-price" id="modalPrice"></div>
+</div>
+
+<div>
+<div class="modal-size-label">Seleccioná tu talle:</div>
+<div class="modal-sizes" id="modalSizes"></div>
+</div>
+
+<button class="btn size-guide-btn" onclick="openSizeGuide()" style="width:100%;">
+Ver Guía de Talles
+</button>
+
+<div class="modal-actions">
+<button class="btn cart-btn" onclick="modalAddToCart()" style="width:100%;">
+Agregar al Carrito
+</button>
+<button class="btn wa-btn" onclick="modalBuyNow()" style="width:100%;">
+COMPRAR YA
+</button>
+</div>
+
+</div>
+</div>
+
 <!-- DATOS DE TRANSFERENCIA -->
 
 <div class="discount-alert-overlay" id="transferModal">
@@ -682,319 +902,71 @@ Ropa diseñada para verte estético en el gym y en la calle.
 Remeras de Compresión
 </h2>
 
-<div class="products-grid">
+<div class="carousel-wrapper">
+
+<button class="carousel-arrow" id="carouselPrev" onclick="carouselMove(-1)">❮</button>
+
+<div class="carousel-viewport" id="carouselViewport">
+<div class="products-grid" id="productsGrid">
 
 <!-- ROJO -->
-
-<div class="product-card">
-
-<div class="slider">
-
-<button class="slide-btn left" onclick="prevSlide(0)">❮</button>
-
-<div class="slides" id="slider0">
-<img src="compresrojo.jpg">
-<img src="compresrojo1.jpg">
-</div>
-
-<button class="slide-btn right" onclick="nextSlide(0)">❯</button>
-
-</div>
-
-<div class="product-info">
-
-<div class="product-title">
-Compresivo Tribal Rojo
-</div>
-
-<div class="old-price" id="old0"></div>
-<div class="price" id="price0">
-$30.000 ARS
-</div>
-
-<select id="size0">
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-</select>
-
-<button class="btn size-guide-btn" onclick="openSizeGuide()">
-Ver Guía de Talles
-</button>
-
-<button class="btn cart-btn"
-onclick="addToCart('Compresivo Tribal Rojo',30000,'size0')">
-Agregar al Carrito
-</button>
-
-<button class="btn wa-btn"
-onclick="buyNow('Compresivo Tribal Rojo',30000,'size0')">
-COMPRAR YA
-</button>
-
+<div class="product-card" onclick="openProductModal(0)">
+<img src="compresrojo.jpg" class="card-thumb" alt="Compresivo Tribal Rojo">
+<div class="card-label">
+<div class="card-name">Compresivo Tribal Rojo</div>
+<div class="card-price" id="price0">$30.000 ARS</div>
 </div>
 </div>
 
 <!-- MORADO -->
-
-<div class="product-card">
-
-<div class="slider">
-
-<button class="slide-btn left" onclick="prevSlide(1)">❮</button>
-
-<div class="slides" id="slider1">
-<img src="compresmorado.jpg">
-<img src="compresmorado1.jpg">
-</div>
-
-<button class="slide-btn right" onclick="nextSlide(1)">❯</button>
-
-</div>
-
-<div class="product-info">
-
-<div class="product-title">
-Compresivo Tribal Morado
-</div>
-
-<div class="old-price" id="old1"></div>
-<div class="price" id="price1">
-$30.000 ARS
-</div>
-
-<select id="size1">
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-</select>
-
-<button class="btn size-guide-btn" onclick="openSizeGuide()">
-Ver Guía de Talles
-</button>
-
-<button class="btn cart-btn"
-onclick="addToCart('Compresivo Tribal Morado',30000,'size1')">
-Agregar al Carrito
-</button>
-
-<button class="btn wa-btn"
-onclick="buyNow('Compresivo Tribal Morado',30000,'size1')">
-COMPRAR YA
-</button>
-
+<div class="product-card" onclick="openProductModal(1)">
+<img src="compresmorado.jpg" class="card-thumb" alt="Compresivo Tribal Morado">
+<div class="card-label">
+<div class="card-name">Compresivo Tribal Morado</div>
+<div class="card-price" id="price1">$30.000 ARS</div>
 </div>
 </div>
 
 <!-- BLANCO -->
-
-<div class="product-card">
-
-<div class="slider">
-
-<button class="slide-btn left" onclick="prevSlide(2)">❮</button>
-
-<div class="slides" id="slider2">
-<img src="compresblanco.jpg">
-<img src="compresblanco1.jpg">
-</div>
-
-<button class="slide-btn right" onclick="nextSlide(2)">❯</button>
-
-</div>
-
-<div class="product-info">
-
-<div class="product-title">
-Compresivo Tribal Blanco
-</div>
-
-<div class="old-price" id="old2"></div>
-<div class="price" id="price2">
-$30.000 ARS
-</div>
-
-<select id="size2">
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-</select>
-
-<button class="btn size-guide-btn" onclick="openSizeGuide()">
-Ver Guía de Talles
-</button>
-
-<button class="btn cart-btn"
-onclick="addToCart('Compresivo Tribal Blanco',30000,'size2')">
-Agregar al Carrito
-</button>
-
-<button class="btn wa-btn"
-onclick="buyNow('Compresivo Tribal Blanco',30000,'size2')">
-COMPRAR YA
-</button>
-
+<div class="product-card" onclick="openProductModal(2)">
+<img src="compresblanco.jpg" class="card-thumb" alt="Compresivo Tribal Blanco">
+<div class="card-label">
+<div class="card-name">Compresivo Tribal Blanco</div>
+<div class="card-price" id="price2">$30.000 ARS</div>
 </div>
 </div>
 
 <!-- BASICO -->
-
-<div class="product-card">
-
-<div class="slider">
-
-<button class="slide-btn left" onclick="prevSlide(3)">❮</button>
-
-<div class="slides" id="slider3">
-<img src="compresbasico.jpg">
-<img src="compresbasico1.jpg">
-</div>
-
-<button class="slide-btn right" onclick="nextSlide(3)">❯</button>
-
-</div>
-
-<div class="product-info">
-
-<div class="product-title">
-Compresivo Básico
-</div>
-
-<div class="old-price" id="old3"></div>
-<div class="price" id="price3">
-$25.000 ARS
-</div>
-
-<select id="size3">
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-</select>
-
-<button class="btn size-guide-btn" onclick="openSizeGuide()">
-Ver Guía de Talles
-</button>
-
-<button class="btn cart-btn"
-onclick="addToCart('Compresivo Básico',25000,'size3')">
-Agregar al Carrito
-</button>
-
-<button class="btn wa-btn"
-onclick="buyNow('Compresivo Básico',25000,'size3')">
-COMPRAR YA
-</button>
-
+<div class="product-card" onclick="openProductModal(3)">
+<img src="compresbasico.jpg" class="card-thumb" alt="Compresivo Básico">
+<div class="card-label">
+<div class="card-name">Compresivo Básico</div>
+<div class="card-price" id="price3">$25.000 ARS</div>
 </div>
 </div>
 
 <!-- BERSERK -->
-
-<div class="product-card">
-
-<div class="slider">
-
-<button class="slide-btn left" onclick="prevSlide(4)">❮</button>
-
-<div class="slides" id="slider4">
-<img src="berserk.jpg">
-<img src="berserk1.jpg">
-</div>
-
-<button class="slide-btn right" onclick="nextSlide(4)">❯</button>
-
-</div>
-
-<div class="product-info">
-
-<div class="product-title">
-Compresivo de Berserk
-</div>
-
-<div class="old-price" id="old4"></div>
-<div class="price" id="price4">
-$25.000 ARS
-</div>
-
-<select id="size4">
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-</select>
-
-<button class="btn size-guide-btn" onclick="openSizeGuide()">
-Ver Guía de Talles
-</button>
-
-<button class="btn cart-btn"
-onclick="addToCart('Compresivo de Berserk',25000,'size4')">
-Agregar al Carrito
-</button>
-
-<button class="btn wa-btn"
-onclick="buyNow('Compresivo de Berserk',25000,'size4')">
-COMPRAR YA
-</button>
-
+<div class="product-card" onclick="openProductModal(4)">
+<img src="berserk.jpg" class="card-thumb" alt="Compresivo de Berserk">
+<div class="card-label">
+<div class="card-name">Compresivo de Berserk</div>
+<div class="card-price" id="price4">$25.000 ARS</div>
 </div>
 </div>
 
 <!-- CLASICO -->
-
-<div class="product-card">
-
-<div class="slider">
-
-<button class="slide-btn left" onclick="prevSlide(5)">❮</button>
-
-<div class="slides" id="slider5">
-<img src="clasico.jpg">
-<img src="clasico1.jpg">
+<div class="product-card" onclick="openProductModal(5)">
+<img src="clasico.jpg" class="card-thumb" alt="Compresivo Clásico">
+<div class="card-label">
+<div class="card-name">Compresivo Clásico</div>
+<div class="card-price" id="price5">$25.000 ARS</div>
 </div>
-
-<button class="slide-btn right" onclick="nextSlide(5)">❯</button>
-
 </div>
-
-<div class="product-info">
-
-<div class="product-title">
-Compresivo Clásico
-</div>
-
-<div class="old-price" id="old5"></div>
-<div class="price" id="price5">
-$25.000 ARS
-</div>
-
-<select id="size5">
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-</select>
-
-<button class="btn size-guide-btn" onclick="openSizeGuide()">
-Ver Guía de Talles
-</button>
-
-<button class="btn cart-btn"
-onclick="addToCart('Compresivo Clásico',25000,'size5')">
-Agregar al Carrito
-</button>
-
-<button class="btn wa-btn"
-onclick="buyNow('Compresivo Clásico',25000,'size5')">
-COMPRAR YA
-</button>
 
 </div>
 </div>
+
+<button class="carousel-arrow" id="carouselNext" onclick="carouselMove(1)">❯</button>
 
 </div>
 
@@ -1104,6 +1076,222 @@ target="_blank">
 
 <script>
 
+// PRODUCT DATA
+
+const products = [
+{
+name: "Compresivo Tribal Rojo",
+desc: "Compresión total para entrenar al límite. Tela técnica que se adapta a tu físico y diseño tribal que no pasa desapercibido, dentro y fuera del gym.",
+imgs: ["compresrojo.jpg","compresrojo1.jpg"],
+price: 30000,
+idx: 0
+},
+{
+name: "Compresivo Tribal Morado",
+desc: "Compresión total para entrenar al límite. Tela técnica que se adapta a tu físico y diseño tribal que no pasa desapercibido, dentro y fuera del gym.",
+imgs: ["compresmorado.jpg","compresmorado1.jpg"],
+price: 30000,
+idx: 1
+},
+{
+name: "Compresivo Tribal Blanco",
+desc: "Compresión total para entrenar al límite. Tela técnica que se adapta a tu físico y diseño tribal que no pasa desapercibido, dentro y fuera del gym.",
+imgs: ["compresblanco.jpg","compresblanco1.jpg"],
+price: 30000,
+idx: 2
+},
+{
+name: "Compresivo Básico",
+desc: "El esencial que no puede faltar. Compresión cómoda, ajuste perfecto y estilo minimalista para entrenar todos los días con actitud.",
+imgs: ["compresbasico.jpg","compresbasico1.jpg"],
+price: 25000,
+idx: 3
+},
+{
+name: "Compresivo de Berserk",
+desc: "Para los que entrenan con la furia de una bestia. Diseño inspirado en el universo dark fantasy, compresión que aguanta cualquier entrenamiento.",
+imgs: ["berserk.jpg","berserk1.jpg"],
+price: 25000,
+idx: 4
+},
+{
+name: "Compresivo Clásico",
+desc: "El primero. El original. Nuestro primer diseño, compresión clásica y un ajuste que no te va a decepcionar. El punto de partida de todo lo que es BlazeBorn.",
+imgs: ["clasico.jpg","clasico1.jpg"],
+price: 25000,
+idx: 5
+}
+];
+
+const sizes = ["S","M","L","XL"];
+let currentProduct = null;
+let modalSlideIndex = 0;
+let selectedSize = "M";
+
+function openProductModal(idx){
+const p = products[idx];
+currentProduct = p;
+modalSlideIndex = 0;
+selectedSize = "M";
+
+document.getElementById("modalTitle").innerText = p.name;
+document.getElementById("modalDesc").innerText = p.desc;
+
+const finalPrice = getDiscountedPrice(p.price);
+const oldEl = document.getElementById("modalOldPrice");
+const priceEl = document.getElementById("modalPrice");
+
+if(activeDiscount !== "" && finalPrice !== p.price){
+oldEl.style.display = "block";
+oldEl.innerText = `$${p.price.toLocaleString()} ARS`;
+}else{
+oldEl.style.display = "none";
+}
+
+priceEl.innerText = `$${finalPrice.toLocaleString()} ARS`;
+
+document.getElementById("modalImg0").src = p.imgs[0];
+document.getElementById("modalImg1").src = p.imgs[1];
+document.getElementById("modalSlides").style.transform = "translateX(0)";
+
+const sizesEl = document.getElementById("modalSizes");
+sizesEl.innerHTML = "";
+sizes.forEach(s => {
+const btn = document.createElement("button");
+btn.className = "size-btn" + (s === selectedSize ? " active" : "");
+btn.innerText = s;
+btn.onclick = () => {
+selectedSize = s;
+sizesEl.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active"));
+btn.classList.add("active");
+};
+sizesEl.appendChild(btn);
+});
+
+document.getElementById("productModal").classList.add("active");
+document.body.style.overflow = "hidden";
+}
+
+function closeProductModal(){
+document.getElementById("productModal").classList.remove("active");
+document.body.style.overflow = "";
+currentProduct = null;
+}
+
+function modalSlide(dir){
+modalSlideIndex += dir;
+if(modalSlideIndex < 0) modalSlideIndex = 0;
+if(modalSlideIndex > 1) modalSlideIndex = 1;
+document.getElementById("modalSlides").style.transform =
+`translateX(-${modalSlideIndex * 100}%)`;
+}
+
+function modalAddToCart(){
+if(!currentProduct) return;
+const finalPrice = getDiscountedPrice(currentProduct.price);
+const key = `${currentProduct.name}||${selectedSize}`;
+const existing = cart.find(i => i.key === key);
+if(existing){
+existing.qty++;
+}else{
+cart.push({key, name:currentProduct.name, size:selectedSize, basePrice:currentProduct.price, qty:1});
+}
+renderCart();
+closeProductModal();
+toggleCart();
+}
+
+function modalBuyNow(){
+if(!currentProduct) return;
+openPayModal(currentProduct.name, selectedSize, currentProduct.price, null, false);
+}
+
+// Swipe on modal image slider
+let mTouchStartX = 0;
+document.addEventListener("DOMContentLoaded", ()=>{
+const slides = document.getElementById("modalSlides");
+if(!slides) return;
+slides.addEventListener("touchstart", e => { mTouchStartX = e.changedTouches[0].screenX; }, {passive:true});
+slides.addEventListener("touchend", e => {
+const diff = mTouchStartX - e.changedTouches[0].screenX;
+if(Math.abs(diff) > 40) modalSlide(diff > 0 ? 1 : -1);
+}, {passive:true});
+});
+
+let carouselIndex = 0;
+const totalProducts = 6;
+
+function getVisibleCount(){
+const w = window.innerWidth;
+if(w <= 680) return 2;
+if(w <= 1024) return 3;
+return 4;
+}
+
+function updateCarousel(){
+const grid = document.getElementById("productsGrid");
+const card = grid.querySelector(".product-card");
+if(!card) return;
+
+const cardWidth = card.offsetWidth;
+const gap = 25;
+const offset = carouselIndex * (cardWidth + gap);
+
+grid.style.transform = `translateX(-${offset}px)`;
+}
+
+function carouselMove(direction){
+const visible = getVisibleCount();
+const maxIndex = Math.max(0, totalProducts - visible);
+
+carouselIndex += direction;
+
+if(carouselIndex < 0) carouselIndex = maxIndex;
+if(carouselIndex > maxIndex) carouselIndex = 0;
+
+updateCarousel();
+}
+
+window.addEventListener("resize", ()=>{
+const visible = getVisibleCount();
+const maxIndex = Math.max(0, totalProducts - visible);
+if(carouselIndex > maxIndex) carouselIndex = 0;
+updateCarousel();
+});
+
+window.addEventListener("load", updateCarousel);
+
+// SWIPE TÁCTIL
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+const carouselViewportEl = document.getElementById("carouselViewport");
+
+if(carouselViewportEl){
+
+carouselViewportEl.addEventListener("touchstart", (e)=>{
+touchStartX = e.changedTouches[0].screenX;
+}, {passive:true});
+
+carouselViewportEl.addEventListener("touchend", (e)=>{
+touchEndX = e.changedTouches[0].screenX;
+handleSwipe();
+}, {passive:true});
+
+}
+
+function handleSwipe(){
+const diff = touchStartX - touchEndX;
+const threshold = 40;
+
+if(diff > threshold){
+carouselMove(1);
+}else if(diff < -threshold){
+carouselMove(-1);
+}
+}
+
 let cart = [];
 let activeDiscount = "";
 
@@ -1187,56 +1375,10 @@ function updatePrices(){
 for(let i=0;i<basePrices.length;i++){
 const original = basePrices[i];
 const finalPrice = getDiscountedPrice(original);
-const oldEl = document.getElementById(`old${i}`);
 const priceEl = document.getElementById(`price${i}`);
-
-if(activeDiscount !== ""){
-oldEl.style.display = "block";
-oldEl.innerHTML = `$${original.toLocaleString()} ARS`;
-}else{
-oldEl.style.display = "none";
-oldEl.innerHTML = "";
-}
-
-priceEl.innerHTML = `$${finalPrice.toLocaleString()} ARS`;
+if(priceEl) priceEl.innerHTML = `$${finalPrice.toLocaleString()} ARS`;
 }
 renderCart();
-}
-
-const currentSlides = [0,0,0,0,0,0];
-
-function updateSlider(index){
-
-const slider =
-document.getElementById(`slider${index}`);
-
-slider.style.transform =
-`translateX(-${currentSlides[index] * 100}%)`;
-
-}
-
-function nextSlide(index){
-
-currentSlides[index]++;
-
-if(currentSlides[index] > 1){
-currentSlides[index] = 0;
-}
-
-updateSlider(index);
-
-}
-
-function prevSlide(index){
-
-currentSlides[index]--;
-
-if(currentSlides[index] < 0){
-currentSlides[index] = 1;
-}
-
-updateSlider(index);
-
 }
 
 function toggleCart(){
