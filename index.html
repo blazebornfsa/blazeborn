@@ -243,8 +243,7 @@ display:flex;align-items:center;justify-content:center;
 .modal-img-slider{
 position:relative;
 width:100%;
-min-height:280px;
-max-height:55vh;
+aspect-ratio:1/1;
 overflow:hidden;
 background:#0a0a0a;
 }
@@ -253,15 +252,14 @@ background:#0a0a0a;
 display:flex;
 transition:transform 0.4s ease;
 width:100%;
-min-height:280px;
+height:100%;
 }
 
 .modal-slides img{
 width:100%;
 min-width:100%;
-min-height:280px;
-max-height:55vh;
-object-fit:contain;
+height:100%;
+object-fit:cover;
 background:#0a0a0a;
 flex-shrink:0;
 }
