@@ -186,7 +186,7 @@ font-size:0.95rem;
 font-weight:700;
 }
 
-/* PRODUCT MODAL - MODIFICADO PARA RESOLVER EL SCROLL */
+/* PRODUCT MODAL */
 .product-modal-overlay{
 display:none;
 position:fixed;
@@ -195,7 +195,7 @@ width:100%;height:100%;
 background:#000;
 z-index:2000;
 flex-direction:column;
-overflow-y:auto; /* Permite el scroll general del modal */
+overflow-y:auto;
 }
 
 .product-modal-overlay.active{
@@ -228,8 +228,8 @@ display:flex;align-items:center;justify-content:center;
 position:relative;
 width:100%;
 aspect-ratio:1/1;
-max-height:60vh; /* Evita que la imagen cubra toda la pantalla en móviles */
-max-width:700px; /* Lo alinea estéticamente con la info de abajo */
+max-height:60vh;
+max-width:700px;
 margin:0 auto;
 flex-shrink:0;
 overflow:hidden;
@@ -271,7 +271,7 @@ z-index:5;
 .modal-slide-btn.right{ right:12px; }
 
 .modal-product-info{
-overflow-y:visible; /* El scroll ahora lo maneja el contenedor padre */
+overflow-y:visible;
 flex:none;
 padding:24px 20px 40px;
 display:flex;
@@ -382,12 +382,13 @@ text-decoration:line-through;
 display:none;
 }
 
-select{
+select, .checkout-field select{
 padding:12px;
 border:none;
 border-radius:10px;
 background:#1a1a1a;
 color:white;
+width:100%;
 }
 
 .btn{
@@ -508,7 +509,7 @@ border-radius:12px;
 display:block;
 }
 
-/* AVISO DESCUENTO */
+/* AVISO DESCUENTO / MODAL DE CHECKOUT DESLIZABLE */
 
 .discount-alert-overlay{
 display:none;
@@ -530,15 +531,28 @@ display:flex;
 
 .discount-alert-box{
 background:#000;
-border:2px solid var(--green);
+border:2px solid var(--red);
 border-radius:16px;
-padding:35px 30px;
-max-width:380px;
+padding:30px 24px;
+max-width:440px;
 width:100%;
-text-align:center;
+max-height:85vh; /* Hace que el contenido no se salga en pantallas chicas */
+overflow-y:auto; /* Activa el scroll vertical */
 display:flex;
 flex-direction:column;
-gap:20px;
+gap:18px;
+}
+
+/* Personalizar barra de scroll del checkout */
+.discount-alert-box::-webkit-scrollbar {
+width:6px;
+}
+.discount-alert-box::-webkit-scrollbar-track {
+background:#000;
+}
+.discount-alert-box::-webkit-scrollbar-thumb {
+background:var(--red);
+border-radius:3px;
 }
 
 .discount-alert-box p{
@@ -562,6 +576,71 @@ align-self:center;
 
 .discount-alert-ok:hover{
 opacity:0.85;
+}
+
+/* NUEVOS CAMPOS FORMULARIO */
+.checkout-field {
+text-align:left;
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+.checkout-field label {
+font-size:0.8rem;
+color:#aaa;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:1px;
+}
+.checkout-field input, .checkout-field textarea {
+padding:11px;
+border:1px solid #222;
+border-radius:10px;
+background:#1a1a1a;
+color:white;
+font-size:0.9rem;
+font-family:'Montserrat',sans-serif;
+outline:none;
+width:100%;
+}
+.checkout-field input:focus, .checkout-field textarea:focus, .checkout-field select:focus {
+border-color:var(--red);
+}
+.delivery-alert {
+background:rgba(255,0,0,0.1);
+border:1px solid var(--red);
+padding:12px;
+border-radius:10px;
+font-size:0.85rem;
+line-height:1.5;
+color:#ffcbd1;
+text-align:left;
+}
+.shipping-options {
+display:flex;
+gap:12px;
+}
+.shipping-options label {
+flex:1;
+background:#111;
+border:1px solid #222;
+padding:12px;
+border-radius:10px;
+text-align:center;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+font-size:0.85rem;
+font-weight:600;
+color:#fff;
+text-transform:none;
+letter-spacing:0;
+}
+.shipping-options input[type="radio"] {
+width:auto;
+accent-color:var(--red);
 }
 
 /* CARRITO */
@@ -786,7 +865,7 @@ background:#1e1e1e;
 margin:8px 0;
 }
 
-/* THEME TOGGLE dentro del menú */
+/* THEME TOGGLE */
 
 .theme-toggle-row{
 display:flex;
@@ -1078,7 +1157,7 @@ border-color:#ccc;
 color:#111;
 }
 
-body.light-theme select{
+body.light-theme select, body.light-theme .checkout-field select{
 background:#ececec;
 color:#111;
 }
@@ -1109,19 +1188,40 @@ background:#fff;
 border-color:#ddd;
 }
 
+body.light-theme .discount-alert-box {
+background:#fff;
+border-color:var(--red);
+}
+body.light-theme .discount-alert-box p {
+color:#111;
+}
+body.light-theme .checkout-field label {
+color:#555;
+}
+body.light-theme .checkout-field input, body.light-theme .checkout-field textarea {
+background:#f5f5f5;
+color:#111;
+border-color:#ccc;
+}
+body.light-theme .shipping-options label {
+background:#f5f5f5;
+border-color:#ccc;
+color:#111;
+}
+body.light-theme .delivery-alert {
+background:rgba(255,0,0,0.05);
+color:#800000;
+}
 
 </style>
 </head>
 
 <body>
 
-<!-- HAMBURGER BUTTON -->
 <button class="hamburger-btn" onclick="toggleMenu()" id="hamburgerBtn" aria-label="Menú">☰</button>
 
-<!-- MENU BACKDROP -->
 <div class="menu-backdrop" id="menuBackdrop" onclick="closeMenu()"></div>
 
-<!-- HAMBURGER MENU -->
 <div class="hamburger-menu" id="hamburgerMenu">
 
   <span class="menu-title">Opciones</span>
@@ -1153,8 +1253,6 @@ border-color:#ddd;
 
 </div>
 
-<!-- CARRITO -->
-
 <div class="cart-floating" onclick="toggleCart()">
 <img src="carrito.png" style="width:34px;height:34px;object-fit:contain;">
 </div>
@@ -1181,31 +1279,31 @@ COMPRAR YA
 
 </div>
 
-<!-- MODAL DE PAGO -->
-
 <div class="discount-alert-overlay" id="payModal">
-<div class="discount-alert-box" style="max-width:420px;gap:16px;">
+<div class="discount-alert-box">
 
-<h3 style="color:white;font-size:1.2rem;font-weight:900;letter-spacing:1px;">
+<h3 style="color:var(--red);font-size:1.2rem;font-weight:900;letter-spacing:1px;text-align:center;">
 💳 RESUMEN DE COMPRA
 </h3>
 
 <p id="payProductName" style="color:#ccc;font-size:0.95rem;white-space:pre-line;text-align:left;"></p>
 
-<p style="color:white;font-size:1rem;">
+<p style="color:white;font-size:1rem;text-align:center;">
 <span id="payOriginalTotal" style="display:none;color:#888;font-size:0.6rem;text-decoration:line-through;margin-right:6px;"></span>
 Total a pagar: <span id="payTotal" style="color:var(--green);font-weight:700;"></span>
 </p>
 
-<p style="color:#aaa;font-size:0.85rem;line-height:1.6;">
-Hacé clic en <strong style="color:white;">Pagar con Transferencia</strong>, completá la transferencia a nuestro alias <strong style="color:var(--green);">blazeborn.ar</strong> por el monto indicado, y luego confirmá tu pedido por WhatsApp adjuntando el comprobante.
-</p>
+<div class="checkout-field">
+<label>Medio de Pago</label>
+<select id="paymentMethod">
+<option value="Transferencia">Transferencia Bancaria</option>
+</select>
+</div>
 
-<div style="display:flex;flex-direction:column;gap:6px;">
-<span style="color:var(--green);font-size:0.8rem;font-weight:700;">Aplicar código de descuento</span>
-<div style="display:flex;gap:10px;">
-<input type="text" id="modalDiscountCode" placeholder="Ingresá tu código"
-style="flex:1;padding:10px;border:none;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;">
+<div class="checkout-field" style="background:rgba(255,255,255,0.02); padding:12px; border-radius:10px; border:1px solid #111;">
+<label style="color:var(--green);">¿Tenés un código de descuento?</label>
+<div style="display:flex;gap:10px;margin-top:4px;">
+<input type="text" id="modalDiscountCode" placeholder="Ingresá tu código" style="flex:1;text-transform:uppercase;">
 <button onclick="applyModalDiscount()"
 style="background:var(--green);color:#000;border:none;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.85rem;">
 Aplicar
@@ -1213,26 +1311,100 @@ Aplicar
 </div>
 </div>
 
-<button onclick="openTransferModal()"
-style="background:#009ee3;color:white;border:none;padding:13px 20px;border-radius:12px;font-weight:700;font-size:1rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;cursor:pointer;">
-Pagar con Transferencia
-<div style="display:flex;gap:8px;align-items:center;justify-content:center;">
-<img src="pago.png" style="width:24px;height:24px;object-fit:contain;">
-<img src="pago1.png" style="width:24px;height:24px;object-fit:contain;">
-<img src="pago2.png" style="width:24px;height:24px;object-fit:contain;">
-<img src="pago3.png" style="width:24px;height:24px;object-fit:contain;">
+<hr style="border:none; border-top:1px solid #222; margin:5px 0;">
+
+<h4 style="color:white; font-size:0.9rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:-5px;">📍 Datos de Envío</h4>
+
+<div class="checkout-field">
+<label>Provincia</label>
+<select id="selectProvincia" onchange="handleLocationChange()">
+<option value="">Seleccioná tu provincia</option>
+<option value="Formosa">Formosa</option>
+<option value="Buenos Aires">Buenos Aires</option>
+<option value="Catamarca">Catamarca</option>
+<option value="Chaco">Chaco</option>
+<option value="Chubut">Chubut</option>
+<option value="Córdoba">Córdoba</option>
+<option value="Corrientes">Corrientes</option>
+<option value="Entre Ríos">Entre Ríos</option>
+<option value="Jujuy">Jujuy</option>
+<option value="La Pampa">La Pampa</option>
+<option value="La Rioja">La Rioja</option>
+<option value="Mendoza">Mendoza</option>
+<option value="Misiones">Misiones</option>
+<option value="Neuquén">Neuquén</option>
+<option value="Río Negro">Río Negro</option>
+<option value="Salta">Salta</option>
+<option value="San Juan">San Juan</option>
+<option value="San Luis">San Luis</option>
+<option value="Santa Cruz">Santa Cruz</option>
+<option value="Santa Fe">Santa Fe</option>
+<option value="Santiago del Estero">Santiago del Estero</option>
+<option value="Tierra del Fuego">Tierra del Fuego</option>
+<option value="Tucumán">Tucumán</option>
+</select>
 </div>
+
+<div class="checkout-field">
+<label>Localidad</label>
+<input type="text" id="inputLocalidad" placeholder="Ej: Formosa, Clorinda, Córdoba..." oninput="handleLocationChange()">
+</div>
+
+<div id="sectionFormosaCapital" style="display:none; flex-direction:column; gap:14px;">
+<div class="delivery-alert">
+🛵 <strong>Aviso importante:</strong> Para envíos dentro de Formosa Capital, el despacho se realiza exclusivamente a través de <strong>delivery (moto mensajería)</strong>. Coordinaremos el horario con vos.
+</div>
+<div class="checkout-field">
+<label>Dirección exacta de entrega</label>
+<input type="text" id="dirFormosa" placeholder="Calle, número, barrio, depto...">
+</div>
+<button onclick="processCheckoutAdvance('delivery')"
+style="background:var(--green);color:#000;border:none;padding:14px;border-radius:12px;font-weight:700;font-size:1rem;cursor:pointer;width:100%;">
+Coordinar Envío por WhatsApp
 </button>
+</div>
+
+<div id="sectionRestoPais" style="display:none; flex-direction:column; gap:14px;">
+<div class="checkout-field">
+<label>Código Postal (CP)</label>
+<input type="text" id="shippingCP" placeholder="Ej: 3600">
+</div>
+<div class="checkout-field">
+<label>Dirección completa</label>
+<input type="text" id="shippingDir" placeholder="Calle, número, depto, piso...">
+</div>
+<div class="checkout-field">
+<label>Correo Electrónico</label>
+<input type="email" id="shippingEmail" placeholder="ejemplo@email.com">
+</div>
+<div class="checkout-field">
+<label>Número de teléfono</label>
+<input type="tel" id="shippingTel" placeholder="Ej: 3704123456">
+</div>
+<div class="checkout-field">
+<label>Indicaciones extra (Opcional)</label>
+<textarea id="shippingExtra" rows="2" placeholder="Ej: Casa reja negra, portón gris..."></textarea>
+</div>
+<div class="checkout-field">
+<label>Medio de Transporte Postal</label>
+<div class="shipping-options">
+<label><input type="radio" name="correoOption" value="Correo Argentino" checked> Correo Argentino</label>
+<label><input type="radio" name="correoOption" value="Andreani"> Andreani</label>
+</div>
+</div>
+<button onclick="processCheckoutAdvance('correo')"
+style="background:var(--red);color:white;border:none;padding:14px;border-radius:12px;font-weight:700;font-size:1rem;cursor:pointer;width:100%;">
+Siguiente: Datos de Transferencia
+</button>
+</div>
 
 <button onclick="closePayModal()"
-style="background:transparent;border:1px solid #ff0000;color:#ff0000;padding:10px;border-radius:10px;cursor:pointer;font-size:0.9rem;width:100%;">
+style="background:transparent;border:1px solid #ff0000;color:#ff0000;padding:10px;border-radius:10px;cursor:pointer;font-size:0.9rem;width:100%;margin-top:5px;">
 Cancelar
 </button>
 
 </div>
 </div>
-
-<!-- PRODUCT DETAIL MODAL -->
 
 <div class="product-modal-overlay" id="productModal">
 
@@ -1278,7 +1450,6 @@ COMPRAR YA
 </button>
 </div>
 
-<!-- OPINIÓN EN MODAL -->
 <div id="modalReviewSection" style="display:none;border-top:1px solid #222;padding-top:20px;margin-top:8px;">
 <div style="font-size:0.75rem;font-weight:700;color:#888;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Opinión de cliente</div>
 <div style="background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;">
@@ -1291,10 +1462,8 @@ COMPRAR YA
 </div>
 </div>
 
-<!-- DATOS DE TRANSFERENCIA -->
-
 <div class="discount-alert-overlay" id="transferModal">
-<div class="discount-alert-box" style="max-width:400px;gap:18px;text-align:left;">
+<div class="discount-alert-box" style="max-width:400px;gap:18px;text-align:left; max-height:85vh; overflow-y:auto;">
 
 <h3 style="color:white;font-size:1.1rem;font-weight:900;text-align:center;letter-spacing:1px;">
 💳 DATOS PARA TRANSFERIR
@@ -1328,19 +1497,17 @@ Copiar
 </div>
 
 <a id="payWALink" href="#" target="_blank"
-style="display:block;text-align:center;background:transparent;color:#25d366;text-decoration:none;padding:8px 16px;border-radius:10px;border:1px solid #25d366;font-weight:600;font-size:0.9rem;width:100%;">
-✅ Confirmar pedido por WhatsApp
+style="display:block;text-align:center;background:transparent;color:#25d366;text-decoration:none;padding:12px;border-radius:10px;border:1px solid #25d366;font-weight:700;font-size:0.95rem;width:100%;">
+✅ Enviar pedido por WhatsApp
 </a>
 
 <button onclick="closeTransferModal(); closePayModal();"
-style="background:var(--green);color:#000;border:none;padding:13px;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;width:100%;margin-top:5px;">
+style="background:var(--green);color:#000;border:none;padding:13px;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;width:100%;margin-top:5px;text-align:center;">
 OK
 </button>
 
 </div>
 </div>
-
-<!-- AVISO DESCUENTO -->
 
 <div class="discount-alert-overlay" id="discountAlert">
 <div class="discount-alert-box">
@@ -1349,16 +1516,12 @@ OK
 </div>
 </div>
 
-<!-- AVISO CÓDIGO INVÁLIDO -->
-
 <div class="discount-alert-overlay" id="invalidAlert">
 <div class="discount-alert-box" style="border-color:#ff0000;">
 <p>❌ Código inválido.</p>
 <button class="discount-alert-ok" style="background:#ff0000;" onclick="closeInvalidAlert()">OK</button>
 </div>
 </div>
-
-<!-- GUIA DE TALLES -->
 
 <div class="modal-overlay" id="sizeGuideModal">
 
@@ -1372,8 +1535,6 @@ OK
 
 </div>
 </div>
-
-<!-- HEADER -->
 
 <header>
 
@@ -1392,8 +1553,6 @@ Ropa diseñada para verte estético en el gym y en la calle.
 </p>
 
 </header>
-
-<!-- BUSCADOR INLINE -->
 
 <section style="padding-bottom:0;">
 <div style="position:relative;max-width:520px;">
@@ -1418,7 +1577,6 @@ Ropa diseñada para verte estético en el gym y en la calle.
 </div>
 </section>
 
-<!-- RESULTADOS DE BÚSQUEDA (oculto por defecto) -->
 <section id="secSearchResults" style="display:none;">
 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;">
 <h2 class="section-title" id="searchResultsTitle" style="margin-bottom:0;border:none;padding:0;font-size:1.6rem;">Resultados</h2>
@@ -1426,8 +1584,6 @@ Ropa diseñada para verte estético en el gym y en la calle.
 </div>
 <div id="searchResultsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:25px;"></div>
 </section>
-
-<!-- PRODUCTOS -->
 
 <section id="secCompresion">
 
@@ -1442,7 +1598,6 @@ Remeras de Compresión
 <div class="carousel-viewport" id="carouselViewport">
 <div class="products-grid" id="productsGrid">
 
-<!-- ROJO -->
 <div class="product-card" onclick="openProductModal(0)">
 <img src="compresrojo.jpg" class="card-thumb" alt="Compresivo Tribal Rojo">
 <div class="card-label">
@@ -1451,7 +1606,6 @@ Remeras de Compresión
 </div>
 </div>
 
-<!-- MORADO -->
 <div class="product-card" onclick="openProductModal(1)">
 <img src="compresmorado.jpg" class="card-thumb" alt="Compresivo Tribal Morado">
 <div class="card-label">
@@ -1460,7 +1614,6 @@ Remeras de Compresión
 </div>
 </div>
 
-<!-- BLANCO -->
 <div class="product-card" onclick="openProductModal(2)" style="cursor:pointer;">
 <div style="position:relative;">
 <img src="compresblanco.jpg" class="card-thumb" alt="Compresivo Tribal Blanco">
@@ -1474,7 +1627,6 @@ Remeras de Compresión
 </div>
 </div>
 
-<!-- BASICO -->
 <div class="product-card" onclick="openProductModal(3)">
 <img src="compresbasico.jpg" class="card-thumb" alt="Compresivo Básico">
 <div class="card-label">
@@ -1483,7 +1635,6 @@ Remeras de Compresión
 </div>
 </div>
 
-<!-- BERSERK -->
 <div class="product-card" onclick="openProductModal(4)">
 <img src="berserk.jpg" class="card-thumb" alt="Compresivo de Berserk">
 <div class="card-label">
@@ -1492,7 +1643,6 @@ Remeras de Compresión
 </div>
 </div>
 
-<!-- CLASICO -->
 <div class="product-card" onclick="openProductModal(5)">
 <img src="clasico.jpg" class="card-thumb" alt="Compresivo Clásico">
 <div class="card-label">
@@ -1510,8 +1660,6 @@ Remeras de Compresión
 
 </section>
 
-<!-- MUSCULOSAS -->
-
 <section id="secMusculosas">
 
 <h2 class="section-title">
@@ -1525,7 +1673,6 @@ Musculosas
 <div class="carousel-viewport" id="muscuViewport">
 <div class="products-grid" id="muscuGrid">
 
-<!-- TRIBAL -->
 <div class="product-card" onclick="openMuscuModal(0)">
 <div style="position:relative;">
 <img src="muscu.jpg" class="card-thumb" alt="Musculosa Tribal">
@@ -1538,7 +1685,6 @@ Musculosas
 </div>
 </div>
 
-<!-- MENTZER -->
 <div class="product-card" onclick="openMuscuModal(1)">
 <div style="position:relative;">
 <img src="mentzer.jpg" class="card-thumb" alt="Musculosa Mike Mentzer">
@@ -1551,7 +1697,6 @@ Musculosas
 </div>
 </div>
 
-<!-- KEVIN -->
 <div class="product-card" onclick="openMuscuModal(2)">
 <div style="position:relative;">
 <img src="kevin.jpg" class="card-thumb" alt="Musculosa Kevin Levrone">
@@ -1573,8 +1718,6 @@ Musculosas
 
 </section>
 
-<!-- CALZAS -->
-
 <section id="secCalzas">
 
 <h2 class="section-title">
@@ -1588,7 +1731,6 @@ Calzas <span style="color:#aaa;font-weight:400;font-size:1.4rem;">(para mujeres)
 <div class="carousel-viewport" id="calzaViewport">
 <div class="products-grid" id="calzaGrid">
 
-<!-- CALZA DE LYCRA -->
 <div class="product-card" onclick="openCalzaModal(0)">
 <img src="calza.jpg" class="card-thumb" alt="Calza de Lycra">
 <div class="card-label">
@@ -1604,8 +1746,6 @@ Calzas <span style="color:#aaa;font-weight:400;font-size:1.4rem;">(para mujeres)
 </div>
 
 </section>
-
-<!-- SOBRE NOSOTROS -->
 
 <section>
 
@@ -1630,8 +1770,6 @@ Cuando escuches música pesada, ya sea Rock o Metal, te acordarás de nosotros.
 </p>
 
 </section>
-
-<!-- OPINIONES -->
 
 <section>
 
@@ -1664,8 +1802,6 @@ Opiniones
 </div>
 
 </section>
-
-<!-- REDES -->
 
 <section>
 
@@ -1810,7 +1946,6 @@ btn.classList.add("active");
 };
 sizesEl.appendChild(btn);
 });
-// set default selected to first available size
 const firstAvail = sizes.find(s => !(soldoutSizes.includes(s)));
 if(firstAvail) selectedSize = firstAvail;
 }
@@ -1839,7 +1974,6 @@ document.getElementById("modalSlides").style.transform =
 
 function modalAddToCart(){
 if(!currentProduct) return;
-const finalPrice = getDiscountedPrice(currentProduct.price);
 const key = `${currentProduct.name}||${selectedSize}`;
 const existing = cart.find(i => i.key === key);
 if(existing){
@@ -1857,7 +1991,7 @@ if(!currentProduct) return;
 openPayModal(currentProduct.name, selectedSize, currentProduct.price, null, false);
 }
 
-// Swipe on modal image slider
+// Swipe elements
 let mTouchStartX = 0;
 document.addEventListener("DOMContentLoaded", ()=>{
 const slides = document.getElementById("modalSlides");
@@ -1914,7 +2048,6 @@ const gap = 25;
 grid.style.transform = `translateX(-${muscuIndex * (cardWidth + gap)}px)`;
 }
 
-// Muscu swipe
 let muscuTouchStart = 0;
 const muscuViewport = document.getElementById("muscuViewport");
 if(muscuViewport){
@@ -2066,12 +2199,9 @@ grid.style.transform = `translateX(-${offset}px)`;
 function carouselMove(direction){
 const visible = getVisibleCount();
 const maxIndex = Math.max(0, totalProducts - visible);
-
 carouselIndex += direction;
-
 if(carouselIndex < 0) carouselIndex = maxIndex;
 if(carouselIndex > maxIndex) carouselIndex = 0;
-
 updateCarousel();
 }
 
@@ -2086,94 +2216,33 @@ updateCalzaCarousel();
 
 window.addEventListener("load", ()=>{ updateCarousel(); updateMuscuCarousel(); updateCalzaCarousel(); });
 
-// SWIPE TÁCTIL
-
+// SWIPE
 let touchStartX = 0;
 let touchEndX = 0;
-
 const carouselViewportEl = document.getElementById("carouselViewport");
-
 if(carouselViewportEl){
-
-carouselViewportEl.addEventListener("touchstart", (e)=>{
-touchStartX = e.changedTouches[0].screenX;
-}, {passive:true});
-
-carouselViewportEl.addEventListener("touchend", (e)=>{
-touchEndX = e.changedTouches[0].screenX;
-handleSwipe();
-}, {passive:true});
-
+carouselViewportEl.addEventListener("touchstart", (e)=>{ touchStartX = e.changedTouches[0].screenX; }, {passive:true});
+carouselViewportEl.addEventListener("touchend", (e)=>{ touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, {passive:true});
 }
 
 function handleSwipe(){
 const diff = touchStartX - touchEndX;
 const threshold = 40;
-
-if(diff > threshold){
-carouselMove(1);
-}else if(diff < -threshold){
-carouselMove(-1);
-}
+if(diff > threshold){ carouselMove(1); }else if(diff < -threshold){ carouselMove(-1); }
 }
 
 let cart = [];
 let activeDiscount = "";
 
-const validCodes = [
-"NAVARRETE",
-"NATY",
-"IVANMG",
-"THELONELYONE",
-"RIVATOMY",
-"SUAR"
-];
-
+const validCodes = [ "NAVARRETE", "NATY", "IVANMG", "THELONELYONE", "RIVATOMY", "SUAR" ];
 const basePrices = [30000,30000,30000,25000,25000,25000];
 
-function applyDiscount(){
-
-if(activeDiscount !== ""){
-alert("Ya tenés un código aplicado. Solo se puede usar un código por compra.");
-return;
-}
-
-const code =
-document
-.getElementById("discountCode")
-.value
-.trim()
-.toUpperCase();
-
-if(validCodes.includes(code)){
-activeDiscount = code;
-updatePrices();
-document.getElementById("discountAlert").classList.add("active");
-}else{
-document.getElementById("invalidAlert").classList.add("active");
-}
-
-}
-
 function applyModalDiscount(){
-
-if(activeDiscount !== ""){
-alert("Ya tenés un código aplicado. Solo se puede usar uno por compra.");
-return;
-}
-
-const code =
-document
-.getElementById("modalDiscountCode")
-.value
-.trim()
-.toUpperCase();
-
+const code = document.getElementById("modalDiscountCode").value.trim().toUpperCase();
 if(validCodes.includes(code)){
 activeDiscount = code;
 updatePrices();
 document.getElementById("discountAlert").classList.add("active");
-// Refresh the pay modal totals
 if(currentPayData){
 openPayModal(
 currentPayData.name,
@@ -2186,13 +2255,10 @@ currentPayData.isCart
 }else{
 document.getElementById("invalidAlert").classList.add("active");
 }
-
 }
 
 function getDiscountedPrice(price){
-if(activeDiscount !== ""){
-return Math.round(price * 0.9);
-}
+if(activeDiscount !== ""){ return Math.round(price * 0.9); }
 return price;
 }
 
@@ -2207,12 +2273,7 @@ renderCart();
 }
 
 function toggleCart(){
-
-document
-.getElementById("cartPanel")
-.classList
-.toggle("active");
-
+document.getElementById("cartPanel").classList.toggle("active");
 }
 
 function closeDiscountAlert(){
@@ -2233,63 +2294,29 @@ function closeSizeGuide(){
 document.getElementById("sizeGuideModal").classList.remove("active");
 }
 
-function addToCart(name,price,sizeId){
-
-const size =
-document.getElementById(sizeId).value;
-
-const key = `${name}||${size}`;
-const existing = cart.find(i => i.key === key);
-
-if(existing){
-existing.qty++;
-}else{
-cart.push({key, name, size, basePrice:price, qty:1});
-}
-
-renderCart();
-
-}
-
 function changeQty(key, delta){
-
 const idx = cart.findIndex(i => i.key === key);
 if(idx === -1) return;
-
 const item = cart[idx];
-
 if(item.qty + delta <= 0){
 if(cart.length === 1){
-if(!confirm("¿Querés eliminar todos los productos del carrito?")){
-return;
-}
+if(!confirm("¿Querés eliminar todos los productos del carrito?")){ return; }
 }
 cart.splice(idx, 1);
 }else{
 item.qty += delta;
 }
-
 renderCart();
-
 }
 
 function renderCart(){
-
-const cartItems =
-document.getElementById("cartItems");
-
-const cartTotal =
-document.getElementById("cartTotal");
-
+const cartItems = document.getElementById("cartItems");
+const cartTotal = document.getElementById("cartTotal");
 cartItems.innerHTML = "";
-
 let total = 0;
-
 cart.forEach(item=>{
-
 const finalPrice = getDiscountedPrice(item.basePrice);
 total += finalPrice * item.qty;
-
 cartItems.innerHTML += `
 <div class="cart-item">
 <strong>${item.name}</strong><br>
@@ -2303,51 +2330,30 @@ $${finalPrice.toLocaleString()} ARS c/u<br>
 </div>
 </div>
 `;
-
 });
-
-cartTotal.innerHTML =
-`TOTAL: $${total.toLocaleString()} ARS`;
-
-}
-
-function buyNow(name,price,sizeId){
-
-const size =
-document.getElementById(sizeId).value;
-
-openPayModal(name, size, price, null, false);
-
+cartTotal.innerHTML = `TOTAL: $${total.toLocaleString()} ARS`;
 }
 
 function checkoutWhatsApp(){
-
 if(cart.length === 0){
 alert("Tu carrito está vacío.");
 return;
 }
-
 let baseTotal = 0;
 let resumen = "";
-
 cart.forEach(item=>{
 baseTotal += item.basePrice * item.qty;
 resumen += `${item.name} x${item.qty} (Talle: ${item.size})\n`;
 });
-
 openPayModal("Carrito", null, baseTotal, resumen, true);
-
 }
 
 let currentPayData = null;
 
 function openPayModal(name, size, baseTotal, resumen, isCart){
-
 currentPayData = {name, size, baseTotal, resumen, isCart};
-
 const total = getDiscountedPrice(baseTotal);
 
-// Build product name display
 let productDisplay = "";
 if(isCart && cart.length > 0){
 cart.forEach(item => {
@@ -2372,25 +2378,105 @@ origEl.style.display = "none";
 origEl.innerText = "";
 }
 
-document.getElementById("payTotal").innerText =
-`$${total.toLocaleString()} ARS`;
+document.getElementById("payTotal").innerText = `$${total.toLocaleString()} ARS`;
 
-const waMessage = isCart
-? `¡Hola! Acabo de realizar el pago de $${total.toLocaleString()} ARS por los siguientes productos:\n\n${productDisplay}Código canjeado: ${activeDiscount || "Ninguno"}\n\nAdjunto el comprobante de pago. ¡Gracias!`
-: `¡Hola! Acabo de realizar el pago de $${total.toLocaleString()} ARS por:\n\n- Producto: ${name}\n- Talle: ${size}\n- Código canjeado: ${activeDiscount || "Ninguno"}\n\nAdjunto el comprobante de pago. ¡Gracias!`;
-
-document.getElementById("payWALink").href =
-`https://wa.me/5493704509580?text=${encodeURIComponent(waMessage)}`;
-
-document.getElementById("modalDiscountCode").value = "";
+// Reset de los campos de envío cada vez que se abre el modal de pago
+document.getElementById("selectProvincia").value = "";
+document.getElementById("inputLocalidad").value = "";
+document.getElementById("dirFormosa").value = "";
+document.getElementById("shippingCP").value = "";
+document.getElementById("shippingDir").value = "";
+document.getElementById("shippingEmail").value = "";
+document.getElementById("shippingTel").value = "";
+document.getElementById("shippingExtra").value = "";
+document.getElementById("sectionFormosaCapital").style.display = "none";
+document.getElementById("sectionRestoPais").style.display = "none";
 
 document.getElementById("payModal").classList.add("active");
-
 }
 
 function closePayModal(){
 document.getElementById("payModal").classList.remove("active");
 currentPayData = null;
+}
+
+// DETECCIÓN DINÁMICA DE LA UBICACIÓN DEL CLIENTE
+function handleLocationChange() {
+const prov = document.getElementById("selectProvincia").value;
+const loc = document.getElementById("inputLocalidad").value.trim().toLowerCase();
+
+const secFormosa = document.getElementById("sectionFormosaCapital");
+const secResto = document.getElementById("sectionRestoPais");
+
+// Validación limpia removiendo acentos comunes y espacios extras
+const esFormosaCapital = (loc === "formosa" || loc === "formosa capital" || loc === "capital" || loc === "formosa cap");
+
+if(prov === "Formosa" && esFormosaCapital){
+secFormosa.style.display = "flex";
+secResto.style.display = "none";
+} else if(prov !== "" && loc !== "") {
+secFormosa.style.display = "none";
+secResto.style.display = "flex";
+} else {
+secFormosa.style.display = "none";
+secResto.style.display = "none";
+}
+}
+
+// AVANCE DE FORMULARIO A MODAL DE TRANSFERENCIA Y REDACCIÓN WHATSAPP
+function processCheckoutAdvance(tipoEnvio){
+const total = getDiscountedPrice(currentPayData.baseTotal);
+let productDisplay = "";
+
+if(currentPayData.isCart && cart.length > 0){
+cart.forEach(item => {
+productDisplay += `- ${item.name} x${item.qty} (Talle: ${item.size})\n`;
+});
+}else{
+productDisplay = `- ${currentPayData.name} (Talle: ${currentPayData.size})\n`;
+}
+
+const prov = document.getElementById("selectProvincia").value;
+const loc = document.getElementById("inputLocalidad").value.trim();
+const medioPago = document.getElementById("paymentMethod").value;
+
+let waMessage = `🔥 *NUEVO PEDIDO BLAZEBORN* 🔥\n\n`;
+waMessage += `🛒 *Productos:*\n${productDisplay}\n`;
+waMessage += `💰 *Total:* $${total.toLocaleString()} ARS\n`;
+waMessage += `💳 *Método de Pago:* ${medioPago}\n`;
+waMessage += `🎟️ *Cupón Canjeado:* ${activeDiscount || "Ninguno"}\n`;
+waMessage += `📍 *Ubicación:* ${loc}, ${prov}\n`;
+
+if(tipoEnvio === 'delivery'){
+const dirM moto = document.getElementById("dirFormosa").value.trim();
+if(!dirMmoto){ alert("Por favor, ingresá la dirección de entrega."); return; }
+waMessage += `🛵 *Envío:* Delivery Moto Express\n`;
+waMessage += `🏠 *Dirección:* ${dirMmoto}\n`;
+} else {
+const cp = document.getElementById("shippingCP").value.trim();
+const dir = document.getElementById("shippingDir").value.trim();
+const email = document.getElementById("shippingEmail").value.trim();
+const tel = document.getElementById("shippingTel").value.trim();
+const extra = document.getElementById("shippingExtra").value.trim();
+const correo = document.querySelector('input[name="correoOption"]:checked').value;
+
+if(!cp || !dir || !email || !tel){ alert("Por favor, rellená todos los campos obligatorios del envío."); return; }
+
+waMessage += `🚚 *Envío Postal:* ${correo}\n`;
+waMessage += `📮 *Código Postal:* ${cp}\n`;
+waMessage += `🏠 *Dirección:* ${dir}\n`;
+waMessage += `📞 *Teléfono:* ${tel}\n`;
+waMessage += `📧 *Email:* ${email}\n`;
+if(extra) waMessage += `📝 *Notas:* ${extra}\n`;
+}
+
+waMessage += `\nAdjunto el comprobante de la transferencia a continuación. ¡Muchas gracias!`;
+
+// Insertar enlace dinámico listo para enviar
+document.getElementById("payWALink").href = `https://wa.me/5493704509580?text=${encodeURIComponent(waMessage)}`;
+
+// Transición estética al modal de transferencia
+openTransferModal();
 }
 
 function openTransferModal(){
@@ -2414,8 +2500,7 @@ btn.style.borderColor = "#444";
 });
 }
 
-// ── HAMBURGER MENU ────────────────────────────────────────────
-
+// HAMBURGER MENU
 function toggleMenu(){
 const menu = document.getElementById("hamburgerMenu");
 const backdrop = document.getElementById("menuBackdrop");
@@ -2428,10 +2513,8 @@ document.getElementById("hamburgerMenu").classList.remove("active");
 document.getElementById("menuBackdrop").classList.remove("active");
 }
 
-// ── THEME TOGGLE ──────────────────────────────────────────────
-
+// THEME TOGGLE
 let isLightTheme = false;
-
 function toggleTheme(){
 isLightTheme = !isLightTheme;
 const body = document.body;
@@ -2443,7 +2526,7 @@ if(isLightTheme){
 body.classList.add("light-theme");
 toggle.classList.add("light-on");
 label.textContent = "Tema oscuro";
-if(logo) logo.src = "blazelogo1.jpg";
+if(logo) logo.src = "blazelogo1.png";
 } else {
 body.classList.remove("light-theme");
 toggle.classList.remove("light-on");
@@ -2452,8 +2535,7 @@ if(logo) logo.src = "blazelogo.png";
 }
 }
 
-// ── SEARCH ────────────────────────────────────────────────────
-
+// SEARCH CATALOG
 const searchCatalog = [
 {name:"Compresivo Tribal Rojo",   price:"$30.000 ARS",   img:"compresrojo.jpg",   fn:"openProductModal", arg:0},
 {name:"Compresivo Tribal Morado", price:"$30.000 ARS",   img:"compresmorado.jpg", fn:"openProductModal", arg:1},
@@ -2471,24 +2553,14 @@ let _lastSearchMatches = [];
 function handleSearch(){
 const query = document.getElementById("searchInput").value.trim().toLowerCase();
 const resultsEl = document.getElementById("searchResults");
-
-if(query.length === 0){
-resultsEl.innerHTML = "";
-resultsEl.classList.remove("visible");
-return;
-}
-
-const matches = searchCatalog.filter(p =>
-p.name.toLowerCase().includes(query)
-);
+if(query.length === 0){ resultsEl.innerHTML = ""; resultsEl.classList.remove("visible"); return; }
+const matches = searchCatalog.filter(p => p.name.toLowerCase().includes(query));
 _lastSearchMatches = matches;
-
 if(matches.length === 0){
 resultsEl.innerHTML = '<div class="search-no-results">Sin resultados para \"' + query + '\"</div>';
 resultsEl.classList.add("visible");
 return;
 }
-
 resultsEl.innerHTML = matches.map((p,i) =>
 '<div class="search-result-item" onclick="selectSearchResult(' + i + ')">' +
 '<img src="' + p.img + '" class="search-result-thumb" alt="' + p.name + '">' +
@@ -2498,7 +2570,6 @@ resultsEl.innerHTML = matches.map((p,i) =>
 '</div>' +
 '</div>'
 ).join("");
-
 resultsEl.classList.add("visible");
 }
 
@@ -2519,34 +2590,19 @@ document.getElementById("searchInput").focus();
 
 document.addEventListener("click", function(e){
 const wrapper = document.getElementById("searchWrapper");
-if(wrapper && !wrapper.contains(e.target)){
-document.getElementById("searchResults").classList.remove("visible");
-}
+if(wrapper && !wrapper.contains(e.target)){ document.getElementById("searchResults").classList.remove("visible"); }
 });
 
 let _lastInlineMatches = [];
-
 function handleInlineSearch(){
 const query = document.getElementById("inlineSearchInput").value.trim().toLowerCase();
 const resultsEl = document.getElementById("inlineSearchResults");
 const clearBtn = document.getElementById("inlineClearBtn");
 if(clearBtn) clearBtn.style.display = query.length > 0 ? "block" : "none";
-
-if(query.length === 0){
-resultsEl.style.display = "none";
-resultsEl.innerHTML = "";
-return;
-}
-
+if(query.length === 0){ resultsEl.style.display = "none"; resultsEl.innerHTML = ""; return; }
 const matches = searchCatalog.filter(p => p.name.toLowerCase().includes(query));
 _lastInlineMatches = matches;
-
-if(matches.length === 0){
-resultsEl.innerHTML = '<div class="search-no-results">Sin resultados</div>';
-resultsEl.style.display = "block";
-return;
-}
-
+if(matches.length === 0){ resultsEl.innerHTML = '<div class="search-no-results">Sin resultados</div>'; resultsEl.style.display = "block"; return; }
 resultsEl.innerHTML = matches.map((p,i) =>
 '<div class="search-result-item" onclick="inlineSelectResult(' + i + ')">' +
 '<img src="' + p.img + '" class="search-result-thumb" alt="' + p.name + '">' +
@@ -2563,19 +2619,14 @@ function commitInlineSearch(){
 const query = document.getElementById("inlineSearchInput").value.trim();
 if(!query) return;
 document.getElementById("inlineSearchResults").style.display = "none";
-
 const matches = searchCatalog.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
 _lastInlineMatches = matches;
-
 ["secCompresion","secMusculosas","secCalzas"].forEach(id => {
-const el = document.getElementById(id);
-if(el) el.style.display = "none";
+const el = document.getElementById(id); if(el) el.style.display = "none";
 });
-
 const secResults = document.getElementById("secSearchResults");
 const grid = document.getElementById("searchResultsGrid");
 const title = document.getElementById("searchResultsTitle");
-
 if(matches.length === 0){
 title.textContent = 'Sin resultados para "' + query + '"';
 grid.innerHTML = '<p style="color:#666;font-size:0.95rem;">Probá con otro término.</p>';
@@ -2591,7 +2642,6 @@ grid.innerHTML = matches.map((p,i) =>
 '</div>'
 ).join("");
 }
-
 secResults.style.display = "block";
 secResults.scrollIntoView({behavior:"smooth", block:"start"});
 }
@@ -2602,20 +2652,14 @@ if(p) window[p.fn](p.arg);
 }
 
 function clearInlineSearch(){
-const inp = document.getElementById("inlineSearchInput");
-if(inp){ inp.value = ""; }
-const clearBtn = document.getElementById("inlineClearBtn");
-if(clearBtn) clearBtn.style.display = "none";
-const res = document.getElementById("inlineSearchResults");
-if(res){ res.style.display = "none"; res.innerHTML = ""; }
-const secResults = document.getElementById("secSearchResults");
-if(secResults) secResults.style.display = "none";
-const grid = document.getElementById("searchResultsGrid");
-if(grid) grid.innerHTML = "";
+const inp = document.getElementById("inlineSearchInput"); if(inp){ inp.value = ""; }
+const clearBtn = document.getElementById("inlineClearBtn"); if(clearBtn) clearBtn.style.display = "none";
+const res = document.getElementById("inlineSearchResults"); if(res){ res.style.display = "none"; res.innerHTML = ""; }
+const secResults = document.getElementById("secSearchResults"); if(secResults) secResults.style.display = "none";
+const grid = document.getElementById("searchResultsGrid"); if(grid) grid.innerHTML = "";
 _lastInlineMatches = [];
 ["secCompresion","secMusculosas","secCalzas"].forEach(id => {
-const el = document.getElementById(id);
-if(el) el.style.display = "";
+const el = document.getElementById(id); if(el) el.style.display = "";
 });
 if(inp) inp.focus();
 }
@@ -2624,9 +2668,7 @@ document.addEventListener("click", function(e){
 const inp = document.getElementById("inlineSearchInput");
 const res = document.getElementById("inlineSearchResults");
 const btn = document.getElementById("inlineClearBtn");
-if(inp && res && !inp.contains(e.target) && !res.contains(e.target) && e.target !== btn){
-res.style.display = "none";
-}
+if(inp && res && !inp.contains(e.target) && !res.contains(e.target) && e.target !== btn){ res.style.display = "none"; }
 });
 </script>
 
