@@ -186,7 +186,8 @@ font-size:0.95rem;
 font-weight:700;
 }
 
-/* PRODUCT MODAL - MODIFICADO PARA RESOLVER EL SCROLL */
+/* PRODUCT MODAL */
+
 .product-modal-overlay{
 display:none;
 position:fixed;
@@ -195,7 +196,7 @@ width:100%;height:100%;
 background:#000;
 z-index:2000;
 flex-direction:column;
-overflow-y:auto; /* Permite el scroll general del modal */
+overflow:hidden;
 }
 
 .product-modal-overlay.active{
@@ -228,9 +229,6 @@ display:flex;align-items:center;justify-content:center;
 position:relative;
 width:100%;
 aspect-ratio:1/1;
-max-height:60vh; /* Evita que la imagen cubra toda la pantalla en móviles */
-max-width:700px; /* Lo alinea estéticamente con la info de abajo */
-margin:0 auto;
 flex-shrink:0;
 overflow:hidden;
 background:#0a0a0a;
@@ -271,8 +269,10 @@ z-index:5;
 .modal-slide-btn.right{ right:12px; }
 
 .modal-product-info{
-overflow-y:visible; /* El scroll ahora lo maneja el contenedor padre */
-flex:none;
+overflow-y:scroll;
+scrollbar-width:thin;
+scrollbar-color:#ff0000 #1a1a1a;
+flex:1;
 padding:24px 20px 40px;
 display:flex;
 flex-direction:column;
@@ -280,6 +280,19 @@ gap:16px;
 max-width:700px;
 margin:0 auto;
 width:100%;
+}
+
+.modal-product-info::-webkit-scrollbar{
+width:6px;
+}
+
+.modal-product-info::-webkit-scrollbar-track{
+background:#1a1a1a;
+}
+
+.modal-product-info::-webkit-scrollbar-thumb{
+background:var(--red);
+border-radius:3px;
 }
 
 .modal-product-title{
@@ -1109,6 +1122,29 @@ background:#fff;
 border-color:#ddd;
 }
 
+body.light-theme #checkoutOverlay{
+background:#fff;
+color:#111;
+}
+
+body.light-theme #checkoutOverlay input,
+body.light-theme #checkoutOverlay select,
+body.light-theme #checkoutOverlay textarea{
+background:#f0f0f0;
+color:#111;
+border-color:#ccc;
+}
+
+body.light-theme #checkoutOverlay #labelCorreo,
+body.light-theme #checkoutOverlay #labelAndreani{
+border-color:#ccc;
+}
+
+body.light-theme #checkoutOverlay .discount-block{
+background:#f5f5f5;
+border-color:#e0e0e0;
+}
+
 
 </style>
 </head>
@@ -1181,55 +1217,119 @@ COMPRAR YA
 
 </div>
 
-<!-- MODAL DE PAGO -->
+<!-- CHECKOUT OVERLAY -->
+<div id="checkoutOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:3000;overflow-y:auto;flex-direction:column;">
 
-<div class="discount-alert-overlay" id="payModal">
-<div class="discount-alert-box" style="max-width:420px;gap:16px;">
+  <div style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:rgba(0,0,0,0.92);backdrop-filter:blur(8px);border-bottom:1px solid #222;">
+    <h2 style="font-size:1.1rem;font-weight:900;letter-spacing:1px;">💳 RESUMEN DE COMPRA</h2>
+    <button onclick="closeCheckout()" style="background:#111;border:1px solid #444;color:white;padding:8px 16px;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.9rem;">✕ Volver</button>
+  </div>
 
-<h3 style="color:white;font-size:1.2rem;font-weight:900;letter-spacing:1px;">
-💳 RESUMEN DE COMPRA
-</h3>
+  <div style="max-width:600px;margin:0 auto;width:100%;padding:24px 20px 60px;display:flex;flex-direction:column;gap:28px;">
 
-<p id="payProductName" style="color:#ccc;font-size:0.95rem;white-space:pre-line;text-align:left;"></p>
+    <!-- PRODUCTOS -->
+    <div>
+      <div id="checkoutItems" style="display:flex;flex-direction:column;gap:12px;"></div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid #222;display:flex;justify-content:space-between;align-items:center;">
+        <span style="color:#aaa;font-size:0.9rem;">Subtotal</span>
+        <span id="checkoutSubtotal" style="font-size:1.1rem;font-weight:700;color:var(--green);"></span>
+      </div>
+    </div>
 
-<p style="color:white;font-size:1rem;">
-<span id="payOriginalTotal" style="display:none;color:#888;font-size:0.6rem;text-decoration:line-through;margin-right:6px;"></span>
-Total a pagar: <span id="payTotal" style="color:var(--green);font-weight:700;"></span>
-</p>
+    <!-- DESCUENTO -->
+    <div style="background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px;">
+      <span style="font-size:0.75rem;font-weight:700;color:#888;letter-spacing:2px;text-transform:uppercase;">Código de descuento</span>
+      <div style="display:flex;gap:10px;">
+        <input type="text" id="checkoutDiscountCode" placeholder="Ingresá tu código"
+          style="flex:1;padding:11px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <button onclick="applyCheckoutDiscount()"
+          style="background:var(--green);color:#000;border:none;padding:11px 16px;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.85rem;">
+          Aplicar
+        </button>
+      </div>
+      <div id="checkoutDiscountMsg" style="font-size:0.8rem;display:none;"></div>
+    </div>
 
-<p style="color:#aaa;font-size:0.85rem;line-height:1.6;">
-Hacé clic en <strong style="color:white;">Pagar con Transferencia</strong>, completá la transferencia a nuestro alias <strong style="color:var(--green);">blazeborn.ar</strong> por el monto indicado, y luego confirmá tu pedido por WhatsApp adjuntando el comprobante.
-</p>
+    <!-- ENVÍO -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div style="font-size:1rem;font-weight:900;letter-spacing:1px;border-left:3px solid var(--red);padding-left:12px;">Seleccionar envío</div>
 
-<div style="display:flex;flex-direction:column;gap:6px;">
-<span style="color:var(--green);font-size:0.8rem;font-weight:700;">Aplicar código de descuento</span>
-<div style="display:flex;gap:10px;">
-<input type="text" id="modalDiscountCode" placeholder="Ingresá tu código"
-style="flex:1;padding:10px;border:none;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;">
-<button onclick="applyModalDiscount()"
-style="background:var(--green);color:#000;border:none;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.85rem;">
-Aplicar
-</button>
-</div>
-</div>
+      <!-- PROVINCIA -->
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <label style="font-size:0.8rem;color:#aaa;font-weight:600;">Provincia</label>
+        <select id="checkoutProvincia" onchange="checkoutUpdateEnvio()" style="padding:12px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+          <option value="">— Seleccioná tu provincia —</option>
+          <option>Buenos Aires</option><option>Catamarca</option><option>Chaco</option>
+          <option>Chubut</option><option>Córdoba</option><option>Corrientes</option>
+          <option>Entre Ríos</option><option>Formosa</option><option>Jujuy</option>
+          <option>La Pampa</option><option>La Rioja</option><option>Mendoza</option>
+          <option>Misiones</option><option>Neuquén</option><option>Río Negro</option>
+          <option>Salta</option><option>San Juan</option><option>San Luis</option>
+          <option>Santa Cruz</option><option>Santa Fe</option><option>Santiago del Estero</option>
+          <option>Tierra del Fuego</option><option>Tucumán</option>
+        </select>
+      </div>
 
-<button onclick="openTransferModal()"
-style="background:#009ee3;color:white;border:none;padding:13px 20px;border-radius:12px;font-weight:700;font-size:1rem;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;cursor:pointer;">
-Pagar con Transferencia
-<div style="display:flex;gap:8px;align-items:center;justify-content:center;">
-<img src="pago.png" style="width:24px;height:24px;object-fit:contain;">
-<img src="pago1.png" style="width:24px;height:24px;object-fit:contain;">
-<img src="pago2.png" style="width:24px;height:24px;object-fit:contain;">
-<img src="pago3.png" style="width:24px;height:24px;object-fit:contain;">
-</div>
-</button>
+      <!-- LOCALIDAD -->
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <label style="font-size:0.8rem;color:#aaa;font-weight:600;">Localidad</label>
+        <input type="text" id="checkoutLocalidad" placeholder="Ej: Formosa" oninput="checkoutUpdateEnvio()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+      </div>
 
-<button onclick="closePayModal()"
-style="background:transparent;border:1px solid #ff0000;color:#ff0000;padding:10px;border-radius:10px;cursor:pointer;font-size:0.9rem;width:100%;">
-Cancelar
-</button>
+      <!-- FORMOSA CAPITAL: solo WhatsApp -->
+      <div id="envioFormosaCapital" style="display:none;">
+        <a id="envioWABtn" href="#" target="_blank"
+          style="display:block;text-align:center;background:#25d366;color:#000;text-decoration:none;padding:14px;border-radius:12px;font-weight:700;font-size:1rem;">
+          📦 Coordinar el envío por WhatsApp
+        </a>
+      </div>
 
-</div>
+      <!-- OTROS: formulario + correo -->
+      <div id="envioOtros" style="display:none;flex-direction:column;gap:14px;">
+
+        <input type="text" id="envNombre" placeholder="Nombre Completo — Ej: Fulano González" oninput="checkoutValidate()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <input type="text" id="envDireccion" placeholder="Dirección" oninput="checkoutValidate()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <input type="text" id="envCP" placeholder="Código Postal (CP)" oninput="checkoutValidate()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <input type="email" id="envEmail" placeholder="Correo Electrónico" oninput="checkoutValidate()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <input type="text" id="envDNI" placeholder="Número de Documento (DNI)" oninput="checkoutValidate()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <input type="tel" id="envTel" placeholder="Número telefónico" oninput="checkoutValidate()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <textarea id="envIndicaciones" placeholder="Indicaciones extra (opcional)" oninput="checkoutValidate()" rows="4"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;resize:vertical;"></textarea>
+
+        <!-- COURIER -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <label style="font-size:0.8rem;color:#aaa;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Servicio de envío</label>
+
+          <label id="labelCorreo" onclick="selectCourier('correo')" style="display:flex;align-items:center;gap:12px;padding:14px;border:1px solid #333;border-radius:12px;cursor:pointer;transition:0.2s;">
+            <span id="radioCorreo" style="width:20px;height:20px;border-radius:50%;border:2px solid #555;flex-shrink:0;transition:0.2s;"></span>
+            <img src="correo argentino.jpg" style="width:28px;height:28px;object-fit:contain;border-radius:4px;">
+            <span style="font-weight:600;font-size:0.95rem;">Correo Argentino</span>
+          </label>
+
+          <label id="labelAndreani" onclick="selectCourier('andreani')" style="display:flex;align-items:center;gap:12px;padding:14px;border:1px solid #333;border-radius:12px;cursor:pointer;transition:0.2s;">
+            <span id="radioAndreani" style="width:20px;height:20px;border-radius:50%;border:2px solid #555;flex-shrink:0;transition:0.2s;"></span>
+            <img src="andreani.jpg" style="width:28px;height:28px;object-fit:contain;border-radius:4px;">
+            <span style="font-weight:600;font-size:0.95rem;">Andreani</span>
+          </label>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CONFIRMAR -->
+    <button id="checkoutConfirmBtn" onclick="openTransferFromCheckout()" disabled
+      style="padding:16px;border-radius:14px;border:none;background:#25d366;color:#000;font-weight:900;font-size:1.1rem;cursor:not-allowed;filter:blur(1.5px) opacity(0.4);transition:0.3s;width:100%;">
+      Confirmar compra
+    </button>
+
+  </div>
 </div>
 
 <!-- PRODUCT DETAIL MODAL -->
@@ -1292,50 +1392,43 @@ COMPRAR YA
 </div>
 
 <!-- DATOS DE TRANSFERENCIA -->
-
 <div class="discount-alert-overlay" id="transferModal">
-<div class="discount-alert-box" style="max-width:400px;gap:18px;text-align:left;">
+<div class="discount-alert-box" style="max-width:420px;gap:16px;text-align:left;">
 
-<h3 style="color:white;font-size:1.1rem;font-weight:900;text-align:center;letter-spacing:1px;">
-💳 DATOS PARA TRANSFERIR
-</h3>
+  <h3 style="color:white;font-size:1.1rem;font-weight:900;text-align:center;letter-spacing:1px;">💳 DATOS PARA TRANSFERIR</h3>
 
-<div style="display:flex;flex-direction:column;gap:12px;">
+  <p style="color:#ccc;font-size:0.85rem;line-height:1.6;text-align:center;background:#0f0f0f;border:1px solid #333;border-radius:10px;padding:12px;">
+    Copiá y pegá el alias o CVU al hacer la transferencia, luego confirmá tu compra enviando tus datos de envío junto con el comprobante de pago por WhatsApp.
+  </p>
 
-<div>
-<span style="color:var(--green);font-size:0.75rem;font-weight:700;">ALIAS</span><br>
-<span style="color:white;font-size:1rem;font-weight:700;letter-spacing:1px;">blazeborn.ar</span>
-<button onclick="copyText('blazeborn.ar', this)"
-style="margin-left:10px;background:#1a1a1a;border:1px solid #444;color:#aaa;padding:4px 10px;border-radius:8px;font-size:0.75rem;cursor:pointer;">
-Copiar
-</button>
-</div>
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <div>
+      <span style="color:var(--green);font-size:0.75rem;font-weight:700;">ALIAS</span><br>
+      <span style="color:white;font-size:1rem;font-weight:700;letter-spacing:1px;">blazeborn.ar</span>
+      <button onclick="copyText('blazeborn.ar', this)"
+        style="margin-left:10px;background:#1a1a1a;border:1px solid #444;color:#aaa;padding:4px 10px;border-radius:8px;font-size:0.75rem;cursor:pointer;">Copiar</button>
+    </div>
+    <div>
+      <span style="color:var(--green);font-size:0.75rem;font-weight:700;">CVU</span><br>
+      <span style="color:white;font-size:0.9rem;font-weight:700;letter-spacing:1px;">0000003100066889905144</span>
+      <button onclick="copyText('0000003100066889905144', this)"
+        style="margin-left:10px;background:#1a1a1a;border:1px solid #444;color:#aaa;padding:4px 10px;border-radius:8px;font-size:0.75rem;cursor:pointer;">Copiar</button>
+    </div>
+    <div>
+      <span style="color:var(--green);font-size:0.75rem;font-weight:700;">A NOMBRE DE</span><br>
+      <span style="color:white;font-size:1rem;font-weight:700;">Matías Emanuel Cherñac</span>
+    </div>
+  </div>
 
-<div>
-<span style="color:var(--green);font-size:0.75rem;font-weight:700;">CVU</span><br>
-<span style="color:white;font-size:0.95rem;font-weight:700;letter-spacing:1px;">0000003100066889905144</span>
-<button onclick="copyText('0000003100066889905144', this)"
-style="margin-left:10px;background:#1a1a1a;border:1px solid #444;color:#aaa;padding:4px 10px;border-radius:8px;font-size:0.75rem;cursor:pointer;">
-Copiar
-</button>
-</div>
+  <a id="checkoutWALink" href="#" target="_blank"
+    style="display:block;text-align:center;background:#25d366;color:#000;text-decoration:none;padding:13px;border-radius:12px;font-weight:700;font-size:0.95rem;width:100%;">
+    ✅ Confirmar pedido por WhatsApp
+  </a>
 
-<div>
-<span style="color:var(--green);font-size:0.75rem;font-weight:700;">A NOMBRE DE</span><br>
-<span style="color:white;font-size:1rem;font-weight:700;">Matías Emanuel Cherñac</span>
-</div>
-
-</div>
-
-<a id="payWALink" href="#" target="_blank"
-style="display:block;text-align:center;background:transparent;color:#25d366;text-decoration:none;padding:8px 16px;border-radius:10px;border:1px solid #25d366;font-weight:600;font-size:0.9rem;width:100%;">
-✅ Confirmar pedido por WhatsApp
-</a>
-
-<button onclick="closeTransferModal(); closePayModal();"
-style="background:var(--green);color:#000;border:none;padding:13px;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;width:100%;margin-top:5px;">
-OK
-</button>
+  <button onclick="closeTransferModal()"
+    style="background:transparent;border:1px solid #ff0000;color:#ff0000;padding:10px;border-radius:10px;cursor:pointer;font-size:0.9rem;width:100%;">
+    Cerrar
+  </button>
 
 </div>
 </div>
@@ -2339,58 +2432,176 @@ openPayModal("Carrito", null, baseTotal, resumen, true);
 
 }
 
-let currentPayData = null;
+// ── CHECKOUT ──────────────────────────────────────────────────
+
+let checkoutData = null;
+let selectedCourier = "";
 
 function openPayModal(name, size, baseTotal, resumen, isCart){
-
-currentPayData = {name, size, baseTotal, resumen, isCart};
-
-const total = getDiscountedPrice(baseTotal);
-
-// Build product name display
-let productDisplay = "";
+let items = [];
 if(isCart && cart.length > 0){
-cart.forEach(item => {
-const orig = item.basePrice;
-const disc = getDiscountedPrice(orig);
-const hasDisc = activeDiscount !== "" && disc !== orig;
-const lineOrig = hasDisc ? ` (antes $${(orig * item.qty).toLocaleString()})` : "";
-productDisplay += `${item.name} x${item.qty} (Talle: ${item.size}) — $${(disc * item.qty).toLocaleString()} ARS${lineOrig}\n`;
+items = cart.map(i => ({name:i.name, size:i.size, qty:i.qty, basePrice:i.basePrice}));
+}else{
+items = [{name, size, qty:1, basePrice:baseTotal}];
+}
+checkoutData = {items, baseTotal, isCart};
+openCheckout();
+}
+
+function openCheckout(){
+if(!checkoutData) return;
+["cart-floating","whatsapp-float","hamburger-btn"].forEach(cls => {
+document.querySelectorAll("."+cls).forEach(el => el.style.display="none");
 });
+const itemsEl = document.getElementById("checkoutItems");
+itemsEl.innerHTML = "";
+checkoutData.items.forEach(item => {
+const disc = getDiscountedPrice(item.basePrice);
+const total = disc * item.qty;
+itemsEl.innerHTML += `<div style="display:flex;align-items:center;gap:14px;background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:14px;"><img src="${getProductImg(item.name)}" style="width:70px;height:70px;object-fit:cover;border-radius:10px;flex-shrink:0;"><div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:0.95rem;margin-bottom:4px;">${item.name}</div><div style="color:#aaa;font-size:0.82rem;">Talle: ${item.size} &nbsp;·&nbsp; Cantidad: ${item.qty}</div><div style="color:var(--red);font-weight:700;font-size:0.95rem;margin-top:4px;">$${total.toLocaleString()} ARS</div></div></div>`;
+});
+updateCheckoutSubtotal();
+document.getElementById("checkoutDiscountCode").value = "";
+document.getElementById("checkoutDiscountMsg").style.display = "none";
+document.getElementById("checkoutProvincia").value = "";
+document.getElementById("checkoutLocalidad").value = "";
+document.getElementById("envioFormosaCapital").style.display = "none";
+document.getElementById("envioOtros").style.display = "none";
+selectedCourier = "";
+resetCourierUI();
+["envNombre","envDireccion","envCP","envEmail","envDNI","envTel","envIndicaciones"].forEach(id => {
+const el = document.getElementById(id); if(el) el.value = "";
+});
+const overlay = document.getElementById("checkoutOverlay");
+overlay.style.display = "flex";
+overlay.style.flexDirection = "column";
+overlay.scrollTop = 0;
+document.body.style.overflow = "hidden";
+checkoutValidate();
+}
+
+function closeCheckout(){
+document.getElementById("checkoutOverlay").style.display = "none";
+document.body.style.overflow = "";
+["cart-floating","whatsapp-float","hamburger-btn"].forEach(cls => {
+document.querySelectorAll("."+cls).forEach(el => el.style.display="");
+});
+}
+
+function closePayModal(){ closeCheckout(); }
+function applyModalDiscount(){ applyCheckoutDiscount(); }
+
+function getProductImg(name){
+const map = {"Compresivo Tribal Rojo":"compresrojo.jpg","Compresivo Tribal Morado":"compresmorado.jpg","Compresivo Tribal Blanco":"compresblanco.jpg","Compresivo Básico":"compresbasico.jpg","Compresivo de Berserk":"berserk.jpg","Compresivo Clásico":"clasico.jpg","Musculosa Tribal":"muscu.jpg","Musculosa Mike Mentzer":"mentzer.jpg","Musculosa Kevin Levrone":"kevin.jpg","Calza de Lycra":"calza.jpg"};
+return map[name] || "";
+}
+
+function updateCheckoutSubtotal(){
+if(!checkoutData) return;
+let total = 0;
+checkoutData.items.forEach(i => { total += getDiscountedPrice(i.basePrice) * i.qty; });
+document.getElementById("checkoutSubtotal").innerText = `$${total.toLocaleString()} ARS`;
+}
+
+function applyCheckoutDiscount(){
+if(activeDiscount !== ""){
+const msg = document.getElementById("checkoutDiscountMsg");
+msg.style.display="block"; msg.style.color="#ff0000"; msg.innerText="Ya tenés un código aplicado."; return;
+}
+const code = document.getElementById("checkoutDiscountCode").value.trim().toUpperCase();
+const msg = document.getElementById("checkoutDiscountMsg");
+if(validCodes.includes(code)){
+activeDiscount = code; updatePrices();
+const itemsEl = document.getElementById("checkoutItems");
+checkoutData.items.forEach(item => {
+const disc = getDiscountedPrice(item.basePrice);
+const total = disc * item.qty;
+});
+updateCheckoutSubtotal();
+msg.style.display="block"; msg.style.color="var(--green)"; msg.innerText="✅ ¡Descuento del 10% aplicado!";
 }else{
-productDisplay = `${name} | Talle: ${size}`;
+msg.style.display="block"; msg.style.color="#ff0000"; msg.innerText="❌ Código inválido.";
+}
 }
 
-document.getElementById("payProductName").innerText = productDisplay;
+function checkoutUpdateEnvio(){
+const prov = document.getElementById("checkoutProvincia").value;
+const loc = document.getElementById("checkoutLocalidad").value.trim().toLowerCase();
+const isFormosaCapital = prov === "Formosa" && loc === "formosa";
+document.getElementById("envioFormosaCapital").style.display = isFormosaCapital ? "block" : "none";
+document.getElementById("envioOtros").style.display = (!isFormosaCapital && prov !== "") ? "flex" : "none";
+if(isFormosaCapital){
+const waMsg = buildWAMessage(true);
+document.getElementById("envioWABtn").href = `https://wa.me/5493704509580?text=${encodeURIComponent(waMsg)}`;
+}
+checkoutValidate();
+}
 
-const origEl = document.getElementById("payOriginalTotal");
-if(activeDiscount !== "" && total !== baseTotal){
-origEl.style.display = "inline";
-origEl.innerText = `$${baseTotal.toLocaleString()} ARS`;
+function selectCourier(val){
+selectedCourier = val; resetCourierUI();
+if(val === "correo"){
+document.getElementById("radioCorreo").style.background="var(--red)";
+document.getElementById("radioCorreo").style.borderColor="var(--red)";
+document.getElementById("labelCorreo").style.borderColor="var(--red)";
 }else{
-origEl.style.display = "none";
-origEl.innerText = "";
+document.getElementById("radioAndreani").style.background="var(--red)";
+document.getElementById("radioAndreani").style.borderColor="var(--red)";
+document.getElementById("labelAndreani").style.borderColor="var(--red)";
+}
+checkoutValidate();
 }
 
-document.getElementById("payTotal").innerText =
-`$${total.toLocaleString()} ARS`;
-
-const waMessage = isCart
-? `¡Hola! Acabo de realizar el pago de $${total.toLocaleString()} ARS por los siguientes productos:\n\n${productDisplay}Código canjeado: ${activeDiscount || "Ninguno"}\n\nAdjunto el comprobante de pago. ¡Gracias!`
-: `¡Hola! Acabo de realizar el pago de $${total.toLocaleString()} ARS por:\n\n- Producto: ${name}\n- Talle: ${size}\n- Código canjeado: ${activeDiscount || "Ninguno"}\n\nAdjunto el comprobante de pago. ¡Gracias!`;
-
-document.getElementById("payWALink").href =
-`https://wa.me/5493704509580?text=${encodeURIComponent(waMessage)}`;
-
-document.getElementById("modalDiscountCode").value = "";
-
-document.getElementById("payModal").classList.add("active");
-
+function resetCourierUI(){
+["radioCorreo","radioAndreani"].forEach(id=>{const el=document.getElementById(id);if(el){el.style.background="transparent";el.style.borderColor="#555";}});
+["labelCorreo","labelAndreani"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.borderColor="#333";});
 }
 
-function closePayModal(){
-document.getElementById("payModal").classList.remove("active");
-currentPayData = null;
+function checkoutValidate(){
+const prov = document.getElementById("checkoutProvincia").value;
+const loc = document.getElementById("checkoutLocalidad").value.trim().toLowerCase();
+const isFormosaCapital = prov === "Formosa" && loc === "formosa";
+const othersVisible = document.getElementById("envioOtros").style.display !== "none";
+let valid = false;
+if(othersVisible){
+const fields = ["envNombre","envDireccion","envCP","envEmail","envDNI","envTel"];
+const filled = fields.every(id => document.getElementById(id).value.trim() !== "");
+valid = filled && selectedCourier !== "";
+}
+const btn = document.getElementById("checkoutConfirmBtn");
+if(valid){
+btn.disabled=false; btn.style.filter="none"; btn.style.cursor="pointer";
+}else{
+btn.disabled=true; btn.style.filter="blur(1.5px) opacity(0.4)"; btn.style.cursor="not-allowed";
+}
+}
+
+function buildWAMessage(isFormosa){
+if(!checkoutData) return "";
+let msg = "Hola, quiero confirmar mi compra:\n\n";
+checkoutData.items.forEach(item => {
+const price = getDiscountedPrice(item.basePrice) * item.qty;
+msg += `- ${item.name}\n  Cantidad: ${item.qty}\n  Talle: ${item.size}\n  Precio: $${price.toLocaleString()} ARS\n`;
+});
+let total = 0;
+checkoutData.items.forEach(i => { total += getDiscountedPrice(i.basePrice) * i.qty; });
+msg += `\nTotal: $${total.toLocaleString()} ARS`;
+if(activeDiscount) msg += ` (código: ${activeDiscount})`;
+msg += "\n\n——————————————\n";
+if(isFormosa){
+msg += "Localidad: Formosa Capital\nEnvío: A coordinar\n";
+}else{
+msg += `Datos de envío:\n- Nombre: ${document.getElementById("envNombre").value}\n- Dirección: ${document.getElementById("envDireccion").value}\n- Código Postal: ${document.getElementById("envCP").value}\n- Email: ${document.getElementById("envEmail").value}\n- DNI: ${document.getElementById("envDNI").value}\n- Teléfono: ${document.getElementById("envTel").value}\n`;
+const ind = document.getElementById("envIndicaciones").value.trim();
+if(ind) msg += `- Indicaciones: ${ind}\n`;
+msg += `- Servicio de envío: ${selectedCourier === "correo" ? "Correo Argentino" : "Andreani"}\n- Costo de envío: a confirmar\n`;
+}
+return msg;
+}
+
+function openTransferFromCheckout(){
+const waMsg = buildWAMessage(false);
+document.getElementById("checkoutWALink").href = `https://wa.me/5493704509580?text=${encodeURIComponent(waMsg)}`;
+document.getElementById("transferModal").classList.add("active");
 }
 
 function openTransferModal(){
