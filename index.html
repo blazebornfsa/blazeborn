@@ -196,7 +196,7 @@ width:100%;height:100%;
 background:#000;
 z-index:2000;
 flex-direction:column;
-overflow:hidden;
+overflow-y:auto;
 }
 
 .product-modal-overlay.active{
@@ -228,8 +228,6 @@ display:flex;align-items:center;justify-content:center;
 .modal-img-slider{
 position:relative;
 width:100%;
-aspect-ratio:1/1;
-flex-shrink:0;
 overflow:hidden;
 background:#0a0a0a;
 }
@@ -238,13 +236,12 @@ background:#0a0a0a;
 display:flex;
 transition:transform 0.4s ease;
 width:100%;
-height:100%;
 }
 
 .modal-slides img{
 width:100%;
 min-width:100%;
-height:100%;
+height:auto;
 display:block;
 object-fit:contain;
 background:#0a0a0a;
@@ -269,30 +266,14 @@ z-index:5;
 .modal-slide-btn.right{ right:12px; }
 
 .modal-product-info{
-overflow-y:scroll;
-scrollbar-width:thin;
-scrollbar-color:#ff0000 #1a1a1a;
-flex:1;
-padding:24px 20px 40px;
+flex:none;
+padding:24px 20px 60px;
 display:flex;
 flex-direction:column;
 gap:16px;
 max-width:700px;
 margin:0 auto;
 width:100%;
-}
-
-.modal-product-info::-webkit-scrollbar{
-width:6px;
-}
-
-.modal-product-info::-webkit-scrollbar-track{
-background:#1a1a1a;
-}
-
-.modal-product-info::-webkit-scrollbar-thumb{
-background:var(--red);
-border-radius:3px;
 }
 
 .modal-product-title{
@@ -1278,10 +1259,22 @@ COMPRAR YA
       </div>
 
       <!-- FORMOSA CAPITAL: solo WhatsApp -->
-      <div id="envioFormosaCapital" style="display:none;">
+      <div id="envioFormosaCapital" style="display:none;flex-direction:column;gap:14px;">
+
+        <div id="envioFormosaForm" style="display:none;flex-direction:column;gap:12px;">
+          <input type="text" id="envFNombre" placeholder="Nombre Completo — Ej: Fulano González" oninput="checkoutValidate()"
+            style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+          <input type="text" id="envFDireccion" placeholder="Dirección" oninput="checkoutValidate()"
+            style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+          <input type="tel" id="envFTel" placeholder="Número telefónico" oninput="checkoutValidate()"
+            style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+          <textarea id="envFIndicaciones" placeholder="Indicaciones extra (opcional)" oninput="checkoutValidate()" rows="3"
+            style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;resize:vertical;"></textarea>
+        </div>
+
         <a id="envioWABtn" href="#" target="_blank"
           style="display:block;text-align:center;background:#25d366;color:#000;text-decoration:none;padding:14px;border-radius:12px;font-weight:700;font-size:1rem;">
-          📦 Coordinar el envío por WhatsApp
+          📦 Si sos de Formosa, coordiná el envío por WhatsApp
         </a>
       </div>
 
@@ -2469,9 +2462,11 @@ document.getElementById("envioFormosaCapital").style.display = "none";
 document.getElementById("envioOtros").style.display = "none";
 selectedCourier = "";
 resetCourierUI();
-["envNombre","envDireccion","envCP","envEmail","envDNI","envTel","envIndicaciones"].forEach(id => {
+["envNombre","envDireccion","envCP","envEmail","envDNI","envTel","envIndicaciones",
+"envFNombre","envFDireccion","envFTel","envFIndicaciones"].forEach(id => {
 const el = document.getElementById(id); if(el) el.value = "";
 });
+document.getElementById("envioFormosaForm").style.display = "none";
 const overlay = document.getElementById("checkoutOverlay");
 overlay.style.display = "flex";
 overlay.style.flexDirection = "column";
@@ -2530,6 +2525,7 @@ const loc = document.getElementById("checkoutLocalidad").value.trim().toLowerCas
 const isFormosaCapital = prov === "Formosa" && loc === "formosa";
 document.getElementById("envioFormosaCapital").style.display = isFormosaCapital ? "block" : "none";
 document.getElementById("envioOtros").style.display = (!isFormosaCapital && prov !== "") ? "flex" : "none";
+document.getElementById("envioFormosaForm").style.display = isFormosaCapital ? "flex" : "none";
 if(isFormosaCapital){
 const waMsg = buildWAMessage(true);
 document.getElementById("envioWABtn").href = `https://wa.me/5493704509580?text=${encodeURIComponent(waMsg)}`;
@@ -2562,13 +2558,20 @@ const loc = document.getElementById("checkoutLocalidad").value.trim().toLowerCas
 const isFormosaCapital = prov === "Formosa" && loc === "formosa";
 const othersVisible = document.getElementById("envioOtros").style.display !== "none";
 let valid = false;
-if(othersVisible){
+if(isFormosaCapital){
+const fields = ["envFNombre","envFDireccion","envFTel"];
+valid = fields.every(id => document.getElementById(id).value.trim() !== "");
+// rebuild WA link live
+const waMsg = buildWAMessage(true);
+const btn = document.getElementById("envioWABtn");
+if(btn) btn.href = `https://wa.me/5493704509580?text=${encodeURIComponent(waMsg)}`;
+}else if(othersVisible){
 const fields = ["envNombre","envDireccion","envCP","envEmail","envDNI","envTel"];
 const filled = fields.every(id => document.getElementById(id).value.trim() !== "");
 valid = filled && selectedCourier !== "";
 }
 const btn = document.getElementById("checkoutConfirmBtn");
-if(valid){
+if(valid && !isFormosaCapital){
 btn.disabled=false; btn.style.filter="none"; btn.style.cursor="pointer";
 }else{
 btn.disabled=true; btn.style.filter="blur(1.5px) opacity(0.4)"; btn.style.cursor="not-allowed";
@@ -2588,7 +2591,16 @@ msg += `\nTotal: $${total.toLocaleString()} ARS`;
 if(activeDiscount) msg += ` (código: ${activeDiscount})`;
 msg += "\n\n——————————————\n";
 if(isFormosa){
-msg += "Localidad: Formosa Capital\nEnvío: A coordinar\n";
+const fNombre = document.getElementById("envFNombre") ? document.getElementById("envFNombre").value : "";
+const fDireccion = document.getElementById("envFDireccion") ? document.getElementById("envFDireccion").value : "";
+const fTel = document.getElementById("envFTel") ? document.getElementById("envFTel").value : "";
+const fInd = document.getElementById("envFIndicaciones") ? document.getElementById("envFIndicaciones").value.trim() : "";
+msg += `Localidad: Formosa Capital\n`;
+if(fNombre) msg += `- Nombre: ${fNombre}\n`;
+if(fDireccion) msg += `- Dirección: ${fDireccion}\n`;
+if(fTel) msg += `- Teléfono: ${fTel}\n`;
+if(fInd) msg += `- Indicaciones: ${fInd}\n`;
+msg += "- Envío: A coordinar por WhatsApp\n";
 }else{
 msg += `Datos de envío:\n- Nombre: ${document.getElementById("envNombre").value}\n- Dirección: ${document.getElementById("envDireccion").value}\n- Código Postal: ${document.getElementById("envCP").value}\n- Email: ${document.getElementById("envEmail").value}\n- DNI: ${document.getElementById("envDNI").value}\n- Teléfono: ${document.getElementById("envTel").value}\n`;
 const ind = document.getElementById("envIndicaciones").value.trim();
