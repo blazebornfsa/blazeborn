@@ -184,6 +184,7 @@ margin-bottom:4px;
 color:var(--red);
 font-size:0.95rem;
 font-weight:700;
+line-height:1.3;
 }
 
 /* PRODUCT MODAL */
@@ -290,7 +291,7 @@ line-height:1.7;
 
 .modal-old-price{
 color:#888;
-font-size:0.65rem;
+font-size:0.95rem;
 text-decoration:line-through;
 display:none;
 }
@@ -1127,19 +1128,99 @@ background:#f5f5f5;
 border-color:#e0e0e0;
 }
 
+/* BANNER DESCUENTO LIGHT THEME */
+body.light-theme section > div[style*="rgba(0,255,115,0.1)"] {
+background: rgba(255,0,0,0.1) !important;
+border-color: var(--red) !important;
+}
+
+body.light-theme section > div[style*="rgba(0,255,115,0.1)"] > div {
+color: var(--red) !important;
+text-shadow: 0 0 20px rgba(255,0,0,0.3) !important;
+}
+
+/* PRICE SUMMARY BOX */
+.checkout-price-summary{
+background:#333;
+border-radius:14px;
+padding:18px;
+display:flex;
+flex-direction:column;
+gap:12px;
+margin-bottom:18px;
+}
+
+.price-items-list{
+display:flex;
+flex-direction:column;
+gap:6px;
+border-bottom:1px solid #555;
+padding-bottom:12px;
+}
+
+.price-item-line{
+font-size:0.8rem;
+color:#bbb;
+font-weight:500;
+}
+
+.price-shipping-line{
+font-size:1.05rem;
+color:#ccc;
+font-weight:700;
+}
+
+.price-total-line{
+font-size:1.6rem;
+color:#00ff73;
+font-weight:900;
+letter-spacing:1px;
+}
+
+.free-shipping-msg{
+color:var(--green);
+font-size:0.75rem;
+font-weight:700;
+letter-spacing:1px;
+text-align:center;
+margin-top:8px;
+}
+
+/* COURIER DISPLAY */
+.courier-display{
+display:flex;
+align-items:center;
+gap:12px;
+padding:14px;
+border:1px solid #333;
+border-radius:12px;
+background:#1a1a1a;
+cursor:default;
+}
+
+.courier-display img{
+width:28px;
+height:28px;
+object-fit:contain;
+border-radius:4px;
+}
+
+.courier-display-name{
+font-weight:600;
+font-size:0.95rem;
+color:#ccc;
+}
+
 
 </style>
 </head>
 
 <body>
 
-<!-- HAMBURGER BUTTON -->
 <button class="hamburger-btn" onclick="toggleMenu()" id="hamburgerBtn" aria-label="Menú">☰</button>
 
-<!-- MENU BACKDROP -->
 <div class="menu-backdrop" id="menuBackdrop" onclick="closeMenu()"></div>
 
-<!-- HAMBURGER MENU -->
 <div class="hamburger-menu" id="hamburgerMenu">
 
   <span class="menu-title">Opciones</span>
@@ -1171,8 +1252,6 @@ border-color:#e0e0e0;
 
 </div>
 
-<!-- CARRITO -->
-
 <div class="cart-floating" onclick="toggleCart()">
 <img src="carrito.png" style="width:34px;height:34px;object-fit:contain;">
 </div>
@@ -1199,7 +1278,6 @@ COMPRAR YA
 
 </div>
 
-<!-- CHECKOUT OVERLAY -->
 <div id="checkoutOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:3000;overflow-y:auto;flex-direction:column;">
 
   <div style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:rgba(0,0,0,0.92);backdrop-filter:blur(8px);border-bottom:1px solid #222;">
@@ -1209,7 +1287,6 @@ COMPRAR YA
 
   <div style="max-width:600px;margin:0 auto;width:100%;padding:24px 20px 60px;display:flex;flex-direction:column;gap:28px;">
 
-    <!-- PRODUCTOS -->
     <div>
       <div id="checkoutItems" style="display:flex;flex-direction:column;gap:12px;"></div>
       <div style="margin-top:16px;padding-top:16px;border-top:1px solid #222;display:flex;justify-content:space-between;align-items:center;">
@@ -1218,7 +1295,6 @@ COMPRAR YA
       </div>
     </div>
 
-    <!-- DESCUENTO -->
     <div style="background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px;">
       <span style="font-size:0.75rem;font-weight:700;color:#888;letter-spacing:2px;text-transform:uppercase;">Código de descuento</span>
       <div style="display:flex;gap:10px;">
@@ -1232,11 +1308,9 @@ COMPRAR YA
       <div id="checkoutDiscountMsg" style="font-size:0.8rem;display:none;"></div>
     </div>
 
-    <!-- ENVÍO -->
     <div style="display:flex;flex-direction:column;gap:16px;">
       <div style="font-size:1rem;font-weight:900;letter-spacing:1px;border-left:3px solid var(--red);padding-left:12px;">Seleccionar envío</div>
 
-      <!-- PROVINCIA -->
       <div style="display:flex;flex-direction:column;gap:8px;">
         <label style="font-size:0.8rem;color:#aaa;font-weight:600;">Provincia</label>
         <select id="checkoutProvincia" onchange="checkoutUpdateEnvio()" style="padding:12px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
@@ -1252,14 +1326,21 @@ COMPRAR YA
         </select>
       </div>
 
-      <!-- LOCALIDAD -->
       <div style="display:flex;flex-direction:column;gap:8px;">
         <label style="font-size:0.8rem;color:#aaa;font-weight:600;">Localidad</label>
         <input type="text" id="checkoutLocalidad" placeholder="Ej: Formosa" oninput="checkoutUpdateEnvio()"
           style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
       </div>
 
-      <!-- FORMOSA CAPITAL: solo WhatsApp -->
+      <div id="priceSummaryBox" style="display:none;">
+        <div class="checkout-price-summary">
+          <div class="price-items-list" id="priceSummaryItems"></div>
+          <div class="price-shipping-line">Envío: <span id="shippingCostDisplay">$0 ARS</span></div>
+          <div class="price-total-line" id="priceTotalDisplay">TOTAL: $0 ARS</div>
+        </div>
+        <div class="free-shipping-msg">¡Envío gratis a partir de 3 unidades!</div>
+      </div>
+
       <div id="envioFormosaCapital" style="display:none;flex-direction:column;gap:14px;">
 
         <div id="envioFormosaForm" style="display:none;flex-direction:column;gap:12px;">
@@ -1279,7 +1360,6 @@ COMPRAR YA
         </a>
       </div>
 
-      <!-- OTROS: formulario + correo -->
       <div id="envioOtros" style="display:none;flex-direction:column;gap:14px;">
 
         <input type="text" id="envNombre" placeholder="Nombre Completo — Ej: Fulano González" oninput="checkoutValidate()"
@@ -1297,27 +1377,20 @@ COMPRAR YA
         <textarea id="envIndicaciones" placeholder="Indicaciones extra (opcional)" oninput="checkoutValidate()" rows="4"
           style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;resize:vertical;"></textarea>
 
-        <!-- COURIER -->
         <div style="display:flex;flex-direction:column;gap:10px;">
           <label style="font-size:0.8rem;color:#aaa;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Servicio de envío</label>
 
-          <label id="labelCorreo" onclick="selectCourier('correo')" style="display:flex;align-items:center;gap:12px;padding:14px;border:1px solid #333;border-radius:12px;cursor:pointer;transition:0.2s;">
-            <span id="radioCorreo" style="width:20px;height:20px;border-radius:50%;border:2px solid #555;flex-shrink:0;transition:0.2s;"></span>
+          <div class="courier-display">
             <img src="correo argentino.jpg" style="width:28px;height:28px;object-fit:contain;border-radius:4px;">
-            <span style="font-weight:600;font-size:0.95rem;">Correo Argentino</span>
-          </label>
-
-          <label id="labelAndreani" onclick="selectCourier('andreani')" style="display:flex;align-items:center;gap:12px;padding:14px;border:1px solid #333;border-radius:12px;cursor:pointer;transition:0.2s;">
-            <span id="radioAndreani" style="width:20px;height:20px;border-radius:50%;border:2px solid #555;flex-shrink:0;transition:0.2s;"></span>
-            <img src="andreani.jpg" style="width:28px;height:28px;object-fit:contain;border-radius:4px;">
-            <span style="font-weight:600;font-size:0.95rem;">Andreani</span>
-          </label>
+            <div>
+              <div class="courier-display-name">Correo Argentino - <span id="correoPrice">$0 ARS</span></div>
+            </div>
+          </div>
         </div>
 
       </div>
     </div>
 
-    <!-- CONFIRMAR -->
     <button id="checkoutConfirmBtn" onclick="openTransferFromCheckout()" disabled
       style="padding:16px;border-radius:14px;border:none;background:#25d366;color:#000;font-weight:900;font-size:1.1rem;cursor:not-allowed;filter:blur(1.5px) opacity(0.4);transition:0.3s;width:100%;">
       Confirmar compra
@@ -1325,8 +1398,6 @@ COMPRAR YA
 
   </div>
 </div>
-
-<!-- PRODUCT DETAIL MODAL -->
 
 <div class="product-modal-overlay" id="productModal">
 
@@ -1372,7 +1443,6 @@ COMPRAR YA
 </button>
 </div>
 
-<!-- OPINIÓN EN MODAL -->
 <div id="modalReviewSection" style="display:none;border-top:1px solid #222;padding-top:20px;margin-top:8px;">
 <div style="font-size:0.75rem;font-weight:700;color:#888;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Opinión de cliente</div>
 <div style="background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;">
@@ -1385,7 +1455,6 @@ COMPRAR YA
 </div>
 </div>
 
-<!-- DATOS DE TRANSFERENCIA -->
 <div class="discount-alert-overlay" id="transferModal">
 <div class="discount-alert-box" style="max-width:420px;gap:16px;text-align:left;">
 
@@ -1427,8 +1496,6 @@ COMPRAR YA
 </div>
 </div>
 
-<!-- AVISO DESCUENTO -->
-
 <div class="discount-alert-overlay" id="discountAlert">
 <div class="discount-alert-box">
 <p>✅ ¡Código de descuento aplicado correctamente!</p>
@@ -1436,16 +1503,12 @@ COMPRAR YA
 </div>
 </div>
 
-<!-- AVISO CÓDIGO INVÁLIDO -->
-
 <div class="discount-alert-overlay" id="invalidAlert">
 <div class="discount-alert-box" style="border-color:#ff0000;">
 <p>❌ Código inválido.</p>
 <button class="discount-alert-ok" style="background:#ff0000;" onclick="closeInvalidAlert()">OK</button>
 </div>
 </div>
-
-<!-- GUIA DE TALLES -->
 
 <div class="modal-overlay" id="sizeGuideModal">
 
@@ -1459,8 +1522,6 @@ COMPRAR YA
 
 </div>
 </div>
-
-<!-- HEADER -->
 
 <header>
 
@@ -1479,8 +1540,6 @@ Ropa diseñada para verte estético en el gym y en la calle.
 </p>
 
 </header>
-
-<!-- BUSCADOR INLINE -->
 
 <section style="padding-bottom:0;">
 <div style="position:relative;max-width:520px;">
@@ -1505,7 +1564,6 @@ Ropa diseñada para verte estético en el gym y en la calle.
 </div>
 </section>
 
-<!-- RESULTADOS DE BÚSQUEDA (oculto por defecto) -->
 <section id="secSearchResults" style="display:none;">
 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;">
 <h2 class="section-title" id="searchResultsTitle" style="margin-bottom:0;border:none;padding:0;font-size:1.6rem;">Resultados</h2>
@@ -1514,7 +1572,13 @@ Ropa diseñada para verte estético en el gym y en la calle.
 <div id="searchResultsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:25px;"></div>
 </section>
 
-<!-- PRODUCTOS -->
+<section style="padding-top:40px;padding-bottom:20px;">
+<div style="background:rgba(0,255,115,0.1);border:2px solid var(--green);border-radius:16px;padding:24px;text-align:center;backdrop-filter:blur(4px);">
+<div style="font-size:2rem;font-weight:900;letter-spacing:3px;color:var(--green);text-shadow:0 0 20px rgba(0,255,115,0.3);">
+10% OFF HASTA AGOTAR STOCK
+</div>
+</div>
+</section>
 
 <section id="secCompresion">
 
@@ -1529,25 +1593,22 @@ Remeras de Compresión
 <div class="carousel-viewport" id="carouselViewport">
 <div class="products-grid" id="productsGrid">
 
-<!-- ROJO -->
 <div class="product-card" onclick="openProductModal(0)">
 <img src="compresrojo.jpg" class="card-thumb" alt="Compresivo Tribal Rojo">
 <div class="card-label">
 <div class="card-name">Compresivo Tribal Rojo</div>
-<div class="card-price" id="price0">$30.000 ARS</div>
+<div class="card-price" id="price0"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$30.000 ARS</span><br>$27.000 ARS</div>
 </div>
 </div>
 
-<!-- MORADO -->
 <div class="product-card" onclick="openProductModal(1)">
 <img src="compresmorado.jpg" class="card-thumb" alt="Compresivo Tribal Morado">
 <div class="card-label">
 <div class="card-name">Compresivo Tribal Morado</div>
-<div class="card-price" id="price1">$30.000 ARS</div>
+<div class="card-price" id="price1"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$30.000 ARS</span><br>$27.000 ARS</div>
 </div>
 </div>
 
-<!-- BLANCO -->
 <div class="product-card" onclick="openProductModal(2)" style="cursor:pointer;">
 <div style="position:relative;">
 <img src="compresblanco.jpg" class="card-thumb" alt="Compresivo Tribal Blanco">
@@ -1557,34 +1618,31 @@ Remeras de Compresión
 </div>
 <div class="card-label">
 <div class="card-name" style="color:#ff0000;font-weight:900;">AGOTADO</div>
-<div class="card-price" id="price2">$30.000 ARS</div>
+<div class="card-price" id="price2"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$30.000 ARS</span><br>$27.000 ARS</div>
 </div>
 </div>
 
-<!-- BASICO -->
 <div class="product-card" onclick="openProductModal(3)">
 <img src="compresbasico.jpg" class="card-thumb" alt="Compresivo Básico">
 <div class="card-label">
 <div class="card-name">Compresivo Básico</div>
-<div class="card-price" id="price3">$25.000 ARS</div>
+<div class="card-price" id="price3"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$25.000 ARS</span><br>$22.500 ARS</div>
 </div>
 </div>
 
-<!-- BERSERK -->
 <div class="product-card" onclick="openProductModal(4)">
 <img src="berserk.jpg" class="card-thumb" alt="Compresivo de Berserk">
 <div class="card-label">
 <div class="card-name">Compresivo de Berserk</div>
-<div class="card-price" id="price4">$25.000 ARS</div>
+<div class="card-price" id="price4"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$25.000 ARS</span><br>$22.500 ARS</div>
 </div>
 </div>
 
-<!-- CLASICO -->
 <div class="product-card" onclick="openProductModal(5)">
 <img src="clasico.jpg" class="card-thumb" alt="Compresivo Clásico">
 <div class="card-label">
 <div class="card-name">Compresivo Clásico</div>
-<div class="card-price" id="price5">$25.000 ARS</div>
+<div class="card-price" id="price5"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$25.000 ARS</span><br>$22.500 ARS</div>
 </div>
 </div>
 
@@ -1596,8 +1654,6 @@ Remeras de Compresión
 </div>
 
 </section>
-
-<!-- MUSCULOSAS -->
 
 <section id="secMusculosas">
 
@@ -1612,7 +1668,6 @@ Musculosas
 <div class="carousel-viewport" id="muscuViewport">
 <div class="products-grid" id="muscuGrid">
 
-<!-- TRIBAL -->
 <div class="product-card" onclick="openMuscuModal(0)">
 <div style="position:relative;">
 <img src="muscu.jpg" class="card-thumb" alt="Musculosa Tribal">
@@ -1625,7 +1680,6 @@ Musculosas
 </div>
 </div>
 
-<!-- MENTZER -->
 <div class="product-card" onclick="openMuscuModal(1)">
 <div style="position:relative;">
 <img src="mentzer.jpg" class="card-thumb" alt="Musculosa Mike Mentzer">
@@ -1638,7 +1692,6 @@ Musculosas
 </div>
 </div>
 
-<!-- KEVIN -->
 <div class="product-card" onclick="openMuscuModal(2)">
 <div style="position:relative;">
 <img src="kevin.jpg" class="card-thumb" alt="Musculosa Kevin Levrone">
@@ -1660,8 +1713,6 @@ Musculosas
 
 </section>
 
-<!-- CALZAS -->
-
 <section id="secCalzas">
 
 <h2 class="section-title">
@@ -1675,7 +1726,6 @@ Calzas <span style="color:#aaa;font-weight:400;font-size:1.4rem;">(para mujeres)
 <div class="carousel-viewport" id="calzaViewport">
 <div class="products-grid" id="calzaGrid">
 
-<!-- CALZA DE LYCRA -->
 <div class="product-card" onclick="openCalzaModal(0)">
 <img src="calza.jpg" class="card-thumb" alt="Calza de Lycra">
 <div class="card-label">
@@ -1691,8 +1741,6 @@ Calzas <span style="color:#aaa;font-weight:400;font-size:1.4rem;">(para mujeres)
 </div>
 
 </section>
-
-<!-- SOBRE NOSOTROS -->
 
 <section>
 
@@ -1718,8 +1766,6 @@ Cuando escuches música pesada, ya sea Rock o Metal, te acordarás de nosotros.
 
 </section>
 
-<!-- OPINIONES -->
-
 <section>
 
 <h2 class="section-title">
@@ -1730,29 +1776,27 @@ Opiniones
 
 <div class="review">
 <div class="stars">★★★★★</div>
-<p>“La calidad es increíble. La tela ajusta perfecto y se nota muchísimo el físico.”</p>
+<p>"La calidad es increíble. La tela ajusta perfecto y se nota muchísimo el físico."</p>
 </div>
 
 <div class="review">
 <div class="stars">★★★★★</div>
-<p>“Compré el tribal rojo y literalmente todos me preguntan dónde lo conseguí.”</p>
+<p>"Compré el tribal rojo y literalmente todos me preguntan dónde lo conseguí."</p>
 </div>
 
 <div class="review">
 <div class="stars">★★★★★</div>
-<p>“Muy cómodo para entrenar y usar en la calle. Se siente premium.”</p>
+<p>"Muy cómodo para entrenar y usar en la calle. Se siente premium."</p>
 </div>
 
 <div class="review">
 <div class="stars">★★★★★</div>
-<p>“Excelente atención y el envío llegó rapidísimo. Recomendado.”</p>
+<p>"Excelente atención y el envío llegó rapidísimo. Recomendado."</p>
 </div>
 
 </div>
 
 </section>
-
-<!-- REDES -->
 
 <section>
 
@@ -1782,6 +1826,13 @@ target="_blank">
 
 <script>
 
+// SHIPPING COSTS BY WEIGHT
+const shippingCostsByWeight = {
+  "0-800": 8000,      // 0g - 800g: $8000
+  "801-1500": 9500,   // 801g - 1,5kg: $9500
+  "1501-3000": 11500  // 1,5kg - 3kg: $11500
+};
+
 // PRODUCT DATA
 
 const products = [
@@ -1789,50 +1840,62 @@ const products = [
 name: "Compresivo Tribal Rojo",
 desc: "Compresión total para entrenar al límite. Tela técnica que se adapta a tu físico y diseño tribal que no pasa desapercibido, dentro y fuera del gym.",
 imgs: ["compresrojo.jpg","compresrojo1.jpg"],
-price: 30000,
+price: 27000,
+oldPrice: 30000,
 idx: 0,
-soldoutSizes: ["S"]
+weight: 200,
+soldoutSizes: ["S","XL"]
 },
 {
 name: "Compresivo Tribal Morado",
 desc: "Compresión total para entrenar al límite. Tela técnica que se adapta a tu físico y diseño tribal que no pasa desapercibido, dentro y fuera del gym.",
 imgs: ["compresmorado.jpg","compresmorado1.jpg"],
-price: 30000,
+price: 27000,
+oldPrice: 30000,
 idx: 1,
-soldoutSizes: ["S"]
+weight: 200,
+soldoutSizes: ["S","XL"]
 },
 {
 name: "Compresivo Tribal Blanco",
 desc: "Compresión total para entrenar al límite. Tela técnica que se adapta a tu físico y diseño tribal que no pasa desapercibido, dentro y fuera del gym.",
 imgs: ["compresblanco.jpg","compresblanco1.jpg"],
-price: 30000,
+price: 27000,
+oldPrice: 30000,
 idx: 2,
+weight: 200,
 soldOut: true,
-soldoutSizes: ["S"]
+soldoutSizes: ["S","XL"]
 },
 {
 name: "Compresivo Básico",
 desc: "El esencial que no puede faltar. Compresión cómoda, ajuste perfecto y estilo minimalista para entrenar todos los días con actitud.",
 imgs: ["compresbasico.jpg","compresbasico1.jpg"],
-price: 25000,
+price: 22500,
+oldPrice: 25000,
 idx: 3,
-soldoutSizes: ["S"]
+weight: 200,
+soldoutSizes: ["S","XL"]
 },
 {
 name: "Compresivo de Berserk",
 desc: "Para los que entrenan con la furia de una bestia. Diseño inspirado en el universo dark fantasy, compresión que aguanta cualquier entrenamiento.",
 imgs: ["berserk.jpg","berserk1.jpg"],
-price: 25000,
+price: 22500,
+oldPrice: 25000,
 idx: 4,
-soldoutSizes: ["S"]
+weight: 200,
+soldoutSizes: ["S","XL"]
 },
 {
 name: "Compresivo Clásico",
 desc: "El primero. El original. Nuestro primer diseño, compresión clásica y un ajuste que no te va a decepcionar. El punto de partida de todo lo que es BlazeBorn.",
 imgs: ["clasico.jpg","clasico1.jpg"],
-price: 25000,
+price: 22500,
+oldPrice: 25000,
 idx: 5,
-soldoutSizes: ["S"]
+weight: 200,
+soldoutSizes: ["S","XL"]
 }
 ];
 
@@ -1857,9 +1920,9 @@ const finalPrice = getDiscountedPrice(p.price);
 const oldEl = document.getElementById("modalOldPrice");
 const priceEl = document.getElementById("modalPrice");
 
-if(activeDiscount !== "" && finalPrice !== p.price && !p.soldOut){
+if(!p.soldOut && p.oldPrice){
 oldEl.style.display = "block";
-oldEl.innerText = `$${p.price.toLocaleString()} ARS`;
+oldEl.innerText = `$${p.oldPrice.toLocaleString()} ARS`;
 }else{
 oldEl.style.display = "none";
 }
@@ -1969,18 +2032,21 @@ const muscuProducts = [
 name: "Musculosa Tribal",
 desc: "Diseño tribal, corte musculoso. Agotada por el momento, ¡vuelve pronto!",
 imgs: ["muscu.jpg"],
+weight: 200,
 soldOut: true
 },
 {
 name: "Musculosa Mike Mentzer",
 desc: "Tributo al maestro del Heavy Duty. Diseño exclusivo para los que entrenan con filosofía. Agotada por el momento.",
 imgs: ["mentzer.jpg"],
+weight: 200,
 soldOut: true
 },
 {
 name: "Musculosa Kevin Levrone",
 desc: "Tributo al Maryland Muscle Machine. Para los que saben lo que es llegar a la cima. Agotada por el momento.",
 imgs: ["kevin.jpg"],
+weight: 200,
 soldOut: true
 }
 ];
@@ -2056,6 +2122,7 @@ name: "Calza de Lycra",
 desc: "Diseñada para el entrenamiento femenino. Ajuste perfecto, tela de Lycra de alta compresión que se adapta a tu cuerpo y te acompaña en cada movimiento.",
 imgs: ["calza.jpg"],
 price: 0,
+weight: 100,
 soldOut: false,
 soldoutSizes: ["S","M"]
 }
@@ -2177,7 +2244,7 @@ updateMuscuCarousel();
 updateCalzaCarousel();
 });
 
-window.addEventListener("load", ()=>{ updateCarousel(); updateMuscuCarousel(); updateCalzaCarousel(); });
+window.addEventListener("load", ()=>{ updatePrices(); updateCarousel(); updateMuscuCarousel(); updateCalzaCarousel(); });
 
 // SWIPE TÁCTIL
 
@@ -2222,7 +2289,7 @@ const validCodes = [
 "SUAR"
 ];
 
-const basePrices = [30000,30000,30000,25000,25000,25000];
+const basePrices = [27000,27000,27000,22500,22500,22500];
 
 function applyDiscount(){
 
@@ -2266,16 +2333,6 @@ if(validCodes.includes(code)){
 activeDiscount = code;
 updatePrices();
 document.getElementById("discountAlert").classList.add("active");
-// Refresh the pay modal totals
-if(currentPayData){
-openPayModal(
-currentPayData.name,
-currentPayData.size,
-currentPayData.baseTotal,
-currentPayData.resumen,
-currentPayData.isCart
-);
-}
 }else{
 document.getElementById("invalidAlert").classList.add("active");
 }
@@ -2290,11 +2347,14 @@ return price;
 }
 
 function updatePrices(){
+const oldPrices = [30000, 30000, 30000, 25000, 25000, 25000];
 for(let i=0;i<basePrices.length;i++){
 const original = basePrices[i];
 const finalPrice = getDiscountedPrice(original);
 const priceEl = document.getElementById(`price${i}`);
-if(priceEl) priceEl.innerHTML = `$${finalPrice.toLocaleString()} ARS`;
+if(priceEl) {
+priceEl.innerHTML = `<span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$${oldPrices[i].toLocaleString()} ARS</span><br>$${finalPrice.toLocaleString()} ARS`;
+}
 }
 renderCart();
 }
@@ -2432,10 +2492,9 @@ openPayModal("Carrito", null, baseTotal, resumen, true);
 
 }
 
-// ── CHECKOUT ──────────────────────────────────────────────────
+// ── CHECKOUT ──────────────────────────────────────────────
 
 let checkoutData = null;
-let selectedCourier = "";
 
 function openPayModal(name, size, baseTotal, resumen, isCart){
 let items = [];
@@ -2465,10 +2524,9 @@ document.getElementById("checkoutDiscountCode").value = "";
 document.getElementById("checkoutDiscountMsg").style.display = "none";
 document.getElementById("checkoutProvincia").value = "";
 document.getElementById("checkoutLocalidad").value = "";
+document.getElementById("priceSummaryBox").style.display = "none";
 document.getElementById("envioFormosaCapital").style.display = "none";
 document.getElementById("envioOtros").style.display = "none";
-selectedCourier = "";
-resetCourierUI();
 ["envNombre","envDireccion","envCP","envEmail","envDNI","envTel","envIndicaciones",
 "envFNombre","envFDireccion","envFTel","envFIndicaciones"].forEach(id => {
 const el = document.getElementById(id); if(el) el.value = "";
@@ -2526,37 +2584,118 @@ msg.style.display="block"; msg.style.color="#ff0000"; msg.innerText="❌ Código
 }
 }
 
+function getTotalItems(){
+if(!checkoutData) return 0;
+let total = 0;
+checkoutData.items.forEach(i => { total += i.qty; });
+return total;
+}
+
+function getCheckoutSubtotal(){
+if(!checkoutData) return 0;
+let total = 0;
+checkoutData.items.forEach(i => { total += getDiscountedPrice(i.basePrice) * i.qty; });
+return total;
+}
+
+function getTotalWeight(){
+if(!checkoutData) return 0;
+let totalWeight = 0;
+checkoutData.items.forEach(item => {
+// Encontrar el producto en los arrays para obtener el peso
+let weight = 0;
+const prodInArray = products.find(p => p.name === item.name);
+if(prodInArray) weight = prodInArray.weight || 0;
+else {
+const muscuInArray = muscuProducts.find(p => p.name === item.name);
+if(muscuInArray) weight = muscuInArray.weight || 0;
+else {
+const calzaInArray = calzaProducts.find(p => p.name === item.name);
+if(calzaInArray) weight = calzaInArray.weight || 0;
+}
+}
+totalWeight += weight * item.qty;
+});
+return totalWeight;
+}
+
+function getShippingCostByWeight(totalWeightGrams){
+if(totalWeightGrams <= 800){
+return shippingCostsByWeight["0-800"];
+}else if(totalWeightGrams <= 1500){
+return shippingCostsByWeight["801-1500"];
+}else if(totalWeightGrams <= 3000){
+return shippingCostsByWeight["1501-3000"];
+}else{
+// Si excede 3kg, usar el máximo
+return shippingCostsByWeight["1501-3000"];
+}
+}
+
 function checkoutUpdateEnvio(){
 const prov = document.getElementById("checkoutProvincia").value;
 const loc = document.getElementById("checkoutLocalidad").value.trim().toLowerCase();
 const isFormosaCapital = prov === "Formosa" && loc === "formosa";
+const showOthers = prov !== "" && !isFormosaCapital;
+
 document.getElementById("envioFormosaCapital").style.display = isFormosaCapital ? "block" : "none";
-document.getElementById("envioOtros").style.display = (!isFormosaCapital && prov !== "") ? "flex" : "none";
+document.getElementById("envioOtros").style.display = showOthers ? "flex" : "none";
 document.getElementById("envioFormosaForm").style.display = isFormosaCapital ? "flex" : "none";
+
+// Show price summary box
+document.getElementById("priceSummaryBox").style.display = showOthers ? "block" : "none";
+
+if(showOthers){
+updatePriceSummary(prov);
+}
+
 if(isFormosaCapital){
 const waMsg = buildWAMessage(true);
 document.getElementById("envioWABtn").href = `https://wa.me/5493704509580?text=${encodeURIComponent(waMsg)}`;
 }
+
 checkoutValidate();
 }
 
-function selectCourier(val){
-selectedCourier = val; resetCourierUI();
-if(val === "correo"){
-document.getElementById("radioCorreo").style.background="var(--red)";
-document.getElementById("radioCorreo").style.borderColor="var(--red)";
-document.getElementById("labelCorreo").style.borderColor="var(--red)";
+function updatePriceSummary(province){
+if(!checkoutData) return;
+
+const itemsListEl = document.getElementById("priceSummaryItems");
+itemsListEl.innerHTML = "";
+
+checkoutData.items.forEach(item => {
+const finalPrice = getDiscountedPrice(item.basePrice);
+const total = finalPrice * item.qty;
+const line = `${item.name} x${item.qty} = $${total.toLocaleString()} ARS`;
+const div = document.createElement("div");
+div.className = "price-item-line";
+div.innerText = line;
+itemsListEl.appendChild(div);
+});
+
+const totalWeight = getTotalWeight();
+const totalItems = getTotalItems();
+const subtotal = getCheckoutSubtotal();
+
+// Envío gratis si hay 3 o más artículos
+const isFreeShipping = totalItems >= 3;
+let shippingCost = 0;
+
+if(!isFreeShipping){
+shippingCost = getShippingCostByWeight(totalWeight);
+}
+
+const finalTotal = subtotal + shippingCost;
+
+if(isFreeShipping){
+document.getElementById("shippingCostDisplay").innerText = "GRATIS";
+document.getElementById("correoPrice").innerText = "GRATIS";
 }else{
-document.getElementById("radioAndreani").style.background="var(--red)";
-document.getElementById("radioAndreani").style.borderColor="var(--red)";
-document.getElementById("labelAndreani").style.borderColor="var(--red)";
-}
-checkoutValidate();
+document.getElementById("shippingCostDisplay").innerText = `$${shippingCost.toLocaleString()} ARS`;
+document.getElementById("correoPrice").innerText = `$${shippingCost.toLocaleString()} ARS`;
 }
 
-function resetCourierUI(){
-["radioCorreo","radioAndreani"].forEach(id=>{const el=document.getElementById(id);if(el){el.style.background="transparent";el.style.borderColor="#555";}});
-["labelCorreo","labelAndreani"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.borderColor="#333";});
+document.getElementById("priceTotalDisplay").innerText = `TOTAL: $${finalTotal.toLocaleString()} ARS`;
 }
 
 function checkoutValidate(){
@@ -2565,6 +2704,7 @@ const loc = document.getElementById("checkoutLocalidad").value.trim().toLowerCas
 const isFormosaCapital = prov === "Formosa" && loc === "formosa";
 const othersVisible = document.getElementById("envioOtros").style.display !== "none";
 let valid = false;
+
 if(isFormosaCapital){
 const fields = ["envFNombre","envFDireccion","envFTel"];
 valid = fields.every(id => document.getElementById(id).value.trim() !== "");
@@ -2574,12 +2714,12 @@ const btn = document.getElementById("envioWABtn");
 if(btn) btn.href = `https://wa.me/5493704509580?text=${encodeURIComponent(waMsg)}`;
 }else if(othersVisible){
 const fields = ["envNombre","envDireccion","envCP","envEmail","envDNI","envTel"];
-const filled = fields.every(id => document.getElementById(id).value.trim() !== "");
-valid = filled && selectedCourier !== "";
+valid = fields.every(id => document.getElementById(id).value.trim() !== "");
 }
+
 const btn = document.getElementById("checkoutConfirmBtn");
 if(valid && !isFormosaCapital){
-btn.disabled=false; btn.style.filter="none"; btn.style.cursor="pointer";
+btn.disabled=false; btn.style.filter="none"; btn.style.cursor="pointer"; btn.style.opacity="1";
 }else{
 btn.disabled=true; btn.style.filter="blur(1.5px) opacity(0.4)"; btn.style.cursor="not-allowed";
 }
@@ -2594,7 +2734,7 @@ msg += `- ${item.name}\n  Cantidad: ${item.qty}\n  Talle: ${item.size}\n  Precio
 });
 let total = 0;
 checkoutData.items.forEach(i => { total += getDiscountedPrice(i.basePrice) * i.qty; });
-msg += `\nTotal: $${total.toLocaleString()} ARS`;
+msg += `\nSubtotal: $${total.toLocaleString()} ARS`;
 if(activeDiscount) msg += ` (código: ${activeDiscount})`;
 msg += "\n\n——————————————\n";
 if(isFormosa){
@@ -2609,10 +2749,22 @@ if(fTel) msg += `- Teléfono: ${fTel}\n`;
 if(fInd) msg += `- Indicaciones: ${fInd}\n`;
 msg += "- Envío: A coordinar por WhatsApp\n";
 }else{
+const totalWeight = getTotalWeight();
+const totalItems = getTotalItems();
+const isFreeShipping = totalItems >= 3;
+let shippingCost = 0;
+if(!isFreeShipping){
+shippingCost = getShippingCostByWeight(totalWeight);
+}
 msg += `Datos de envío:\n- Nombre: ${document.getElementById("envNombre").value}\n- Dirección: ${document.getElementById("envDireccion").value}\n- Código Postal: ${document.getElementById("envCP").value}\n- Email: ${document.getElementById("envEmail").value}\n- DNI: ${document.getElementById("envDNI").value}\n- Teléfono: ${document.getElementById("envTel").value}\n`;
 const ind = document.getElementById("envIndicaciones").value.trim();
 if(ind) msg += `- Indicaciones: ${ind}\n`;
-msg += `- Servicio de envío: ${selectedCourier === "correo" ? "Correo Argentino" : "Andreani"}\n- Costo de envío: a confirmar\n`;
+msg += `- Provincia: ${document.getElementById("checkoutProvincia").value}\n`;
+if(isFreeShipping){
+msg += `- Costo de envío: GRATIS (por 3+ artículos)\n`;
+}else{
+msg += `- Costo de envío: $${shippingCost.toLocaleString()} ARS\n`;
+}
 }
 return msg;
 }
@@ -2685,12 +2837,12 @@ if(logo) logo.src = "blazelogo.png";
 // ── SEARCH ────────────────────────────────────────────────────
 
 const searchCatalog = [
-{name:"Compresivo Tribal Rojo",   price:"$30.000 ARS",   img:"compresrojo.jpg",   fn:"openProductModal", arg:0},
-{name:"Compresivo Tribal Morado", price:"$30.000 ARS",   img:"compresmorado.jpg", fn:"openProductModal", arg:1},
-{name:"Compresivo Tribal Blanco", price:"$30.000 ARS",   img:"compresblanco.jpg", fn:"openProductModal", arg:2},
-{name:"Compresivo Básico",        price:"$25.000 ARS",   img:"compresbasico.jpg", fn:"openProductModal", arg:3},
-{name:"Compresivo de Berserk",    price:"$25.000 ARS",   img:"berserk.jpg",       fn:"openProductModal", arg:4},
-{name:"Compresivo Clásico",       price:"$25.000 ARS",   img:"clasico.jpg",       fn:"openProductModal", arg:5},
+{name:"Compresivo Tribal Rojo",   price:"$27.000 ARS",   img:"compresrojo.jpg",   fn:"openProductModal", arg:0},
+{name:"Compresivo Tribal Morado", price:"$27.000 ARS",   img:"compresmorado.jpg", fn:"openProductModal", arg:1},
+{name:"Compresivo Tribal Blanco", price:"$27.000 ARS",   img:"compresblanco.jpg", fn:"openProductModal", arg:2},
+{name:"Compresivo Básico",        price:"$22.500 ARS",   img:"compresbasico.jpg", fn:"openProductModal", arg:3},
+{name:"Compresivo de Berserk",    price:"$22.500 ARS",   img:"berserk.jpg",       fn:"openProductModal", arg:4},
+{name:"Compresivo Clásico",       price:"$22.500 ARS",   img:"clasico.jpg",       fn:"openProductModal", arg:5},
 {name:"Musculosa Tribal",         price:"Consultá precio", img:"muscu.jpg",       fn:"openMuscuModal",   arg:0},
 {name:"Musculosa Mike Mentzer",   price:"Consultá precio", img:"mentzer.jpg",     fn:"openMuscuModal",   arg:1},
 {name:"Musculosa Kevin Levrone",  price:"Consultá precio", img:"kevin.jpg",       fn:"openMuscuModal",   arg:2},
