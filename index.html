@@ -1,791 +1,2769 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlazeBorn - Fitness & Streetwear</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            red: '#FF2A2A',
-                            orange: '#FF5722',
-                            dark: '#0D0D0D',
-                            cardDark: '#171717',
-                            cardLight: '#FFFFFF',
-                            textDark: '#F3F4F6',
-                            textLight: '#1F2937'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
 
-    <!-- FontAwesome & Google Fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        /* Custom scrollbars and sleek transition styles */
-        body {
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .glow-effect {
-            box-shadow: 0 0 15px rgba(255, 42, 42, 0.4);
-        }
-        .modal-blur {
-            backdrop-filter: blur(8px);
-        }
-    </style>
+<title>BlazeBorn - Fitness & Streetwear</title>
+
+<link rel="icon" type="image/png" href="favicon.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Montserrat',sans-serif;
+}
+
+body{
+background:#000;
+color:white;
+overflow-x:hidden;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+:root{
+--red:#ff0000;
+--green:#00ff73;
+}
+
+header{
+width:100%;
+padding:40px 20px;
+display:flex;
+flex-direction:column;
+align-items:center;
+text-align:center;
+border-bottom:2px solid var(--red);
+background:linear-gradient(to bottom,#000,#080808);
+}
+
+.logo{
+width:50%;
+max-width:450px;
+min-width:220px;
+margin-bottom:20px;
+}
+
+h1{
+font-size:clamp(2rem,5vw,4rem);
+font-weight:900;
+letter-spacing:2px;
+margin-bottom:10px;
+}
+
+.subtitle{
+color:#ccc;
+margin-bottom:10px;
+}
+
+.social-subtitle{
+color:var(--green);
+font-weight:700;
+}
+
+section{
+max-width:1300px;
+margin:auto;
+padding:60px 20px;
+}
+
+.section-title{
+font-size:2rem;
+border-left:4px solid var(--red);
+padding-left:15px;
+margin-bottom:30px;
+}
+
+.carousel-wrapper{
+position:relative;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.carousel-viewport{
+overflow:hidden;
+width:100%;
+}
+
+.products-grid{
+display:flex;
+gap:25px;
+transition:transform 0.4s ease;
+}
+
+.product-card{
+background:#0f0f0f;
+border:1px solid #222;
+border-radius:18px;
+overflow:hidden;
+transition:0.3s;
+flex:0 0 calc(25% - 19px);
+min-width:0;
+cursor:pointer;
+}
+
+.product-card:hover{
+transform:translateY(-5px);
+border-color:var(--red);
+box-shadow:0 0 20px rgba(255,0,0,0.25);
+}
+
+.carousel-arrow{
+flex-shrink:0;
+width:44px;
+height:44px;
+border-radius:50%;
+border:1px solid var(--red);
+background:#0f0f0f;
+color:white;
+font-size:1.2rem;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:5;
+transition:0.2s;
+}
+
+.carousel-arrow:hover{
+background:var(--red);
+}
+
+.carousel-arrow:disabled{
+opacity:0.3;
+cursor:default;
+background:#0f0f0f;
+}
+
+@media (max-width:1024px){
+.product-card{
+flex:0 0 calc(33.333% - 17px);
+}
+}
+
+@media (max-width:680px){
+.product-card{
+flex:0 0 calc(50% - 13px);
+}
+}
+
+/* CATALOG CARDS */
+
+.card-thumb{
+width:100%;
+aspect-ratio:1/1;
+object-fit:cover;
+display:block;
+}
+
+.card-label{
+padding:12px;
+background:#0f0f0f;
+}
+
+.card-name{
+font-size:0.9rem;
+font-weight:700;
+margin-bottom:4px;
+}
+
+.card-price{
+color:var(--red);
+font-size:0.95rem;
+font-weight:700;
+line-height:1.3;
+}
+
+/* PRODUCT MODAL */
+
+.product-modal-overlay{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:#000;
+z-index:2000;
+overflow-y:auto;
+-webkit-overflow-scrolling:touch;
+}
+
+.product-modal-overlay.active{
+display:block;
+}
+
+.modal-close-top{
+position:sticky;
+top:0;
+z-index:10;
+display:flex;
+justify-content:flex-end;
+padding:15px 20px;
+background:rgba(0,0,0,0.85);
+backdrop-filter:blur(6px);
+}
+
+.modal-close-btn{
+width:44px;height:44px;
+border-radius:50%;
+border:1px solid #444;
+background:#111;
+color:white;
+font-size:1.3rem;
+cursor:pointer;
+display:flex;align-items:center;justify-content:center;
+}
+
+.modal-img-slider{
+position:relative;
+width:100%;
+background:#0a0a0a;
+overflow:hidden;
+}
+
+.modal-slides{
+display:flex;
+transition:transform 0.4s ease;
+width:100%;
+}
+
+.modal-slides img{
+width:100%;
+min-width:100%;
+display:block;
+height:auto;
+object-fit:contain;
+background:#0a0a0a;
+flex-shrink:0;
+}
+
+.modal-slide-btn{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+width:40px;height:40px;
+border-radius:50%;
+border:none;
+background:rgba(0,0,0,0.6);
+color:white;
+font-size:1.1rem;
+cursor:pointer;
+z-index:5;
+}
+
+.modal-slide-btn.left{ left:12px; }
+.modal-slide-btn.right{ right:12px; }
+
+.modal-product-info{
+padding:24px 20px 60px;
+display:flex;
+flex-direction:column;
+gap:16px;
+max-width:700px;
+margin:0 auto;
+width:100%;
+}
+
+.modal-product-title{
+font-size:1.6rem;
+font-weight:900;
+}
+
+.modal-product-desc{
+color:#aaa;
+font-size:0.95rem;
+line-height:1.7;
+}
+
+.modal-old-price{
+color:#888;
+font-size:0.95rem;
+text-decoration:line-through;
+display:none;
+}
+
+.modal-price{
+color:var(--red);
+font-size:1.4rem;
+font-weight:700;
+}
+
+.modal-size-label{
+font-size:0.85rem;
+color:#aaa;
+margin-bottom:4px;
+}
+
+.modal-sizes{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.size-btn{
+padding:10px 14px;
+border-radius:10px;
+border:1px solid #444;
+background:#111;
+color:white;
+cursor:pointer;
+text-align:center;
+transition:0.2s;
+min-width:55px;
+}
+
+.size-btn.active{
+border-color:var(--red);
+background:var(--red);
+}
+
+.size-btn.disabled,
+.size-btn.soldout{
+border-color:#333;
+color:#555;
+background:#111;
+position:relative;
+cursor:not-allowed;
+opacity:0.5;
+text-decoration:line-through;
+}
+
+.size-btn.disabled::after,
+.size-btn.soldout::after{
+content:"✕";
+position:absolute;
+top:-6px;
+right:-6px;
+font-size:0.6rem;
+color:#ff0000;
+font-weight:900;
+}
+
+.size-soldout-msg{
+color:#ff0000;
+font-size:0.75rem;
+margin-top:6px;
+min-height:1rem;
+display:none;
+}
+
+.modal-actions{
+display:flex;
+flex-direction:column;
+gap:12px;
+margin-top:4px;
+}
+
+.price{
+color:var(--red);
+font-size:1.1rem;
+font-weight:700;
+}
+
+.old-price{
+color:#888;
+font-size:0.6rem;
+text-decoration:line-through;
+display:none;
+}
+
+select{
+padding:12px;
+border:none;
+border-radius:10px;
+background:#1a1a1a;
+color:white;
+}
+
+.btn{
+border:none;
+padding:13px;
+border-radius:12px;
+font-weight:700;
+cursor:pointer;
+transition:0.3s;
+}
+
+.btn:disabled{
+opacity:0.4;
+cursor:not-allowed;
+background:#333 !important;
+color:#888 !important;
+}
+
+.cart-btn{
+background:var(--red);
+color:white;
+}
+
+.wa-btn{
+background:#25d366;
+color:white;
+}
+
+.cart-btn:hover,
+.wa-btn:hover{
+opacity:0.85;
+}
+
+/* DESCUENTO */
+
+.discount-box{
+display:flex;
+gap:15px;
+margin-bottom:35px;
+flex-wrap:wrap;
+}
+
+.discount-box input{
+flex:1;
+min-width:220px;
+padding:12px;
+border:none;
+border-radius:10px;
+background:#1a1a1a;
+color:white;
+}
+
+.apply-btn{
+background:var(--red);
+color:white;
+border:none;
+padding:12px 18px;
+border-radius:10px;
+font-weight:700;
+cursor:pointer;
+}
+
+/* GUIA TALLES */
+
+.size-guide-btn{
+background:#1a1a1a;
+color:white;
+border:1px solid var(--red);
+}
+
+.size-guide-btn:hover{
+background:var(--red);
+}
+
+.modal-overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+z-index:2000;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.modal-overlay.active{
+display:flex;
+}
+
+.modal-box{
+background:#f4f4f4;
+color:#111;
+border-radius:20px;
+padding:20px;
+max-width:700px;
+width:100%;
+max-height:90vh;
+overflow-y:auto;
+position:relative;
+text-align:center;
+}
+
+.modal-close{
+position:absolute;
+top:15px;
+right:15px;
+width:40px;
+height:40px;
+border:none;
+border-radius:50%;
+background:#000;
+color:white;
+font-size:1.2rem;
+font-weight:700;
+cursor:pointer;
+z-index:5;
+}
+
+.size-guide-img{
+width:100%;
+border-radius:12px;
+display:block;
+}
+
+/* AVISO DESCUENTO */
+
+.discount-alert-overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.75);
+z-index:3000;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.discount-alert-overlay.active{
+display:flex;
+}
+
+.discount-alert-box{
+background:#000;
+border:2px solid var(--green);
+border-radius:16px;
+padding:35px 30px;
+max-width:380px;
+width:100%;
+text-align:center;
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+.discount-alert-box p{
+color:white;
+font-size:1.1rem;
+font-weight:500;
+line-height:1.6;
+}
+
+.discount-alert-ok{
+background:var(--green);
+color:#000;
+border:none;
+padding:13px 30px;
+border-radius:10px;
+font-weight:700;
+font-size:1rem;
+cursor:pointer;
+align-self:center;
+}
+
+.discount-alert-ok:hover{
+opacity:0.85;
+}
+
+/* CARRITO */
+
+.cart-floating{
+position:fixed;
+top:20px;
+right:20px;
+width:60px;
+height:60px;
+border-radius:50%;
+background:var(--red);
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:1.5rem;
+cursor:pointer;
+z-index:999;
+}
+
+.cart-panel{
+position:fixed;
+top:0;
+right:-400px;
+width:350px;
+height:100%;
+background:#0b0b0b;
+border-left:2px solid var(--red);
+transition:0.4s;
+z-index:1000;
+padding:20px;
+overflow-y:auto;
+}
+
+.cart-panel.active{
+right:0;
+}
+
+.close-cart{
+width:45px;
+height:45px;
+border-radius:50%;
+border:none;
+background:var(--red);
+color:white;
+font-size:1.4rem;
+cursor:pointer;
+margin-bottom:20px;
+}
+
+.cart-item{
+border-bottom:1px solid #222;
+padding:12px 0;
+}
+
+.cart-total{
+margin-top:20px;
+font-size:1.2rem;
+font-weight:700;
+color:var(--green);
+}
+
+/* MOCKUP */
+
+.mockup{
+width:100%;
+border-radius:20px;
+border:2px solid var(--red);
+margin-bottom:30px;
+}
+
+.about{
+line-height:1.8;
+color:#ccc;
+}
+
+/* OPINIONES */
+
+.reviews{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.review{
+background:#0f0f0f;
+border:1px solid #222;
+padding:20px;
+border-radius:15px;
+}
+
+.stars{
+color:gold;
+margin-bottom:10px;
+}
+
+/* REDES */
+
+.socials{
+display:flex;
+flex-direction:column;
+gap:15px;
+font-size:1.1rem;
+}
+
+/* FOOTER */
+
+footer{
+text-align:center;
+padding:30px 20px;
+border-top:2px solid var(--red);
+color:#888;
+background:#050505;
+}
+
+/* WHATSAPP */
+
+.whatsapp-float{
+position:fixed;
+bottom:20px;
+right:20px;
+width:60px;
+height:60px;
+border-radius:50%;
+background:#25d366;
+display:flex;
+justify-content:center;
+align-items:center;
+text-decoration:none;
+color:white;
+font-size:1.8rem;
+z-index:999;
+}
+
+/* HAMBURGER MENU */
+
+.hamburger-btn{
+position:fixed;
+top:20px;
+left:20px;
+width:48px;
+height:48px;
+border-radius:12px;
+border:1px solid var(--red);
+background:#0f0f0f;
+color:white;
+font-size:1.3rem;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:1100;
+transition:0.2s;
+}
+
+.hamburger-btn:hover{
+background:var(--red);
+}
+
+.hamburger-menu{
+position:fixed;
+top:0;
+left:-280px;
+width:260px;
+height:100%;
+background:#0b0b0b;
+border-right:2px solid var(--red);
+transition:0.35s cubic-bezier(0.4,0,0.2,1);
+z-index:1050;
+padding:80px 20px 30px;
+display:flex;
+flex-direction:column;
+gap:8px;
+overflow-y:auto;
+}
+
+.hamburger-menu.active{
+left:0;
+}
+
+.menu-title{
+color:#555;
+font-size:0.7rem;
+font-weight:700;
+letter-spacing:2px;
+text-transform:uppercase;
+margin:16px 0 8px;
+padding-left:4px;
+}
+
+.menu-item{
+display:flex;
+align-items:center;
+gap:12px;
+padding:13px 16px;
+border-radius:12px;
+cursor:pointer;
+font-size:0.95rem;
+font-weight:600;
+color:#ccc;
+border:none;
+background:transparent;
+width:100%;
+text-align:left;
+transition:0.2s;
+}
+
+.menu-item:hover{
+background:#1a1a1a;
+color:white;
+}
+
+.menu-item .menu-icon{
+width:20px;
+text-align:center;
+font-size:1.1rem;
+}
+
+.menu-divider{
+height:1px;
+background:#1e1e1e;
+margin:8px 0;
+}
+
+/* THEME TOGGLE */
+
+.theme-toggle-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:13px 16px;
+border-radius:12px;
+cursor:pointer;
+}
+
+.theme-toggle-row:hover{
+background:#1a1a1a;
+}
+
+.toggle-switch{
+width:44px;
+height:24px;
+background:#333;
+border-radius:12px;
+position:relative;
+transition:0.3s;
+flex-shrink:0;
+}
+
+.toggle-switch::after{
+content:"";
+position:absolute;
+top:3px;
+left:3px;
+width:18px;
+height:18px;
+border-radius:50%;
+background:#888;
+transition:0.3s;
+}
+
+.toggle-switch.light-on{
+background:var(--red);
+}
+
+.toggle-switch.light-on::after{
+left:23px;
+background:white;
+}
+
+/* SEARCH */
+
+.search-wrapper{
+position:relative;
+display:flex;
+align-items:center;
+margin-top:16px;
+}
+
+.search-icon-btn{
+position:absolute;
+right:0;
+top:50%;
+transform:translateY(-50%);
+background:none;
+border:none;
+color:#888;
+font-size:1.2rem;
+cursor:pointer;
+padding:8px 12px;
+transition:0.2s;
+}
+
+.search-icon-btn:hover{
+color:var(--red);
+}
+
+.search-input{
+width:0;
+padding:0;
+border:none;
+border-radius:12px;
+background:#1a1a1a;
+color:white;
+font-size:0.9rem;
+font-family:'Montserrat',sans-serif;
+transition:0.35s cubic-bezier(0.4,0,0.2,1);
+outline:none;
+opacity:0;
+}
+
+.search-input.open{
+width:100%;
+padding:11px 42px 11px 14px;
+border:1px solid #333;
+opacity:1;
+}
+
+.search-input::placeholder{
+color:#555;
+}
+
+.search-results{
+position:absolute;
+top:calc(100% + 6px);
+left:0;
+right:0;
+background:#111;
+border:1px solid #2a2a2a;
+border-radius:14px;
+overflow:hidden;
+z-index:200;
+display:none;
+}
+
+.search-results.visible{
+display:block;
+}
+
+.search-result-item{
+display:flex;
+align-items:center;
+gap:12px;
+padding:10px 14px;
+cursor:pointer;
+transition:0.15s;
+border-bottom:1px solid #1e1e1e;
+}
+
+.search-result-item:last-child{
+border-bottom:none;
+}
+
+.search-result-item:hover{
+background:#1c1c1c;
+}
+
+.search-result-thumb{
+width:40px;
+height:40px;
+object-fit:cover;
+border-radius:8px;
+flex-shrink:0;
+}
+
+.search-result-name{
+font-size:0.85rem;
+font-weight:600;
+color:#ddd;
+}
+
+.search-result-price{
+font-size:0.75rem;
+color:var(--red);
+font-weight:700;
+}
+
+.search-no-results{
+padding:14px;
+color:#555;
+font-size:0.85rem;
+text-align:center;
+}
+
+/* MENU BACKDROP */
+
+.menu-backdrop{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.5);
+z-index:1040;
+}
+
+.menu-backdrop.active{
+display:block;
+}
+
+/* LIGHT THEME */
+
+body.light-theme{
+background:#fff;
+color:#111;
+}
+
+body.light-theme header{
+background:linear-gradient(to bottom,#fff,#f5f5f5);
+}
+
+body.light-theme .product-card{
+background:#f5f5f5;
+border-color:#e0e0e0;
+}
+
+body.light-theme .card-label{
+background:#f5f5f5;
+}
+
+body.light-theme .card-name{
+color:#111;
+}
+
+body.light-theme .cart-panel{
+background:#f5f5f5;
+}
+
+body.light-theme .cart-item{
+border-color:#ddd;
+}
+
+body.light-theme .hamburger-btn{
+background:#f0f0f0;
+color:#111;
+}
+
+body.light-theme .hamburger-menu{
+background:#f5f5f5;
+border-color:#000;
+}
+
+body.light-theme .menu-item{
+color:#333;
+}
+
+body.light-theme .menu-item:hover{
+background:#e5e5e5;
+color:#000;
+}
+
+body.light-theme .theme-toggle-row:hover{
+background:#e5e5e5;
+}
+
+body.light-theme .menu-divider{
+background:#ddd;
+}
+
+body.light-theme .search-input{
+background:#ececec;
+color:#111;
+border-color:#ccc;
+}
+
+body.light-theme .search-results{
+background:#fff;
+border-color:#ddd;
+}
+
+body.light-theme .search-result-item:hover{
+background:#f0f0f0;
+}
+
+body.light-theme .search-result-name{
+color:#222;
+}
+
+body.light-theme .review{
+background:#f5f5f5;
+border-color:#e0e0e0;
+}
+
+body.light-theme footer{
+background:#f0f0f0;
+color:#555;
+}
+
+body.light-theme .modal-close-top{
+background:rgba(255,255,255,0.9);
+}
+
+body.light-theme .modal-close-btn{
+background:#eee;
+color:#111;
+border-color:#ccc;
+}
+
+body.light-theme .modal-slides img{
+background:#f0f0f0;
+}
+
+body.light-theme .product-modal-overlay{
+background:#fff;
+}
+
+body.light-theme .modal-product-desc{
+color:#555;
+}
+
+body.light-theme .size-btn{
+background:#eee;
+border-color:#ccc;
+color:#111;
+}
+
+body.light-theme select{
+background:#ececec;
+color:#111;
+}
+
+body.light-theme .about{
+color:#444;
+}
+
+body.light-theme .subtitle{
+color:#555;
+}
+
+body.light-theme .search-no-results{
+color:#999;
+}
+
+body.light-theme .menu-title{
+color:#999;
+}
+body.light-theme #inlineSearchInput{
+background:#ececec;
+color:#111;
+border-color:#ccc;
+}
+
+body.light-theme #inlineSearchResults{
+background:#fff;
+border-color:#ddd;
+}
+
+body.light-theme #checkoutOverlay{
+background:#fff;
+color:#111;
+}
+
+body.light-theme #checkoutOverlay input,
+body.light-theme #checkoutOverlay select,
+body.light-theme #checkoutOverlay textarea{
+background:#f0f0f0;
+color:#111;
+border-color:#ccc;
+}
+
+body.light-theme #checkoutOverlay .discount-block{
+background:#f5f5f5;
+border-color:#e0e0e0;
+}
+
+/* PRICE SUMMARY BOX */
+.checkout-price-summary{
+background:#333;
+border-radius:14px;
+padding:18px;
+display:flex;
+flex-direction:column;
+gap:12px;
+margin-bottom:18px;
+}
+
+.price-items-list{
+display:flex;
+flex-direction:column;
+gap:6px;
+border-bottom:1px solid #555;
+padding-bottom:12px;
+}
+
+.price-item-line{
+font-size:0.8rem;
+color:#bbb;
+font-weight:500;
+}
+
+.price-shipping-line{
+font-size:1.05rem;
+color:#ccc;
+font-weight:700;
+}
+
+.price-total-line{
+font-size:1.6rem;
+color:#00ff73;
+font-weight:900;
+letter-spacing:1px;
+}
+
+.free-shipping-msg{
+color:var(--green);
+font-size:0.75rem;
+font-weight:700;
+letter-spacing:1px;
+text-align:center;
+margin-top:8px;
+}
+
+/* COURIER DISPLAY */
+.courier-display{
+display:flex;
+align-items:center;
+gap:12px;
+padding:14px;
+border:1px solid #333;
+border-radius:12px;
+background:#1a1a1a;
+cursor:default;
+}
+
+.courier-display img{
+width:28px;
+height:28px;
+object-fit:contain;
+border-radius:4px;
+}
+
+.courier-display-name{
+font-weight:600;
+font-size:0.95rem;
+color:#ccc;
+}
+
+</style>
 </head>
-<body class="bg-gray-100 text-gray-900 dark:bg-[#0A0A0A] dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
 
-    <!-- Announcement Bar -->
-    <div class="bg-gradient-to-r from-brand-red to-brand-orange text-white text-xs sm:text-sm font-bold py-2 text-center tracking-wide shadow-md">
-        🔥 ENVIOS A TODO EL PAÍS | 10% OFF CON CÓDIGOS SECRETOS DE ATLETAS 🔥
+<body>
+
+<button class="hamburger-btn" onclick="toggleMenu()" id="hamburgerBtn" aria-label="Menú">☰</button>
+
+<div class="menu-backdrop" id="menuBackdrop" onclick="closeMenu()"></div>
+
+<div class="hamburger-menu" id="hamburgerMenu">
+
+  <span class="menu-title">Opciones</span>
+
+  <div class="theme-toggle-row" onclick="toggleTheme()">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="menu-icon">🌙</span>
+      <span id="themeLabel" style="font-size:0.95rem;font-weight:600;color:#ccc;">Tema claro</span>
+    </div>
+    <div class="toggle-switch" id="themeToggle"></div>
+  </div>
+
+  <div class="menu-divider"></div>
+
+  <span class="menu-title">Buscar productos</span>
+
+  <div class="search-wrapper" id="searchWrapper">
+    <input
+      class="search-input open"
+      id="searchInput"
+      type="text"
+      placeholder="Buscar en BlazeBorn..."
+      oninput="handleSearch()"
+      autocomplete="off"
+    >
+    <button class="search-icon-btn" onclick="clearSearch()">🔍</button>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+
+</div>
+
+<div class="cart-floating" onclick="toggleCart()">
+<img src="carrito.png" style="width:34px;height:34px;object-fit:contain;">
+</div>
+
+<div class="cart-panel" id="cartPanel">
+
+<button class="close-cart" onclick="toggleCart()">
+←
+</button>
+
+<h2 style="margin-bottom:20px;">
+Tu Carrito
+</h2>
+
+<div id="cartItems"></div>
+
+<div class="cart-total" id="cartTotal">
+TOTAL: $0 ARS
+</div>
+
+<button class="btn wa-btn" style="width:100%;margin-top:20px;" onclick="checkoutWhatsApp()">
+COMPRAR YA
+</button>
+
+</div>
+
+<div id="checkoutOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:3000;overflow-y:auto;flex-direction:column;">
+
+  <div style="position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:rgba(0,0,0,0.92);backdrop-filter:blur(8px);border-bottom:1px solid #222;">
+    <h2 style="font-size:1.1rem;font-weight:900;letter-spacing:1px;">💳 RESUMEN DE COMPRA</h2>
+    <button onclick="closeCheckout()" style="background:#111;border:1px solid #444;color:white;padding:8px 16px;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.9rem;">✕ Volver</button>
+  </div>
+
+  <div style="max-width:600px;margin:0 auto;width:100%;padding:24px 20px 60px;display:flex;flex-direction:column;gap:28px;">
+
+    <div>
+      <div id="checkoutItems" style="display:flex;flex-direction:column;gap:12px;"></div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid #222;display:flex;flex-direction:column;gap:4px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="color:#aaa;font-size:0.9rem;">Subtotal</span>
+          <span id="checkoutSubtotal" style="font-size:1.1rem;font-weight:700;color:var(--green);"></span>
+        </div>
+        <div id="checkoutActiveCodeLabel" style="font-size:0.75rem;color:#aaa;text-align:left;display:none;"></div>
+      </div>
     </div>
 
-    <!-- Main Navigation Header -->
-    <header class="sticky top-0 z-40 bg-white/90 dark:bg-[#121212]/90 backdrop-blur-md border-b border-gray-200 dark:border-neutral-800 transition-colors">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <!-- Brand Logo -->
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="filterCategory('all')">
-                <div class="w-10 h-10 bg-brand-red rounded-lg flex items-center justify-center font-black text-white text-2xl shadow-lg transform -rotate-3 hover:rotate-0 transition-transform">
-                    B
-                </div>
-                <span class="text-2xl font-black tracking-wider uppercase bg-clip-text text-transparent bg-gradient-to-r from-brand-red via-brand-orange to-red-500">
-                    BLAZEBORN
-                </span>
-            </div>
-
-            <!-- Global Search Bar (Desktop) -->
-            <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
-                <input type="text" id="globalSearchInput" oninput="handleSearch()" placeholder="Buscar prendas, remeras, oversized..." class="w-full bg-gray-100 dark:bg-neutral-800 text-sm rounded-full pl-10 pr-4 py-2 border border-transparent focus:border-brand-red focus:outline-none transition">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-gray-400"></i>
-            </div>
-
-            <!-- Header Actions -->
-            <div class="flex items-center space-x-4">
-                <!-- Theme Toggle -->
-                <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-neutral-800 transition text-lg" title="Cambiar tema">
-                    <i id="themeIcon" class="fa-solid fa-moon text-yellow-500"></i>
-                </button>
-
-                <!-- Cart Icon Button -->
-                <button onclick="toggleCartModal()" class="relative p-2 rounded-full hover:bg-gray-200 dark:hover:bg-neutral-800 transition">
-                    <i class="fa-solid fa-bag-shopping text-2xl text-gray-800 dark:text-gray-100"></i>
-                    <span id="cartCountBadge" class="absolute -top-1 -right-1 bg-brand-red text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-pulse">
-                        0
-                    </span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Search Bar -->
-        <div class="md:hidden px-4 pb-3">
-            <div class="relative">
-                <input type="text" id="mobileSearchInput" oninput="handleSearch()" placeholder="Buscar productos..." class="w-full bg-gray-100 dark:bg-neutral-800 text-sm rounded-full pl-10 pr-4 py-2 border border-transparent focus:border-brand-red focus:outline-none">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-gray-400"></i>
-            </div>
-        </div>
-    </header>
-
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <!-- Hero Banner -->
-        <div class="relative rounded-2xl overflow-hidden mb-8 bg-neutral-900 border border-neutral-800 shadow-2xl min-h-[220px] flex items-center">
-            <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
-            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1200&q=80" alt="BlazeBorn Hero" class="absolute inset-0 w-full h-full object-cover opacity-50 object-center">
-            
-            <div class="relative z-20 p-6 sm:p-10 max-w-xl">
-                <span class="inline-block bg-brand-red/20 text-brand-red text-xs font-bold px-3 py-1 rounded-full border border-brand-red/40 uppercase mb-3">Colección 2026</span>
-                <h1 class="text-3xl sm:text-5xl font-black uppercase text-white leading-tight tracking-tight">
-                    DOMINA EL GIMNASIO & LA CALLE
-                </h1>
-                <p class="mt-2 text-gray-300 text-sm sm:text-base">
-                    Ropa deportiva de alto rendimiento y estética streetwear sin límites.
-                </p>
-            </div>
-        </div>
-
-        <!-- Category Pills Filter -->
-        <div class="flex items-center space-x-2 overflow-x-auto hide-scrollbar pb-4 mb-6">
-            <button onclick="filterCategory('all')" id="cat-all" class="cat-pill active px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap bg-brand-red text-white transition">
-                Todos
-            </button>
-            <button onclick="filterCategory('remeras')" id="cat-remeras" class="cat-pill px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap bg-gray-200 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-neutral-700 transition">
-                Remeras Oversized
-            </button>
-            <button onclick="filterCategory('hoodies')" id="cat-hoodies" class="cat-pill px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap bg-gray-200 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-neutral-700 transition">
-                Hoodies & Bucios
-            </button>
-            <button onclick="filterCategory('pantalones')" id="cat-pantalones" class="cat-pill px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap bg-gray-200 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-neutral-700 transition">
-                Pantalones & Shorts
-            </button>
-            <button onclick="filterCategory('accesorios')" id="cat-accesorios" class="cat-pill px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap bg-gray-200 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-neutral-700 transition">
-                Accesorios Gym
-            </button>
-        </div>
-
-        <!-- Main Products Grid -->
-        <div class="mb-12">
-            <h2 class="text-2xl font-black tracking-tight mb-6 flex items-center space-x-2">
-                <span>CATÁLOGO DE PRODUCTOS</span>
-                <span class="w-12 h-1 bg-brand-red rounded-full"></span>
-            </h2>
-            
-            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <!-- Dynamic Products injection -->
-            </div>
-            <div id="noProductsMsg" class="hidden text-center py-16 text-gray-500">
-                <i class="fa-solid fa-ghost text-5xl mb-3"></i>
-                <p class="text-lg font-semibold">No se encontraron productos con esa búsqueda.</p>
-            </div>
-        </div>
-    </main>
-
-    <!-- Product Detail Modal -->
-    <div id="productDetailModal" class="fixed inset-0 z-50 hidden bg-black/70 modal-blur flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-neutral-900 w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl relative flex flex-col md:flex-row max-h-[90vh]">
-            <button onclick="closeProductModal()" class="absolute top-4 right-4 z-20 bg-black/50 text-white w-9 h-9 rounded-full flex items-center justify-center hover:bg-brand-red transition">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <!-- Image Carousel Gallery -->
-            <div class="w-full md:w-1/2 bg-neutral-950 relative min-h-[300px] flex items-center justify-center">
-                <img id="modalMainImg" src="" alt="Product Image" class="w-full h-80 md:h-full object-cover">
-                <button onclick="prevModalImg()" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-brand-red">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
-                <button onclick="nextModalImg()" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-brand-red">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
-                <div id="modalThumbnails" class="absolute bottom-3 left-0 right-0 flex justify-center space-x-2 px-2"></div>
-            </div>
-
-            <!-- Product Info & Add to Cart -->
-            <div class="w-full md:w-1/2 p-6 flex flex-col justify-between overflow-y-auto">
-                <div>
-                    <span id="modalCategory" class="text-xs font-bold text-brand-red uppercase tracking-wider"></span>
-                    <h2 id="modalTitle" class="text-2xl font-black mt-1 uppercase"></h2>
-                    <p id="modalPrice" class="text-2xl font-black text-brand-orange mt-2"></p>
-                    <p id="modalDescription" class="text-sm text-gray-600 dark:text-gray-300 mt-4 leading-relaxed"></p>
-
-                    <!-- Size Selector -->
-                    <div class="mt-6">
-                        <label class="block text-xs font-bold uppercase mb-2">Seleccionar Talle</label>
-                        <div id="modalSizes" class="flex space-x-2"></div>
-                    </div>
-                </div>
-
-                <div class="mt-8 pt-4 border-t border-gray-200 dark:border-neutral-800">
-                    <button id="modalAddToCartBtn" onclick="addCurrentModalToCart()" class="w-full bg-gradient-to-r from-brand-red to-brand-orange text-white py-3.5 rounded-xl font-bold uppercase tracking-wider hover:opacity-95 shadow-lg flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-cart-plus"></i>
-                        <span>Agregar al Carrito</span>
-                    </button>
-                </div>
-            </div>
-        </div>
+    <div style="background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px;" class="discount-block">
+      <span style="font-size:0.75rem;font-weight:700;color:#888;letter-spacing:2px;text-transform:uppercase;">Código de descuento</span>
+      <div style="display:flex;gap:10px;">
+        <input type="text" id="checkoutDiscountCode" placeholder="Ingresá tu código"
+          style="flex:1;padding:11px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <button onclick="applyCheckoutDiscount()"
+          style="background:var(--green);color:#000;border:none;padding:11px 16px;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.85rem;">
+          Aplicar
+        </button>
+      </div>
+      <div id="checkoutDiscountMsg" style="font-size:0.8rem;display:none;"></div>
     </div>
 
-    <!-- Cart Sidebar/Modal -->
-    <div id="cartModal" class="fixed inset-0 z-50 hidden bg-black/70 modal-blur flex justify-end">
-        <div class="bg-white dark:bg-neutral-900 w-full max-w-lg h-full shadow-2xl flex flex-col justify-between border-l border-neutral-800">
-            <!-- Cart Header -->
-            <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-neutral-800 flex items-center justify-between">
-                <h2 class="text-xl font-black flex items-center space-x-2 uppercase">
-                    <i class="fa-solid fa-bag-shopping text-brand-red"></i>
-                    <span>Tu Carrito</span>
-                </h2>
-                <button onclick="toggleCartModal()" class="text-gray-500 hover:text-brand-red text-xl">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div style="font-size:1rem;font-weight:900;letter-spacing:1px;border-left:3px solid var(--red);padding-left:12px;">Seleccionar envío</div>
 
-            <!-- Cart Items Scrollable List -->
-            <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
-                <!-- Cart items rendered dynamically -->
-            </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <label style="font-size:0.8rem;color:#aaa;font-weight:600;">Provincia</label>
+        <select id="checkoutProvincia" onchange="checkoutUpdateEnvio()" style="padding:12px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+          <option value="">— Seleccioná tu provincia —</option>
+          <option>Buenos Aires</option><option>Catamarca</option><option>Chaco</option>
+          <option>Chubut</option><option>Córdoba</option><option>Corrientes</option>
+          <option>Entre Ríos</option><option>Formosa</option><option>Jujuy</option>
+          <option>La Pampa</option><option>La Rioja</option><option>Mendoza</option>
+          <option>Misiones</option><option>Neuquén</option><option>Río Negro</option>
+          <option>Salta</option><option>San Juan</option><option>San Luis</option>
+          <option>Santa Cruz</option><option>Santa Fe</option><option>Santiago del Estero</option>
+          <option>Tierra del Fuego</option><option>Tucumán</option>
+        </select>
+      </div>
 
-            <!-- Cart Summary & Discount / Shipping Rules -->
-            <div class="p-4 sm:p-6 bg-gray-50 dark:bg-neutral-950 border-t border-gray-200 dark:border-neutral-800 space-y-4">
-                
-                <!-- Discount Coupon Section (Strict Single-Coupon Rule) -->
-                <div class="space-y-2">
-                    <label class="text-xs font-bold uppercase tracking-wide flex justify-between">
-                        <span>Código de Descuento (10% OFF)</span>
-                        <span class="text-gray-400 font-normal">1 por compra</span>
-                    </label>
-                    <div class="flex space-x-2">
-                        <input type="text" id="couponInput" placeholder="Ej: NAVARRETE" class="flex-1 bg-white dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 text-sm rounded-lg px-3 py-2 uppercase font-mono tracking-wider focus:outline-none focus:border-brand-red">
-                        <button onclick="applyCoupon()" class="bg-neutral-800 hover:bg-neutral-700 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-white font-bold text-xs uppercase px-4 py-2 rounded-lg transition">
-                            Aplicar
-                        </button>
-                    </div>
-                    <div id="couponMessage" class="text-xs font-semibold hidden"></div>
-                </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <label style="font-size:0.8rem;color:#aaa;font-weight:600;">Localidad</label>
+        <input type="text" id="checkoutLocalidad" placeholder="Ej: Formosa" oninput="checkoutUpdateEnvio()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+      </div>
 
-                <!-- Shipping Method Selector -->
-                <div class="space-y-2">
-                    <label class="text-xs font-bold uppercase tracking-wide">Método de Envío</label>
-                    <select id="shippingSelect" onchange="calculateCartTotals()" class="w-full bg-white dark:bg-neutral-800 border border-gray-300 dark:border-neutral-700 text-sm rounded-lg p-2.5 focus:outline-none focus:border-brand-red">
-                        <option value="formosa">Formosa Capital (Retiro / Cadete) - GRATIS</option>
-                        <option value="argentina">Resto de Argentina (Correo Argentino) - $3.500</option>
-                    </select>
-                </div>
-
-                <!-- Price Breakdown -->
-                <div class="space-y-1.5 text-sm pt-2 border-t border-gray-200 dark:border-neutral-800">
-                    <div class="flex justify-between text-gray-500 dark:text-gray-400">
-                        <span>Subtotal Productos:</span>
-                        <span id="summarySubtotal" class="font-bold">$0</span>
-                    </div>
-                    <div id="discountRow" class="flex justify-between text-emerald-500 font-bold hidden">
-                        <span id="discountLabel">Descuento (10%):</span>
-                        <span id="summaryDiscount">-$0</span>
-                    </div>
-                    <div class="flex justify-between text-gray-500 dark:text-gray-400">
-                        <span>Envío:</span>
-                        <span id="summaryShipping" class="font-bold">$0</span>
-                    </div>
-                    <div class="flex justify-between text-lg font-black text-brand-orange pt-2 border-t border-gray-200 dark:border-neutral-800">
-                        <span>TOTAL FINAL:</span>
-                        <span id="summaryTotal">$0</span>
-                    </div>
-                </div>
-
-                <!-- Checkout Button -->
-                <button onclick="openTransferFromCheckout()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase py-3.5 rounded-xl text-center shadow-lg transition flex items-center justify-center space-x-2">
-                    <i class="fa-brands fa-whatsapp text-xl"></i>
-                    <span>Finalizar Pedido por WhatsApp</span>
-                </button>
-            </div>
+      <div id="priceSummaryBox" style="display:none;">
+        <div class="checkout-price-summary">
+          <div class="price-items-list" id="priceSummaryItems"></div>
+          <div class="price-shipping-line">Envío: <span id="shippingCostDisplay">$0 ARS</span></div>
+          <div class="price-total-line" id="priceTotalDisplay">TOTAL: $0 ARS</div>
         </div>
+        <div class="free-shipping-msg">¡Envío gratis a partir de 3 unidades!</div>
+      </div>
+
+      <div id="envioFormosaCapital" style="display:none;flex-direction:column;gap:14px;">
+
+        <div id="envioFormosaForm" style="display:none;flex-direction:column;gap:12px;">
+          <input type="text" id="envFNombre" placeholder="Nombre Completo — Ej: Fulano González" oninput="checkoutValidate()"
+            style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+          <input type="text" id="envFDireccion" placeholder="Dirección" oninput="checkoutValidate()"
+            style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+          <input type="tel" id="envFTel" placeholder="Número telefónico" oninput="checkoutValidate()"
+            style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+          <textarea id="envFIndicaciones" placeholder="Indicaciones extra (opcional)" oninput="checkoutValidate()" rows="3"
+            style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;resize:vertical;"></textarea>
+        </div>
+
+        <a id="envioWABtn" href="#" target="_blank"
+          style="display:block;text-align:center;background:#25d366;color:#000;text-decoration:none;padding:14px;border-radius:12px;font-weight:700;font-size:1rem;">
+          <img src="wsp.png" style="width:22px;height:22px;object-fit:contain;vertical-align:middle;margin-right:8px;"> Si sos de Formosa, coordiná el envío por WhatsApp
+        </a>
+      </div>
+
+      <div id="envioOtros" style="display:none;flex-direction:column;gap:14px;">
+
+        <input type="text" id="envNombre" placeholder="Nombre Completo — Ej: Fulano González" oninput="checkoutValidate()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <input type="text" id="envDireccion" placeholder="Dirección" oninput="checkoutValidate()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <input type="text" id="envCP" placeholder="Código Postal (CP)" oninput="checkoutValidate()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <input type="email" id="envEmail" placeholder="Correo Electrónico" oninput="checkoutValidate()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <input type="text" id="envDNI" placeholder="Número de Documento (DNI)" oninput="checkoutValidate()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <input type="tel" id="envTel" placeholder="Número telefónico" oninput="checkoutValidate()"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;">
+        <textarea id="envIndicaciones" placeholder="Indicaciones extra (opcional)" oninput="checkoutValidate()" rows="4"
+          style="padding:12px 14px;border:1px solid #333;border-radius:10px;background:#1a1a1a;color:white;font-size:0.9rem;font-family:'Montserrat',sans-serif;outline:none;resize:vertical;"></textarea>
+
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <label style="font-size:0.8rem;color:#aaa;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Servicio de envío</label>
+
+          <div class="courier-display">
+            <img src="correo argentino.jpg" style="width:28px;height:28px;object-fit:contain;border-radius:4px;">
+            <div>
+              <div class="courier-display-name">Correo Argentino - <span id="correoPrice">$0 ARS</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Transfer Info Popup Modal -->
-    <div id="transferModal" class="fixed inset-0 z-50 hidden bg-black/80 modal-blur flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-neutral-900 max-w-md w-full rounded-2xl p-6 shadow-2xl relative border border-neutral-800 space-y-4">
-            <button onclick="closeTransferModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
+    <button id="checkoutConfirmBtn" onclick="openTransferFromCheckout()" disabled
+      style="padding:16px;border-radius:14px;border:none;background:#25d366;color:#000;font-weight:900;font-size:1.1rem;cursor:not-allowed;filter:blur(1.5px) opacity(0.4);transition:0.3s;width:100%;">
+      Confirmar compra
+    </button>
 
-            <div class="text-center">
-                <div class="w-12 h-12 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-2 text-2xl">
-                    <i class="fa-solid fa-building-columns"></i>
-                </div>
-                <h3 class="text-xl font-black uppercase">Datos de Transferencia</h3>
-                <p class="text-xs text-gray-400 mt-1">Realizá la transferencia o pago para confirmar tu compra.</p>
-            </div>
+  </div>
+</div>
 
-            <div class="bg-gray-100 dark:bg-neutral-800 p-4 rounded-xl space-y-2 text-sm font-mono">
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-400 text-xs">ALIAS:</span>
-                    <span class="font-bold text-brand-orange">BLAZEBORN.OFFICIAL</span>
-                    <button onclick="copyToClipboard('BLAZEBORN.OFFICIAL')" class="text-xs bg-gray-200 dark:bg-neutral-700 px-2 py-1 rounded hover:bg-brand-red hover:text-white">Copiar</button>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-400 text-xs">CBU/CVU:</span>
-                    <span class="font-bold text-xs">0000003100084739201948</span>
-                    <button onclick="copyToClipboard('0000003100084739201948')" class="text-xs bg-gray-200 dark:bg-neutral-700 px-2 py-1 rounded hover:bg-brand-red hover:text-white">Copiar</button>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-400 text-xs">TITULAR:</span>
-                    <span class="font-bold text-xs">BlazeBorn SRL</span>
-                </div>
-            </div>
+<div class="product-modal-overlay" id="productModal">
 
-            <div class="text-xs text-gray-500 dark:text-gray-400 text-center">
-                Al hacer clic en continuar, te redirigiremos a WhatsApp con los detalles de tu pedido para adjuntar el comprobante.
-            </div>
+<div class="modal-close-top">
+<button class="modal-close-btn" onclick="closeProductModal()">✕</button>
+</div>
 
-            <button onclick="confirmAndSendWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl uppercase tracking-wider transition flex items-center justify-center space-x-2">
-                <i class="fa-brands fa-whatsapp text-lg"></i>
-                <span>Enviar Pedido por WhatsApp</span>
-            </button>
-        </div>
+<div class="modal-img-slider">
+<button class="modal-slide-btn left" onclick="modalSlide(-1)">❮</button>
+<div class="modal-slides" id="modalSlides">
+<img id="modalImg0" src="">
+<img id="modalImg1" src="">
+</div>
+<button class="modal-slide-btn right" onclick="modalSlide(1)">❯</button>
+</div>
+
+<div class="modal-product-info">
+
+<div class="modal-product-title" id="modalTitle"></div>
+<div class="modal-product-desc" id="modalDesc"></div>
+
+<div id="modalOfferBox" style="display:none;background:var(--green);border-radius:14px;padding:14px;text-align:center;color:#000;">
+<div style="font-size:0.75rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;margin-bottom:2px;">¡OFERTA!</div>
+<div style="font-size:0.95rem;font-weight:900;">$50.000 ¡conjunto buzo + pantalon!</div>
+</div>
+
+<div>
+<div class="modal-old-price" id="modalOldPrice"></div>
+<div class="modal-price" id="modalPrice"></div>
+</div>
+
+<div>
+<div class="modal-size-label">Seleccioná tu talle:</div>
+<div class="modal-sizes" id="modalSizes"></div>
+<div class="size-soldout-msg" id="sizeSoldoutMsg">Este talle está agotado o no disponible.</div>
+</div>
+
+<button class="btn size-guide-btn" onclick="openSizeGuide()" style="width:100%;">
+Ver Guía de Talles
+</button>
+
+<div class="modal-actions">
+<button class="btn cart-btn" id="modalAddCartBtn" onclick="modalAddToCart()" style="width:100%;">
+Agregar al Carrito
+</button>
+<button class="btn wa-btn" id="modalBuyNowBtn" onclick="modalBuyNow()" style="width:100%;">
+COMPRAR YA
+</button>
+</div>
+
+<div id="modalReviewSection" style="display:none;border-top:1px solid #222;padding-top:20px;margin-top:8px;">
+<div style="font-size:0.75rem;font-weight:700;color:#888;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Opinión de cliente</div>
+<div style="background:#0f0f0f;border:1px solid #222;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;">
+<div style="color:gold;font-size:1rem;">★★★★★</div>
+<img src="opinion1.jpg" alt="Cliente usando BlazeBorn" style="width:100%;border-radius:10px;object-fit:cover;">
+<p style="color:#ccc;font-size:0.9rem;line-height:1.6;">"La calidad es increíble. La tela ajusta perfecto y se nota muchísimo el físico."</p>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="discount-alert-overlay" id="transferModal">
+<div class="discount-alert-box" style="max-width:420px;gap:16px;text-align:left;">
+
+  <h3 style="color:white;font-size:1.1rem;font-weight:900;text-align:center;letter-spacing:1px;">💳 DATOS PARA TRANSFERIR</h3>
+
+  <p style="color:#ccc;font-size:0.85rem;line-height:1.6;text-align:center;background:#0f0f0f;border:1px solid #333;border-radius:10px;padding:12px;">
+    Copiá y pegá el alias o CVU al hacer la transferencia, luego confirmá tu compra enviando tus datos de envío junto con el comprobante de pago por WhatsApp.
+  </p>
+
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <div>
+      <span style="color:var(--green);font-size:0.75rem;font-weight:700;">ALIAS</span><br>
+      <span style="color:white;font-size:1rem;font-weight:700;letter-spacing:1px;">blazeborn.ar</span>
+      <button onclick="copyText('blazeborn.ar', this)"
+        style="margin-left:10px;background:#1a1a1a;border:1px solid #444;color:#aaa;padding:4px 10px;border-radius:8px;font-size:0.75rem;cursor:pointer;">Copiar</button>
     </div>
+    <div>
+      <span style="color:var(--green);font-size:0.75rem;font-weight:700;">CVU</span><br>
+      <span style="color:white;font-size:0.9rem;font-weight:700;letter-spacing:1px;">0000003100066889905144</span>
+      <button onclick="copyText('0000003100066889905144', this)"
+        style="margin-left:10px;background:#1a1a1a;border:1px solid #444;color:#aaa;padding:4px 10px;border-radius:8px;font-size:0.75rem;cursor:pointer;">Copiar</button>
+    </div>
+    <div>
+      <span style="color:var(--green);font-size:0.75rem;font-weight:700;">A NOMBRE DE</span><br>
+      <span style="color:white;font-size:1rem;font-weight:700;">Matías Emanuel Cherñac</span>
+    </div>
+  </div>
 
-    <!-- Toast Notification Container -->
-    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-neutral-900 text-white border border-brand-red px-6 py-3 rounded-full shadow-2xl font-semibold text-sm hidden transition-all duration-300"></div>
+  <a id="checkoutWALink" href="#" target="_blank"
+    style="display:block;text-align:center;background:#25d366;color:#000;text-decoration:none;padding:13px;border-radius:12px;font-weight:700;font-size:0.95rem;width:100%;">
+    ✅ Confirmar pedido por WhatsApp
+  </a>
 
-    <script>
-        // --- 1. PRODUCT CATALOG DATA ---
-        const PRODUCTS = [
-            {
-                id: 1,
-                name: "Remera Oversized Heavy Gym",
-                category: "remeras",
-                price: 18500,
-                description: "Confeccionada en algodón 100% pesado de 240g. Corte oversized auténtico ideal para sesiones intensas de entrenamiento y salidas de fin de semana.",
-                images: [
-                    "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=800&q=80"
-                ],
-                sizes: ["S", "M", "L", "XL", "XXL"]
-            },
-            {
-                id: 2,
-                name: "Hoodie Acid Wash Pump",
-                category: "hoodies",
-                price: 36000,
-                description: "Buzo oversized con proceso de lavado ácido artesanal. Frisa invisible pesada, capucha doble capa y calce estructurado perfecto.",
-                images: [
-                    "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&w=800&q=80"
-                ],
-                sizes: ["M", "L", "XL"]
-            },
-            {
-                id: 3,
-                name: "Pantalón Jogger Street Pump",
-                category: "pantalones",
-                price: 29500,
-                description: "Pantalón corte relaxed fit en rústico premium. Bolsillos reforzados con cierre e iso bordado al tono.",
-                images: [
-                    "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?auto=format&fit=crop&w=800&q=80"
-                ],
-                sizes: ["S", "M", "L", "XL"]
-            },
-            {
-                id: 4,
-                name: "Short Mesh Athletic Pro",
-                category: "pantalones",
-                price: 16200,
-                description: "Short doble capa en tela mesh ultra respirable. Calce por encima de la rodilla y cordones de ajuste con puntera metálica.",
-                images: [
-                    "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=800&q=80"
-                ],
-                sizes: ["S", "M", "L", "XL"]
-            },
-            {
-                id: 5,
-                name: "Cinturón de Fuerza Powerlifting 10mm",
-                category: "accesorios",
-                price: 28000,
-                description: "Cinturón lumbar rígido de sujeción máxima con hebilla reforzada de acero inoxidable. Ideal para sentadilla y peso muerto heavy.",
-                images: [
-                    "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80"
-                ],
-                sizes: ["M", "L"]
-            },
-            {
-                id: 6,
-                name: "Remera Oversized Vintage Athlete",
-                category: "remeras",
-                price: 19000,
-                description: "Estampa posterior en serigrafía de alta densidad. Estilo hardcore bodybuilding combinado con la estética urbana actual.",
-                images: [
-                    "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=800&q=80"
-                ],
-                sizes: ["M", "L", "XL", "XXL"]
-            }
-        ];
+  <button onclick="closeTransferModal()"
+    style="background:transparent;border:1px solid #ff0000;color:#ff0000;padding:10px;border-radius:10px;cursor:pointer;font-size:0.9rem;width:100%;">
+    Cerrar
+  </button>
 
-        // Valid 10% OFF hidden/public discount coupons
-        const VALID_COUPONS = [
-            "BLAZE10",
-            "ESTETICO10",
-            "NAVARRETE",
-            "NATY",
-            "SANTI10",
-            "SUAR",
-            "RIVATOMY"
-        ];
+</div>
+</div>
 
-        // --- 2. STATE MANAGEMENT ---
-        let cart = [];
-        let appliedCoupon = null; // Single active coupon string
-        let activeCategory = 'all';
-        let activeModalProduct = null;
-        let modalImageIndex = 0;
-        let selectedSizeModal = '';
-        let pendingWhatsAppUrl = '';
+<div class="discount-alert-overlay" id="discountAlert">
+<div class="discount-alert-box">
+<p id="discountAlertText">✅ ¡Código de descuento aplicado correctamente!</p>
+<button class="discount-alert-ok" onclick="closeDiscountAlert()">OK</button>
+</div>
+</div>
 
-        // --- 3. INITIALIZATION & THEME ---
-        window.onload = function() {
-            renderProducts();
-            updateCartUI();
-        };
+<div class="discount-alert-overlay" id="invalidAlert">
+<div class="discount-alert-box" style="border-color:#ff0000;">
+<p>❌ Código inválido.</p>
+<button class="discount-alert-ok" style="background:#ff0000;" onclick="closeInvalidAlert()">OK</button>
+</div>
+</div>
 
-        function toggleTheme() {
-            const html = document.documentElement;
-            const themeIcon = document.getElementById('themeIcon');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                themeIcon.className = 'fa-solid fa-sun text-orange-500';
-            } else {
-                html.classList.add('dark');
-                themeIcon.className = 'fa-solid fa-moon text-yellow-500';
-            }
-        }
+<div class="modal-overlay" id="sizeGuideModal">
 
-        // --- STREAMING_CHUNK:Filtering & Product Rendering... ---
-        function filterCategory(cat) {
-            activeCategory = cat;
-            document.querySelectorAll('.cat-pill').forEach(btn => {
-                btn.className = 'cat-pill px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap bg-gray-200 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-neutral-700 transition';
-            });
-            const activeBtn = document.getElementById(`cat-${cat}`);
-            if (activeBtn) {
-                activeBtn.className = 'cat-pill active px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap bg-brand-red text-white transition';
-            }
-            renderProducts();
-        }
+<div class="modal-box">
 
-        function handleSearch() {
-            renderProducts();
-        }
+<button class="modal-close" onclick="closeSizeGuide()">
+✕
+</button>
 
-        function renderProducts() {
-            const grid = document.getElementById('productsGrid');
-            const noProducts = document.getElementById('noProductsMsg');
-            const searchTerm = (document.getElementById('globalSearchInput').value || document.getElementById('mobileSearchInput').value || '').toLowerCase().trim();
+<img id="sizeGuideImg" src="tallecompres.jpg" class="size-guide-img">
 
-            const filtered = PRODUCTS.filter(p => {
-                const matchesCat = activeCategory === 'all' || p.category === activeCategory;
-                const matchesSearch = p.name.toLowerCase().includes(searchTerm) || p.description.toLowerCase().includes(searchTerm);
-                return matchesCat && matchesSearch;
-            });
+</div>
+</div>
 
-            grid.innerHTML = '';
-            if (filtered.length === 0) {
-                noProducts.classList.remove('hidden');
-                return;
-            }
-            noProducts.classList.add('hidden');
+<header>
 
-            filtered.forEach(product => {
-                const card = document.createElement('div');
-                card.className = "bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition duration-300 flex flex-col justify-between group";
-                
-                card.innerHTML = `
-                    <div class="relative overflow-hidden cursor-pointer" onclick="openProductModal(${product.id})">
-                        <img src="${product.images[0]}" alt="${product.name}" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-3 left-3 bg-brand-red text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow">
-                            10% OFF CÓDIGOS
-                        </span>
-                    </div>
-                    <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
-                        <div>
-                            <span class="text-[11px] font-bold text-brand-red uppercase">${product.category}</span>
-                            <h3 class="font-bold text-lg leading-snug line-clamp-1 cursor-pointer hover:text-brand-orange" onclick="openProductModal(${product.id})">${product.name}</h3>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">${product.description}</p>
-                        </div>
-                        <div>
-                            <div class="text-xl font-black text-brand-orange mb-3">
-                                $${product.price.toLocaleString('es-AR')}
-                            </div>
-                            <button onclick="openProductModal(${product.id})" class="w-full bg-neutral-900 dark:bg-neutral-800 hover:bg-brand-red dark:hover:bg-brand-red text-white text-xs font-bold py-2.5 rounded-xl uppercase tracking-wider transition">
-                                Ver Talles y Comprar
-                            </button>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
+<img src="blazelogo.png" class="logo">
 
-        // --- STREAMING_CHUNK:Product Modal Gallery Logic... ---
-        function openProductModal(id) {
-            activeModalProduct = PRODUCTS.find(p => p.id === id);
-            if (!activeModalProduct) return;
+<h1>
+FITNESS & STREETWEAR
+</h1>
 
-            modalImageIndex = 0;
-            selectedSizeModal = activeModalProduct.sizes[0];
+<p class="subtitle">
+Ropa diseñada para verte estético en el gym y en la calle.
+</p>
 
-            document.getElementById('modalTitle').innerText = activeModalProduct.name;
-            document.getElementById('modalCategory').innerText = activeModalProduct.category;
-            document.getElementById('modalPrice').innerText = `$${activeModalProduct.price.toLocaleString('es-AR')}`;
-            document.getElementById('modalDescription').innerText = activeModalProduct.description;
+<p class="social-subtitle">
+¡Para enterarte de todo lo mejor seguinos en nuestras redes!
+</p>
 
-            updateModalGallery();
+</header>
 
-            // Render Sizes Buttons
-            const sizesContainer = document.getElementById('modalSizes');
-            sizesContainer.innerHTML = '';
-            activeModalProduct.sizes.forEach(size => {
-                const btn = document.createElement('button');
-                btn.className = `px-3.5 py-1.5 rounded-lg font-bold text-xs border transition ${size === selectedSizeModal ? 'bg-brand-red text-white border-brand-red' : 'border-gray-300 dark:border-neutral-700 hover:border-brand-red'}`;
-                btn.innerText = size;
-                btn.onclick = () => {
-                    selectedSizeModal = size;
-                    openProductModal(id);
-                };
-                sizesContainer.appendChild(btn);
-            });
+<section style="padding-bottom:0;">
+<div style="position:relative;max-width:520px;">
+<input
+  id="inlineSearchInput"
+  type="text"
+  placeholder="🔍  Buscar productos..."
+  oninput="handleInlineSearch()"
+  onkeydown="if(event.key==='Enter') commitInlineSearch()"
+  autocomplete="off"
+  style="width:100%;padding:14px 48px 14px 18px;border-radius:14px;border:1px solid #2a2a2a;background:#111;color:white;font-size:0.95rem;font-family:'Montserrat',sans-serif;outline:none;transition:border-color 0.2s;"
+  onfocus="this.style.borderColor='var(--red)'"
+  onblur="this.style.borderColor='#2a2a2a'"
+>
+<button
+  id="inlineClearBtn"
+  onclick="clearInlineSearch()"
+  style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#888;font-size:1.1rem;cursor:pointer;line-height:1;padding:4px;"
+  title="Borrar búsqueda"
+>✕</button>
+<div id="inlineSearchResults" style="display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:#111;border:1px solid #2a2a2a;border-radius:14px;overflow:hidden;z-index:200;"></div>
+</div>
+</section>
 
-            document.getElementById('productDetailModal').classList.remove('hidden');
-        }
+<section id="secSearchResults" style="display:none;">
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;">
+<h2 class="section-title" id="searchResultsTitle" style="margin-bottom:0;border:none;padding:0;font-size:1.6rem;">Resultados</h2>
+<button onclick="clearInlineSearch()" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:9px 18px;border-radius:10px;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:'Montserrat',sans-serif;">✕ Ver todos los productos</button>
+</div>
+<div id="searchResultsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:25px;"></div>
+</section>
 
-        function closeProductModal() {
-            document.getElementById('productDetailModal').classList.add('hidden');
-        }
+<section style="padding-top:40px;padding-bottom:20px;">
+<div style="background:rgba(0,255,115,0.1);border:2px solid var(--green);border-radius:16px;padding:24px;text-align:center;backdrop-filter:blur(4px);">
+<div style="font-size:2rem;font-weight:900;letter-spacing:3px;color:var(--green);text-shadow:0 0 20px rgba(0,255,115,0.3);">
+10% OFF HASTA AGOTAR STOCK
+</div>
+</div>
+</section>
 
-        function updateModalGallery() {
-            if (!activeModalProduct) return;
-            const imgEl = document.getElementById('modalMainImg');
-            imgEl.src = activeModalProduct.images[modalImageIndex];
+<!-- NOVEDADES SECTION (Carrusel automático con remeras de compresión) -->
+<section id="secNovedades">
+<h2 class="section-title">
+Novedades
+</h2>
+<div class="carousel-wrapper" onmousedown="stopNovAutoScroll()" onclick="stopNovAutoScroll()" ontouchstart="stopNovAutoScroll()">
+<button class="carousel-arrow" onclick="novMove(-1)">❮</button>
+<div class="carousel-viewport" id="novViewport">
+<div class="products-grid" id="novGrid">
 
-            const thumbsContainer = document.getElementById('modalThumbnails');
-            thumbsContainer.innerHTML = '';
-            activeModalProduct.images.forEach((img, idx) => {
-                const thumb = document.createElement('img');
-                thumb.src = img;
-                thumb.className = `w-10 h-10 object-cover rounded-md cursor-pointer border-2 ${idx === modalImageIndex ? 'border-brand-red' : 'border-transparent opacity-60'}`;
-                thumb.onclick = () => {
-                    modalImageIndex = idx;
-                    updateModalGallery();
-                };
-                thumbsContainer.appendChild(thumb);
-            });
-        }
+<div class="product-card" onclick="openProductModal(0)">
+<img src="compresrojo.jpg" class="card-thumb" alt="Compresivo Tribal Rojo">
+<div class="card-label">
+<div class="card-name">Compresivo Tribal Rojo</div>
+<div class="card-price">$33.000 ARS</div>
+</div>
+</div>
 
-        function prevModalImg() {
-            if (!activeModalProduct) return;
-            modalImageIndex = (modalImageIndex - 1 + activeModalProduct.images.length) % activeModalProduct.images.length;
-            updateModalGallery();
-        }
+<div class="product-card" onclick="openProductModal(1)">
+<img src="compresmorado.jpg" class="card-thumb" alt="Compresivo Tribal Morado">
+<div class="card-label">
+<div class="card-name">Compresivo Tribal Morado</div>
+<div class="card-price">$33.000 ARS</div>
+</div>
+</div>
 
-        function nextModalImg() {
-            if (!activeModalProduct) return;
-            modalImageIndex = (modalImageIndex + 1) % activeModalProduct.images.length;
-            updateModalGallery();
-        }
+<div class="product-card" onclick="openProductModal(2)">
+<div style="position:relative;">
+<img src="compresblanco.jpg" class="card-thumb" alt="Compresivo Tribal Blanco">
+<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;">
+<span style="color:#ff0000;font-size:1.6rem;font-weight:900;letter-spacing:3px;text-shadow:0 0 10px rgba(255,0,0,0.7);">AGOTADO</span>
+</div>
+</div>
+<div class="card-label">
+<div class="card-name" style="color:#ff0000;font-weight:900;">AGOTADO</div>
+<div class="card-price"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$30.000 ARS</span><br>$27.000 ARS</div>
+</div>
+</div>
 
-        function addCurrentModalToCart() {
-            if (!activeModalProduct) return;
-            addToCart(activeModalProduct.id, selectedSizeModal);
-            closeProductModal();
-            toggleCartModal();
-        }
+<div class="product-card" onclick="openProductModal(3)">
+<img src="compresbasico.jpg" class="card-thumb" alt="Compresivo Básico">
+<div class="card-label">
+<div class="card-name">Compresivo Básico</div>
+<div class="card-price">$25.000 ARS</div>
+</div>
+</div>
 
-        // --- STREAMING_CHUNK:Cart Logic & Single Coupon Rules... ---
-        function addToCart(productId, size) {
-            const product = PRODUCTS.find(p => p.id === productId);
-            if (!product) return;
+<div class="product-card" onclick="openProductModal(4)">
+<img src="berserk.jpg" class="card-thumb" alt="Compresivo de Berserk">
+<div class="card-label">
+<div class="card-name">Compresivo de Berserk</div>
+<div class="card-price">$25.000 ARS</div>
+</div>
+</div>
 
-            const existingIndex = cart.findIndex(item => item.id === productId && item.size === size);
-            if (existingIndex > -1) {
-                cart[existingIndex].qty += 1;
-            } else {
-                cart.push({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    size: size,
-                    qty: 1,
-                    image: product.images[0]
-                });
-            }
-            updateCartUI();
-            showToast(`Añadido: ${product.name} (${size})`);
-        }
+<div class="product-card" onclick="openProductModal(5)">
+<div style="position:relative;">
+<img src="clasico.jpg" class="card-thumb" alt="Compresivo Clásico">
+<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;">
+<span style="color:#ff0000;font-size:1.6rem;font-weight:900;letter-spacing:3px;text-shadow:0 0 10px rgba(255,0,0,0.7);">AGOTADO</span>
+</div>
+</div>
+<div class="card-label">
+<div class="card-name" style="color:#ff0000;font-weight:900;">AGOTADO</div>
+<div class="card-price">$25.000 ARS</div>
+</div>
+</div>
 
-        function updateCartQty(index, delta) {
-            cart[index].qty += delta;
-            if (cart[index].qty <= 0) {
-                cart.splice(index, 1);
-            }
-            updateCartUI();
-        }
+</div>
+</div>
+<button class="carousel-arrow" onclick="novMove(1)">❯</button>
+</div>
+</section>
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartUI();
-        }
+<!-- BUZOS SECTION -->
+<section id="secBuzos">
+<h2 class="section-title">
+Buzos
+</h2>
+<div class="carousel-wrapper">
+<button class="carousel-arrow" onclick="buzoMove(-1)">❮</button>
+<div class="carousel-viewport" id="buzoViewport">
+<div class="products-grid" id="buzoGrid">
 
-        // Apply single 10% discount coupon
-        function applyCoupon() {
-            const input = document.getElementById('couponInput');
-            const msg = document.getElementById('couponMessage');
-            const cleanCode = input.value.trim().toUpperCase();
+<div class="product-card" onclick="openBuzosModal(0)">
+<img src="buzorojo.jpg" class="card-thumb" alt="Buzo Tribal Rojo">
+<div class="card-label">
+<div class="card-name">Buzo Tribal Rojo</div>
+<div class="card-price" id="buzoprice0"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$38.900 ARS</span><br>$35.000 ARS</div>
+</div>
+</div>
 
-            if (!cleanCode) {
-                msg.className = "text-xs font-semibold text-red-500 block";
-                msg.innerText = "Por favor, ingresá un código.";
-                return;
-            }
+<div class="product-card" onclick="openBuzosModal(1)">
+<img src="buzomorado.jpg" class="card-thumb" alt="Buzo Tribal Morado">
+<div class="card-label">
+<div class="card-name">Buzo Tribal Morado</div>
+<div class="card-price" id="buzoprice1"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$38.900 ARS</span><br>$35.000 ARS</div>
+</div>
+</div>
 
-            if (VALID_COUPONS.includes(cleanCode)) {
-                appliedCoupon = cleanCode; // Replaces any previously applied coupon strictly maintaining 1 active coupon
-                msg.className = "text-xs font-semibold text-emerald-500 block";
-                msg.innerText = `¡Código ${cleanCode} (10% OFF) aplicado con éxito!`;
-                showToast(`Descuento ${cleanCode} activado`);
-            } else {
-                msg.className = "text-xs font-semibold text-red-500 block";
-                msg.innerText = "Código no válido.";
-            }
+</div>
+</div>
+<button class="carousel-arrow" onclick="buzoMove(1)">❯</button>
+</div>
+</section>
 
-            calculateCartTotals();
-        }
+<!-- PANTALONES SECTION -->
+<section id="secPantalon">
+<h2 class="section-title">
+Pantalones
+</h2>
+<div class="carousel-wrapper">
+<button class="carousel-arrow" onclick="pantMove(-1)">❮</button>
+<div class="carousel-viewport" id="pantViewport">
+<div class="products-grid" id="pantGrid">
 
-        function calculateCartTotals() {
-            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-            
-            // 10% OFF applied exclusively on total subtotal
-            const discountAmount = appliedCoupon ? Math.round(subtotal * 0.10) : 0;
+<div class="product-card" onclick="openPantModal(0)">
+<img src="pantbasico.jpg" class="card-thumb" alt="Pantalón básico BlazeBorn">
+<div class="card-label">
+<div class="card-name">Pantalón básico BlazeBorn</div>
+<div class="card-price" id="pantprice0"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$28.000 ARS</span><br>$25.000 ARS</div>
+</div>
+</div>
 
-            const shippingSelect = document.getElementById('shippingSelect');
-            const shippingCost = shippingSelect.value === 'argentina' && subtotal > 0 ? 3500 : 0;
+<div class="product-card" onclick="openPantModal(1)">
+<img src="pantrojo.jpg" class="card-thumb" alt="Pantalón Tribal Rojo">
+<div class="card-label">
+<div class="card-name">Pantalón Tribal Rojo</div>
+<div class="card-price" id="pantprice1"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$35.500 ARS</span><br>$32.000 ARS</div>
+</div>
+</div>
 
-            const total = subtotal - discountAmount + shippingCost;
+<div class="product-card" onclick="openPantModal(2)">
+<img src="pantmor.jpg" class="card-thumb" alt="Pantalón Tribal Morado">
+<div class="card-label">
+<div class="card-name">Pantalón Tribal Morado</div>
+<div class="card-price" id="pantprice2"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$35.500 ARS</span><br>$32.000 ARS</div>
+</div>
+</div>
 
-            document.getElementById('summarySubtotal').innerText = `$${subtotal.toLocaleString('es-AR')}`;
-            
-            const discountRow = document.getElementById('discountRow');
-            if (appliedCoupon && discountAmount > 0) {
-                discountRow.classList.remove('hidden');
-                document.getElementById('discountLabel').innerText = `Descuento (${appliedCoupon} 10%):`;
-                document.getElementById('summaryDiscount').innerText = `-$${discountAmount.toLocaleString('es-AR')}`;
-            } else {
-                discountRow.classList.add('hidden');
-            }
+</div>
+</div>
+<button class="carousel-arrow" onclick="pantMove(1)">❯</button>
+</div>
+</section>
 
-            document.getElementById('summaryShipping').innerText = shippingCost > 0 ? `$${shippingCost.toLocaleString('es-AR')}` : 'GRATIS';
-            document.getElementById('summaryTotal').innerText = `$${total.toLocaleString('es-AR')}`;
+<section id="secCompresion">
 
-            return { subtotal, discountAmount, shippingCost, total };
-        }
+<h2 class="section-title">
+Remeras de Compresión
+</h2>
 
-        function updateCartUI() {
-            const countBadge = document.getElementById('cartCountBadge');
-            const container = document.getElementById('cartItemsContainer');
-            
-            const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
-            countBadge.innerText = totalItems;
+<div class="carousel-wrapper">
 
-            container.innerHTML = '';
+<button class="carousel-arrow" id="carouselPrev" onclick="carouselMove(-1)">❮</button>
 
-            if (cart.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-12 text-gray-400">
-                        <i class="fa-solid fa-cart-flatbed text-4xl mb-3"></i>
-                        <p class="font-bold text-sm">Tu carrito está vacío.</p>
-                    </div>
-                `;
-            } else {
-                cart.forEach((item, idx) => {
-                    const itemEl = document.createElement('div');
-                    itemEl.className = "flex items-center space-x-3 bg-gray-50 dark:bg-neutral-800 p-3 rounded-xl border border-gray-200 dark:border-neutral-700";
-                    itemEl.innerHTML = `
-                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
-                        <div class="flex-1">
-                            <h4 class="font-bold text-xs line-clamp-1">${item.name}</h4>
-                            <span class="text-[10px] font-bold bg-brand-red/20 text-brand-red px-1.5 py-0.5 rounded">Talle: ${item.size}</span>
-                            <div class="text-sm font-black text-brand-orange mt-1">$${(item.price * item.qty).toLocaleString('es-AR')}</div>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <button onclick="updateCartQty(${idx}, -1)" class="w-6 h-6 bg-gray-200 dark:bg-neutral-700 rounded flex items-center justify-center font-bold text-xs hover:bg-brand-red hover:text-white">-</button>
-                            <span class="text-xs font-bold">${item.qty}</span>
-                            <button onclick="updateCartQty(${idx}, 1)" class="w-6 h-6 bg-gray-200 dark:bg-neutral-700 rounded flex items-center justify-center font-bold text-xs hover:bg-brand-red hover:text-white">+</button>
-                        </div>
-                        <button onclick="removeFromCart(${idx})" class="text-gray-400 hover:text-red-500 px-1">
-                            <i class="fa-solid fa-trash-can text-sm"></i>
-                        </button>
-                    `;
-                    container.appendChild(itemEl);
-                });
-            }
+<div class="carousel-viewport" id="carouselViewport">
+<div class="products-grid" id="productsGrid">
 
-            calculateCartTotals();
-        }
+<div class="product-card" onclick="openProductModal(0)">
+<img src="compresrojo.jpg" class="card-thumb" alt="Compresivo Tribal Rojo">
+<div class="card-label">
+<div class="card-name">Compresivo Tribal Rojo</div>
+<div class="card-price" id="price0">$33.000 ARS</div>
+</div>
+</div>
 
-        function toggleCartModal() {
-            const modal = document.getElementById('cartModal');
-            modal.classList.toggle('hidden');
-        }
+<div class="product-card" onclick="openProductModal(1)">
+<img src="compresmorado.jpg" class="card-thumb" alt="Compresivo Tribal Morado">
+<div class="card-label">
+<div class="card-name">Compresivo Tribal Morado</div>
+<div class="card-price" id="price1">$33.000 ARS</div>
+</div>
+</div>
 
-        // --- STREAMING_CHUNK:WhatsApp Message Structure Generation... ---
-        function openTransferFromCheckout() {
-            if (cart.length === 0) {
-                showToast("Añadí al menos un producto al carrito");
-                return;
-            }
+<div class="product-card" onclick="openProductModal(2)">
+<div style="position:relative;">
+<img src="compresblanco.jpg" class="card-thumb" alt="Compresivo Tribal Blanco">
+<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;">
+<span style="color:#ff0000;font-size:1.6rem;font-weight:900;letter-spacing:3px;text-shadow:0 0 10px rgba(255,0,0,0.7);">AGOTADO</span>
+</div>
+</div>
+<div class="card-label">
+<div class="card-name" style="color:#ff0000;font-weight:900;">AGOTADO</div>
+<div class="card-price" id="price2"><span style="text-decoration:line-through; color:#888; font-size:0.75rem; font-weight:500;">$30.000 ARS</span><br>$27.000 ARS</div>
+</div>
+</div>
 
-            const { subtotal, discountAmount, shippingCost, total } = calculateCartTotals();
-            const shippingSelect = document.getElementById('shippingSelect');
-            const shippingType = shippingSelect.value === 'formosa' ? 'Formosa Capital (Gratis)' : 'Resto de Argentina ($3.500)';
+<div class="product-card" onclick="openProductModal(3)">
+<img src="compresbasico.jpg" class="card-thumb" alt="Compresivo Básico">
+<div class="card-label">
+<div class="card-name">Compresivo Básico</div>
+<div class="card-price" id="price3">$25.000 ARS</div>
+</div>
+</div>
 
-            // Structure WhatsApp Text
-            let message = `*NUEVO PEDIDO - BLAZEBORN STORE*\n`;
-            message += `------------------------------------\n`;
-            message += `*DETALLE DEL PEDIDO:*\n`;
+<div class="product-card" onclick="openProductModal(4)">
+<img src="berserk.jpg" class="card-thumb" alt="Compresivo de Berserk">
+<div class="card-label">
+<div class="card-name">Compresivo de Berserk</div>
+<div class="card-price" id="price4">$25.000 ARS</div>
+</div>
+</div>
 
-            cart.forEach(item => {
-                message += `• ${item.name} | Talle: ${item.size} | Cant: ${item.qty} = $${(item.price * item.qty).toLocaleString('es-AR')}\n`;
-            });
+<div class="product-card" onclick="openProductModal(5)">
+<div style="position:relative;">
+<img src="clasico.jpg" class="card-thumb" alt="Compresivo Clásico">
+<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;">
+<span style="color:#ff0000;font-size:1.6rem;font-weight:900;letter-spacing:3px;text-shadow:0 0 10px rgba(255,0,0,0.7);">AGOTADO</span>
+</div>
+</div>
+<div class="card-label">
+<div class="card-name" style="color:#ff0000;font-weight:900;">AGOTADO</div>
+<div class="card-price" id="price5">$25.000 ARS</div>
+</div>
+</div>
 
-            message += `------------------------------------\n`;
-            message += `*Subtotal:* $${subtotal.toLocaleString('es-AR')}\n`;
+</div>
+</div>
 
-            // Explicitly detail applied coupon as requested
-            if (appliedCoupon && discountAmount > 0) {
-                message += `*Código aplicado:* ${appliedCoupon} (10% OFF: -$${discountAmount.toLocaleString('es-AR')})\n`;
-            } else {
-                message += `*Código aplicado:* Ninguno\n`;
-            }
+<button class="carousel-arrow" id="carouselNext" onclick="carouselMove(1)">❯</button>
 
-            message += `*Método de Envío:* ${shippingType}\n`;
-            message += `*PRECIO FINAL:* $${total.toLocaleString('es-AR')}\n`;
-            message += `------------------------------------\n`;
-            message += `Aguardando confirmación de datos bancarios para enviar comprobante de pago.`;
+</div>
 
-            const encoded = encodeURIComponent(message);
-            // Replace with target WhatsApp phone number
-            pendingWhatsAppUrl = `https://wa.me/5493704000000?text=${encoded}`;
+</section>
 
-            // Open Transfer Info Modal prior to WhatsApp redirect
-            document.getElementById('transferModal').classList.remove('hidden');
-        }
+<section id="secMusculosas">
 
-        function closeTransferModal() {
-            document.getElementById('transferModal').classList.add('hidden');
-        }
+<h2 class="section-title">
+Musculosas
+</h2>
 
-        function confirmAndSendWhatsApp() {
-            closeTransferModal();
-            window.open(pendingWhatsAppUrl, '_blank');
-        }
+<div class="carousel-wrapper">
 
-        // Utilities
-        function copyToClipboard(text) {
-            const tempInput = document.createElement('input');
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            showToast(`Copiado: ${text}`);
-        }
+<button class="carousel-arrow" onclick="muscuMove(-1)">❮</button>
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.classList.remove('hidden');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 3000);
-        }
-    </script>
+<div class="carousel-viewport" id="muscuViewport">
+<div class="products-grid" id="muscuGrid">
+
+<div class="product-card" onclick="openMuscuModal(0)">
+<div style="position:relative;">
+<img src="muscu.jpg" class="card-thumb" alt="Musculosa Tribal">
+<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;">
+<span style="color:#ff0000;font-size:1.6rem;font-weight:900;letter-spacing:3px;text-shadow:0 0 10px rgba(255,0,0,0.7);">AGOTADO</span>
+</div>
+</div>
+<div class="card-label">
+<div class="card-name" style="color:#ff0000;font-weight:900;">AGOTADO</div>
+</div>
+</div>
+
+<div class="product-card" onclick="openMuscuModal(1)">
+<div style="position:relative;">
+<img src="mentzer.jpg" class="card-thumb" alt="Musculosa Mike Mentzer">
+<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;">
+<span style="color:#ff0000;font-size:1.6rem;font-weight:900;letter-spacing:3px;text-shadow:0 0 10px rgba(255,0,0,0.7);">AGOTADO</span>
+</div>
+</div>
+<div class="card-label">
+<div class="card-name" style="color:#ff0000;font-weight:900;">AGOTADO</div>
+</div>
+</div>
+
+<div class="product-card" onclick="openMuscuModal(2)">
+<div style="position:relative;">
+<img src="kevin.jpg" class="card-thumb" alt="Musculosa Kevin Levrone">
+<div style="position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;">
+<span style="color:#ff0000;font-size:1.6rem;font-weight:900;letter-spacing:3px;text-shadow:0 0 10px rgba(255,0,0,0.7);">AGOTADO</span>
+</div>
+</div>
+<div class="card-label">
+<div class="card-name" style="color:#ff0000;font-weight:900;">AGOTADO</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<button class="carousel-arrow" onclick="muscuMove(1)">❯</button>
+
+</div>
+
+</section>
+
+<section id="secCalzas">
+
+<h2 class="section-title">
+Calzas <span style="color:#aaa;font-weight:400;font-size:1.4rem;">(para mujeres)</span>
+</h2>
+
+<div class="carousel-wrapper">
+
+<button class="carousel-arrow" onclick="calzaMove(-1)">❮</button>
+
+<div class="carousel-viewport" id="calzaViewport">
+<div class="products-grid" id="calzaGrid">
+
+<div class="product-card" onclick="openCalzaModal(0)">
+<img src="calza.jpg" class="card-thumb" alt="Calza de Lycra">
+<div class="card-label">
+<div class="card-name">Calza de Lycra</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<button class="carousel-arrow" onclick="calzaMove(1)">❯</button>
+
+</div>
+
+</section>
+
+<section>
+
+<img src="mockup.jpg" class="mockup">
+
+<h2 class="section-title">
+SOBRE NOSOTROS
+</h2>
+
+<p class="about">
+
+Somos una marca ubicada en la capital de Formosa, dedicada a hacer ropa para gente que entrena duro y necesita vestir luciendo sus resultados.
+
+<br><br>
+
+Nos especializamos en ropa que no solo se adapta a tu cuerpo, sino que también te hace lucir estético tanto en el gimnasio como en la calle.
+
+</p>
+
+</section>
+
+<section>
+
+<h2 class="section-title">
+OPINIONES DE CLIENTES
+</h2>
+
+<div class="reviews">
+
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>"Las remeras de compresión son tremendas. Marcan excelente la forma y la tela es de muy buena calidad."</p>
+</div>
+
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>"Compré el conjunto tribal y es genial para entrenar. El talle M me quedó impecable."</p>
+</div>
+
+<div class="review">
+<div class="stars">★★★★★</div>
+<p>"Súper recomendados, envíos rápidos y excelente atención por WhatsApp."</p>
+</div>
+
+</div>
+
+</section>
+
+<footer>
+<p>&copy; BlazeBorn - Todos los derechos reservados</p>
+</footer>
+
+<a class="whatsapp-float" href="https://wa.me/543704205500" target="_blank" aria-label="WhatsApp">
+  <img src="wsp.png" style="width:34px;height:34px;object-fit:contain;">
+</a>
+
+<script>
+
+// CATALOG DATA
+const products = [
+  {
+    name: "Compresivo Tribal Rojo",
+    price: 33000,
+    oldPrice: null,
+    imgs: ["compresrojo.jpg", "compresrojo2.jpg"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    enabledSizes: ["M"],
+    enabled: true,
+    desc: "Remera de compresión Tribal Rojo. Ajuste perfecto para resaltar tu físico mientras entrenás."
+  },
+  {
+    name: "Compresivo Tribal Morado",
+    price: 33000,
+    oldPrice: null,
+    imgs: ["compresmorado.jpg", "compresmorado2.jpg"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    enabledSizes: ["M"],
+    enabled: true,
+    desc: "Remera de compresión Tribal Morado. Calidad premium con ajuste estético superior."
+  },
+  {
+    name: "Compresivo Tribal Blanco",
+    price: 27000,
+    oldPrice: 30000,
+    imgs: ["compresblanco.jpg", "compresblanco.jpg"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    enabledSizes: [],
+    enabled: false,
+    desc: "Remera de compresión Tribal Blanco. Producto agotado."
+  },
+  {
+    name: "Compresivo Básico",
+    price: 25000,
+    oldPrice: null,
+    imgs: ["compresbasico.jpg", "compresbasico.jpg"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    enabledSizes: ["M"],
+    enabled: true,
+    desc: "Remera de compresión básica BlazeBorn. Comodidad y soporte muscular ideal."
+  },
+  {
+    name: "Compresivo de Berserk",
+    price: 25000,
+    oldPrice: null,
+    imgs: ["berserk.jpg", "berserk.jpg"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    enabledSizes: ["M"],
+    enabled: true,
+    desc: "Remera de compresión con diseño de Berserk. Edición limitada."
+  },
+  {
+    name: "Compresivo Clásico",
+    price: 25000,
+    oldPrice: null,
+    imgs: ["clasico.jpg", "clasico.jpg"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    enabledSizes: [],
+    enabled: false,
+    desc: "Remera de compresión clásico BlazeBorn. Producto agotado."
+  }
+];
+
+const buzosProducts = [
+  {
+    name: "Buzo Tribal Rojo",
+    price: 35000,
+    oldPrice: 38900,
+    imgs: ["buzorojo.jpg", "buzorojo.jpg"],
+    sizes: ["S", "M", "L", "XL"],
+    enabledSizes: ["S", "M", "L", "XL"],
+    enabled: true,
+    desc: "Buzo Tribal Rojo. Diseño urbano y abrigado para tu día a día."
+  },
+  {
+    name: "Buzo Tribal Morado",
+    price: 35000,
+    oldPrice: 38900,
+    imgs: ["buzomorado.jpg", "buzomorado.jpg"],
+    sizes: ["S", "M", "L", "XL"],
+    enabledSizes: ["S", "M", "L", "XL"],
+    enabled: true,
+    desc: "Buzo Tribal Morado. Confección de alta densidad con estampa exclusiva."
+  }
+];
+
+const pantProducts = [
+  {
+    name: "Pantalón básico BlazeBorn",
+    price: 25000,
+    oldPrice: 28000,
+    imgs: ["pantbasico.jpg", "pantbasico.jpg"],
+    sizes: ["S", "M", "L", "XL"],
+    enabledSizes: ["S", "M", "L", "XL"],
+    enabled: true,
+    desc: "Pantalón básico. Comodidad total para el gimnasio o tiempo libre."
+  },
+  {
+    name: "Pantalón Tribal Rojo",
+    price: 32000,
+    oldPrice: 35500,
+    imgs: ["pantrojo.jpg", "pantrojo.jpg"],
+    sizes: ["S", "M", "L", "XL"],
+    enabledSizes: ["S", "M", "L", "XL"],
+    enabled: true,
+    desc: "Pantalón Tribal Rojo. Ajuste perfecto y estética deportiva de alto nivel."
+  },
+  {
+    name: "Pantalón Tribal Morado",
+    price: 32000,
+    oldPrice: 35500,
+    imgs: ["pantmor.jpg", "pantmor.jpg"],
+    sizes: ["S", "M", "L", "XL"],
+    enabledSizes: ["S", "M", "L", "XL"],
+    enabled: true,
+    desc: "Pantalón Tribal Morado. Calce cómodo y combinación ideal con nuestros buzos."
+  }
+];
+
+const muscuProducts = [
+  {
+    name: "Musculosa Tribal",
+    price: 20000,
+    oldPrice: null,
+    imgs: ["muscu.jpg"],
+    sizes: ["S", "M", "L"],
+    enabledSizes: [],
+    enabled: false,
+    desc: "Musculosa Tribal. Producto agotado."
+  },
+  {
+    name: "Musculosa Mike Mentzer",
+    price: 20000,
+    oldPrice: null,
+    imgs: ["mentzer.jpg"],
+    sizes: ["S", "M", "L"],
+    enabledSizes: [],
+    enabled: false,
+    desc: "Musculosa Mike Mentzer. Producto agotado."
+  },
+  {
+    name: "Musculosa Kevin Levrone",
+    price: 20000,
+    oldPrice: null,
+    imgs: ["kevin.jpg"],
+    sizes: ["S", "M", "L"],
+    enabledSizes: [],
+    enabled: false,
+    desc: "Musculosa Kevin Levrone. Producto agotado."
+  }
+];
+
+const calzaProducts = [
+  {
+    name: "Calza de Lycra",
+    price: 22000,
+    oldPrice: null,
+    imgs: ["calza.jpg"],
+    sizes: ["S", "M", "L"],
+    enabledSizes: ["S", "M", "L"],
+    enabled: true,
+    desc: "Calza femenina de Lycra premium. Flexibilidad y contención excelente."
+  }
+];
+
+let cart = [];
+let discountApplied = false;
+let discountPercent = 0;
+let currentModalProduct = null;
+let currentSelectedSize = null;
+let currentSlideIndex = 0;
+
+// STATE CARRUSELES
+let novIndex = 0;
+let buzoIndex = 0;
+let pantIndex = 0;
+let carouselIndex = 0;
+let muscuIndex = 0;
+let calzaIndex = 0;
+
+// AUTOPLAY NOVEDADES
+let novAutoInterval = null;
+let novAutoStopped = false;
+
+function startNovAutoScroll(){
+  if(novAutoInterval) clearInterval(novAutoInterval);
+  novAutoInterval = setInterval(() => {
+    if(!novAutoStopped){
+      novMove(1, false);
+    }
+  }, 2500);
+}
+
+function stopNovAutoScroll(){
+  if(!novAutoStopped){
+    novAutoStopped = true;
+    if(novAutoInterval) clearInterval(novAutoInterval);
+  }
+}
+
+// MOVER CARRUSELES
+function moveGrid(gridId, index, cardWidthPercent) {
+  const grid = document.getElementById(gridId);
+  if(!grid) return;
+  const cards = grid.children.length;
+  let visibleCards = 4;
+  if(window.innerWidth <= 680) visibleCards = 2;
+  else if(window.innerWidth <= 1024) visibleCards = 3;
+
+  const maxIndex = Math.max(0, cards - visibleCards);
+  let safeIndex = index;
+  if(safeIndex > maxIndex) safeIndex = 0;
+  if(safeIndex < 0) safeIndex = maxIndex;
+
+  const card = grid.children[0];
+  if(card){
+    const gap = 25;
+    const shift = safeIndex * (card.offsetWidth + gap);
+    grid.style.transform = `translateX(-${shift}px)`;
+  }
+  return safeIndex;
+}
+
+function novMove(dir, userTriggered = true){
+  if(userTriggered) stopNovAutoScroll();
+  const grid = document.getElementById('novGrid');
+  if(!grid) return;
+  const cards = grid.children.length;
+  let visibleCards = 4;
+  if(window.innerWidth <= 680) visibleCards = 2;
+  else if(window.innerWidth <= 1024) visibleCards = 3;
+  const maxIndex = Math.max(0, cards - visibleCards);
+
+  novIndex += dir;
+  if(novIndex > maxIndex) novIndex = 0;
+  if(novIndex < 0) novIndex = maxIndex;
+
+  const card = grid.children[0];
+  if(card){
+    const gap = 25;
+    const shift = novIndex * (card.offsetWidth + gap);
+    grid.style.transform = `translateX(-${shift}px)`;
+  }
+}
+
+function buzoMove(dir){
+  buzoIndex += dir;
+  buzoIndex = moveGrid('buzoGrid', buzoIndex);
+}
+
+function pantMove(dir){
+  pantIndex += dir;
+  pantIndex = moveGrid('pantGrid', pantIndex);
+}
+
+function carouselMove(dir){
+  carouselIndex += dir;
+  carouselIndex = moveGrid('productsGrid', carouselIndex);
+}
+
+function muscuMove(dir){
+  muscuIndex += dir;
+  muscuIndex = moveGrid('muscuGrid', muscuIndex);
+}
+
+function calzaMove(dir){
+  calzaIndex += dir;
+  calzaIndex = moveGrid('calzaGrid', calzaIndex);
+}
+
+// PRODUCT MODAL LOGIC
+function openProductModal(index) {
+  const p = products[index];
+  showModalForProduct(p);
+}
+
+function openBuzosModal(index) {
+  const p = buzosProducts[index];
+  showModalForProduct(p);
+}
+
+function openPantModal(index) {
+  const p = pantProducts[index];
+  showModalForProduct(p);
+}
+
+function openMuscuModal(index) {
+  const p = muscuProducts[index];
+  showModalForProduct(p);
+}
+
+function openCalzaModal(index) {
+  const p = calzaProducts[index];
+  showModalForProduct(p);
+}
+
+function openProductModalByName(name){
+  let all = [...products, ...buzosProducts, ...pantProducts, ...muscuProducts, ...calzaProducts];
+  let found = all.find(item => item.name.toLowerCase() === name.toLowerCase());
+  if(found){
+    showModalForProduct(found);
+  }
+}
+
+function showModalForProduct(p){
+  currentModalProduct = p;
+  currentSlideIndex = 0;
+  currentSelectedSize = null;
+
+  document.getElementById('modalTitle').textContent = p.name;
+  document.getElementById('modalDesc').textContent = p.desc;
+  
+  const oldPriceEl = document.getElementById('modalOldPrice');
+  if(p.oldPrice){
+    oldPriceEl.style.display = 'block';
+    oldPriceEl.textContent = `$${p.oldPrice.toLocaleString('es-AR')} ARS`;
+  } else {
+    oldPriceEl.style.display = 'none';
+  }
+
+  document.getElementById('modalPrice').textContent = `$${p.price.toLocaleString('es-AR')} ARS`;
+
+  // Imágenes
+  const slides = document.getElementById('modalSlides');
+  const img0 = document.getElementById('modalImg0');
+  const img1 = document.getElementById('modalImg1');
+  
+  img0.src = p.imgs[0] || '';
+  if(p.imgs[1]){
+    img1.src = p.imgs[1];
+    img1.style.display = 'block';
+  } else {
+    img1.style.display = 'none';
+  }
+  slides.style.transform = `translateX(0)`;
+
+  // Talles
+  const sizesContainer = document.getElementById('modalSizes');
+  sizesContainer.innerHTML = '';
+  document.getElementById('sizeSoldoutMsg').style.display = 'none';
+
+  p.sizes.forEach(sz => {
+    const btn = document.createElement('button');
+    btn.className = 'size-btn';
+    btn.textContent = sz;
+    
+    const isEnabled = p.enabled && p.enabledSizes && p.enabledSizes.includes(sz);
+
+    if(!isEnabled){
+      btn.classList.add('disabled');
+      btn.title = "Talle no disponible";
+      btn.onclick = () => {
+        document.getElementById('sizeSoldoutMsg').style.display = 'block';
+      };
+    } else {
+      btn.onclick = () => {
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentSelectedSize = sz;
+        document.getElementById('sizeSoldoutMsg').style.display = 'none';
+      };
+    }
+    sizesContainer.appendChild(btn);
+  });
+
+  const addCartBtn = document.getElementById('modalAddCartBtn');
+  const buyNowBtn = document.getElementById('modalBuyNowBtn');
+
+  if(!p.enabled || !p.enabledSizes || p.enabledSizes.length === 0){
+    addCartBtn.disabled = true;
+    buyNowBtn.disabled = true;
+    addCartBtn.textContent = "AGOTADO";
+  } else {
+    addCartBtn.disabled = false;
+    buyNowBtn.disabled = false;
+    addCartBtn.textContent = "Agregar al Carrito";
+  }
+
+  document.getElementById('productModal').classList.add('active');
+}
+
+function closeProductModal(){
+  document.getElementById('productModal').classList.remove('active');
+}
+
+function modalSlide(dir){
+  if(!currentModalProduct || currentModalProduct.imgs.length <= 1) return;
+  currentSlideIndex += dir;
+  if(currentSlideIndex < 0) currentSlideIndex = currentModalProduct.imgs.length - 1;
+  if(currentSlideIndex >= currentModalProduct.imgs.length) currentSlideIndex = 0;
+  
+  const slides = document.getElementById('modalSlides');
+  slides.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+}
+
+function modalAddToCart(){
+  if(!currentModalProduct) return;
+  if(!currentSelectedSize){
+    alert("Por favor seleccioná un talle disponible antes de agregar al carrito.");
+    return;
+  }
+  
+  addToCart(currentModalProduct.name, currentModalProduct.price, currentSelectedSize, currentModalProduct.imgs[0]);
+  closeProductModal();
+  toggleCart();
+}
+
+function modalBuyNow(){
+  if(!currentModalProduct) return;
+  if(!currentSelectedSize){
+    alert("Por favor seleccioná un talle disponible.");
+    return;
+  }
+  
+  addToCart(currentModalProduct.name, currentModalProduct.price, currentSelectedSize, currentModalProduct.imgs[0]);
+  closeProductModal();
+  checkoutWhatsApp();
+}
+
+// CARRITO LOGIC
+function addToCart(name, price, size, img){
+  const existing = cart.find(item => item.name === name && item.size === size);
+  if(existing){
+    existing.qty += 1;
+  } else {
+    cart.push({ name, price, size, img, qty: 1 });
+  }
+  updateCartUI();
+}
+
+function updateCartUI(){
+  const container = document.getElementById('cartItems');
+  container.innerHTML = '';
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    const itemTotal = item.price * item.qty;
+    total += itemTotal;
+
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <strong style="font-size:0.9rem;">${item.name}</strong><br>
+          <span style="font-size:0.8rem;color:#888;">Talle: ${item.size}</span><br>
+          <span style="color:var(--red);font-weight:700;font-size:0.85rem;">$${item.price.toLocaleString('es-AR')} ARS</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button onclick="changeQty(${index}, -1)" style="background:#222;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;">-</button>
+          <span>${item.qty}</span>
+          <button onclick="changeQty(${index}, 1)" style="background:#222;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;">+</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  if(discountApplied){
+    total = total * (1 - discountPercent);
+  }
+
+  document.getElementById('cartTotal').textContent = `TOTAL: $${Math.round(total).toLocaleString('es-AR')} ARS`;
+}
+
+function changeQty(index, delta){
+  cart[index].qty += delta;
+  if(cart[index].qty <= 0){
+    cart.splice(index, 1);
+  }
+  updateCartUI();
+}
+
+function toggleCart(){
+  document.getElementById('cartPanel').classList.toggle('active');
+}
+
+// CHECKOUT & WHATSAPP
+function checkoutWhatsApp(){
+  if(cart.length === 0){
+    alert("Tu carrito está vacío.");
+    return;
+  }
+  
+  const overlay = document.getElementById('checkoutOverlay');
+  overlay.style.display = 'flex';
+  
+  const itemsContainer = document.getElementById('checkoutItems');
+  itemsContainer.innerHTML = '';
+  let subtotal = 0;
+
+  cart.forEach(item => {
+    const st = item.price * item.qty;
+    subtotal += st;
+    const itemDiv = document.createElement('div');
+    itemDiv.style.cssText = "display:flex;justify-content:space-between;align-items:center;font-size:0.85rem;";
+    itemDiv.innerHTML = `
+      <div>
+        <strong>${item.name}</strong> (Talle ${item.size}) x${item.qty}
+      </div>
+      <div style="color:var(--green);font-weight:700;">
+        $${st.toLocaleString('es-AR')} ARS
+      </div>
+    `;
+    itemsContainer.appendChild(itemDiv);
+  });
+
+  if(discountApplied){
+    subtotal = subtotal * (1 - discountPercent);
+  }
+
+  document.getElementById('checkoutSubtotal').textContent = `$${Math.round(subtotal).toLocaleString('es-AR')} ARS`;
+  checkoutUpdateEnvio();
+}
+
+function closeCheckout(){
+  document.getElementById('checkoutOverlay').style.display = 'none';
+}
+
+function checkoutUpdateEnvio(){
+  const prov = document.getElementById('checkoutProvincia').value;
+  const loc = document.getElementById('checkoutLocalidad').value.trim();
+  const priceBox = document.getElementById('priceSummaryBox');
+  const envioF = document.getElementById('envioFormosaCapital');
+  const envioO = document.getElementById('envioOtros');
+
+  if(!prov){
+    priceBox.style.display = 'none';
+    envioF.style.display = 'none';
+    envioO.style.display = 'none';
+    checkoutValidate();
+    return;
+  }
+
+  priceBox.style.display = 'block';
+
+  let totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
+  let rawSubtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+  if(discountApplied) rawSubtotal = rawSubtotal * (1 - discountPercent);
+
+  let shippingCost = 0;
+  if(totalItems < 3){
+    shippingCost = 6000;
+  }
+
+  document.getElementById('shippingCostDisplay').textContent = shippingCost === 0 ? "¡GRATIS!" : `$${shippingCost.toLocaleString('es-AR')} ARS`;
+  const grandTotal = Math.round(rawSubtotal + shippingCost);
+  document.getElementById('priceTotalDisplay').textContent = `TOTAL: $${grandTotal.toLocaleString('es-AR')} ARS`;
+
+  if(prov === "Formosa" && loc.toLowerCase() === "formosa"){
+    envioF.style.display = 'flex';
+    document.getElementById('envioFormosaForm').style.display = 'flex';
+    envioO.style.display = 'none';
+  } else {
+    envioF.style.display = 'none';
+    envioO.style.display = 'flex';
+    document.getElementById('correoPrice').textContent = shippingCost === 0 ? "GRATIS" : `$${shippingCost.toLocaleString('es-AR')} ARS`;
+  }
+
+  checkoutValidate();
+}
+
+function checkoutValidate(){
+  const prov = document.getElementById('checkoutProvincia').value;
+  const loc = document.getElementById('checkoutLocalidad').value.trim();
+  const btn = document.getElementById('checkoutConfirmBtn');
+
+  if(!prov){
+    btn.disabled = true;
+    btn.style.filter = "blur(1.5px) opacity(0.4)";
+    btn.style.cursor = "not-allowed";
+    return;
+  }
+
+  let isValid = false;
+  if(prov === "Formosa" && loc.toLowerCase() === "formosa"){
+    const nom = document.getElementById('envFNombre').value.trim();
+    const dir = document.getElementById('envFDireccion').value.trim();
+    const tel = document.getElementById('envFTel').value.trim();
+    if(nom && dir && tel) isValid = true;
+  } else {
+    const nom = document.getElementById('envNombre').value.trim();
+    const dir = document.getElementById('envDireccion').value.trim();
+    const cp = document.getElementById('envCP').value.trim();
+    const email = document.getElementById('envEmail').value.trim();
+    const dni = document.getElementById('envDNI').value.trim();
+    const tel = document.getElementById('envTel').value.trim();
+    if(nom && dir && cp && email && dni && tel) isValid = true;
+  }
+
+  if(isValid){
+    btn.disabled = false;
+    btn.style.filter = "none";
+    btn.style.cursor = "pointer";
+  } else {
+    btn.disabled = true;
+    btn.style.filter = "blur(1.5px) opacity(0.4)";
+    btn.style.cursor = "not-allowed";
+  }
+}
+
+function applyCheckoutDiscount(){
+  const code = document.getElementById('checkoutDiscountCode').value.trim().toUpperCase();
+  const msg = document.getElementById('checkoutDiscountMsg');
+
+  if(code === "BLAZE10" || code === "ESTETICO10"){
+    discountApplied = true;
+    discountPercent = 0.10;
+    msg.style.display = 'block';
+    msg.style.color = 'var(--green)';
+    msg.textContent = "10% OFF aplicado correctamente.";
+    document.getElementById('discountAlertText').textContent = "✅ ¡Código de descuento del 10% aplicado!";
+    document.getElementById('discountAlert').classList.add('active');
+  } else {
+    document.getElementById('invalidAlert').classList.add('active');
+  }
+  updateCartUI();
+  checkoutWhatsApp();
+}
+
+function openTransferFromCheckout(){
+  const prov = document.getElementById('checkoutProvincia').value;
+  const loc = document.getElementById('checkoutLocalidad').value.trim();
+  
+  let totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
+  let rawSubtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+  if(discountApplied) rawSubtotal = rawSubtotal * (1 - discountPercent);
+
+  let shippingCost = (totalItems < 3) ? 6000 : 0;
+  let finalTotal = Math.round(rawSubtotal + shippingCost);
+
+  let text = `🔥 *NUEVO PEDIDO BLAZEBORN*\n\n`;
+  cart.forEach(i => {
+    text += `• ${i.name} (Talle: ${i.size}) x${i.qty} - $${(i.price*i.qty).toLocaleString('es-AR')} ARS\n`;
+  });
+  text += `\nEnvío: $${shippingCost.toLocaleString('es-AR')} ARS\n`;
+  text += `*TOTAL A PAGAR:* $${finalTotal.toLocaleString('es-AR')} ARS\n\n`;
+  text += `*DATOS DE ENVÍO:*\n`;
+  text += `Provincia: ${prov}\nLocalidad: ${loc}\n`;
+
+  if(prov === "Formosa" && loc.toLowerCase() === "formosa"){
+    text += `Nombre: ${document.getElementById('envFNombre').value}\n`;
+    text += `Dirección: ${document.getElementById('envFDireccion').value}\n`;
+    text += `Teléfono: ${document.getElementById('envFTel').value}\n`;
+    const ind = document.getElementById('envFIndicaciones').value.trim();
+    if(ind) text += `Indicaciones: ${ind}\n`;
+  } else {
+    text += `Nombre: ${document.getElementById('envNombre').value}\n`;
+    text += `Dirección: ${document.getElementById('envDireccion').value}\n`;
+    text += `CP: ${document.getElementById('envCP').value}\n`;
+    text += `Email: ${document.getElementById('envEmail').value}\n`;
+    text += `DNI: ${document.getElementById('envDNI').value}\n`;
+    text += `Teléfono: ${document.getElementById('envTel').value}\n`;
+    const ind = document.getElementById('envIndicaciones').value.trim();
+    if(ind) text += `Indicaciones: ${ind}\n`;
+  }
+
+  const encoded = encodeURIComponent(text);
+  document.getElementById('checkoutWALink').href = `https://wa.me/543704205500?text=${encoded}`;
+  document.getElementById('transferModal').classList.add('active');
+}
+
+function closeTransferModal(){
+  document.getElementById('transferModal').classList.remove('active');
+}
+
+function copyText(text, btn){
+  navigator.clipboard.writeText(text);
+  const oldText = btn.textContent;
+  btn.textContent = "¡Copiado!";
+  setTimeout(() => btn.textContent = oldText, 1500);
+}
+
+function closeDiscountAlert(){
+  document.getElementById('discountAlert').classList.remove('active');
+}
+
+function closeInvalidAlert(){
+  document.getElementById('invalidAlert').classList.remove('active');
+}
+
+function openSizeGuide(){
+  document.getElementById('sizeGuideModal').classList.add('active');
+}
+
+function closeSizeGuide(){
+  document.getElementById('sizeGuideModal').classList.remove('active');
+}
+
+// MENU & THEME LOGIC
+function toggleMenu(){
+  document.getElementById('hamburgerMenu').classList.toggle('active');
+  document.getElementById('menuBackdrop').classList.toggle('active');
+}
+
+function closeMenu(){
+  document.getElementById('hamburgerMenu').classList.remove('active');
+  document.getElementById('menuBackdrop').classList.remove('active');
+}
+
+function toggleTheme(){
+  document.body.classList.toggle('light-theme');
+  const isLight = document.body.classList.contains('light-theme');
+  document.getElementById('themeToggle').classList.toggle('light-on', isLight);
+  document.getElementById('themeLabel').textContent = isLight ? "Tema oscuro" : "Tema claro";
+}
+
+// BUSCADORES
+function handleSearch(){
+  const val = document.getElementById('searchInput').value.trim().toLowerCase();
+  const resContainer = document.getElementById('searchResults');
+  
+  if(!val){
+    resContainer.classList.remove('visible');
+    resContainer.innerHTML = '';
+    return;
+  }
+
+  let all = [...products, ...buzosProducts, ...pantProducts, ...muscuProducts, ...calzaProducts];
+  let matches = all.filter(p => p.name.toLowerCase().includes(val));
+
+  if(matches.length === 0){
+    resContainer.innerHTML = `<div class="search-no-results">No se encontraron productos</div>`;
+  } else {
+    resContainer.innerHTML = matches.map(p => `
+      <div class="search-result-item" onclick="openProductModalByName('${p.name}'); closeMenu();">
+        <img src="${p.imgs[0]}" class="search-result-thumb">
+        <div>
+          <div class="search-result-name">${p.name}</div>
+          <div class="search-result-price">$${p.price.toLocaleString('es-AR')} ARS</div>
+        </div>
+      </div>
+    `).join('');
+  }
+  resContainer.classList.add('visible');
+}
+
+function clearSearch(){
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').classList.remove('visible');
+}
+
+function handleInlineSearch(){
+  const val = document.getElementById('inlineSearchInput').value.trim().toLowerCase();
+  const clearBtn = document.getElementById('inlineClearBtn');
+  const resContainer = document.getElementById('inlineSearchResults');
+
+  if(val){
+    clearBtn.style.display = 'block';
+  } else {
+    clearBtn.style.display = 'none';
+    resContainer.style.display = 'none';
+    return;
+  }
+
+  let all = [...products, ...buzosProducts, ...pantProducts, ...muscuProducts, ...calzaProducts];
+  let matches = all.filter(p => p.name.toLowerCase().includes(val));
+
+  if(matches.length === 0){
+    resContainer.innerHTML = `<div class="search-no-results">No se encontraron productos</div>`;
+  } else {
+    resContainer.innerHTML = matches.map(p => `
+      <div class="search-result-item" onclick="openProductModalByName('${p.name}'); clearInlineSearch();">
+        <img src="${p.imgs[0]}" class="search-result-thumb">
+        <div>
+          <div class="search-result-name">${p.name}</div>
+          <div class="search-result-price">$${p.price.toLocaleString('es-AR')} ARS</div>
+        </div>
+      </div>
+    `).join('');
+  }
+  resContainer.style.display = 'block';
+}
+
+function commitInlineSearch(){
+  const val = document.getElementById('inlineSearchInput').value.trim().toLowerCase();
+  if(!val) return;
+  
+  let all = [...products, ...buzosProducts, ...pantProducts, ...muscuProducts, ...calzaProducts];
+  let matches = all.filter(p => p.name.toLowerCase().includes(val));
+  
+  document.getElementById('inlineSearchResults').style.display = 'none';
+  const sec = document.getElementById('secSearchResults');
+  const grid = document.getElementById('searchResultsGrid');
+  
+  sec.style.display = 'block';
+  document.getElementById('searchResultsTitle').textContent = `Resultados para "${val}" (${matches.length})`;
+
+  if(matches.length === 0){
+    grid.innerHTML = `<p style="color:#aaa;">No hay resultados disponibles.</p>`;
+  } else {
+    grid.innerHTML = matches.map(p => `
+      <div class="product-card" onclick="openProductModalByName('${p.name}')">
+        <img src="${p.imgs[0]}" class="card-thumb" alt="${p.name}">
+        <div class="card-label">
+          <div class="card-name">${p.name}</div>
+          <div class="card-price">$${p.price.toLocaleString('es-AR')} ARS</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  sec.scrollIntoView({ behavior: 'smooth' });
+}
+
+function clearInlineSearch(){
+  document.getElementById('inlineSearchInput').value = '';
+  document.getElementById('inlineClearBtn').style.display = 'none';
+  document.getElementById('inlineSearchResults').style.display = 'none';
+  document.getElementById('secSearchResults').style.display = 'none';
+}
+
+// INICIALIZACIÓN
+window.addEventListener('DOMContentLoaded', () => {
+  startNovAutoScroll();
+});
+
+</script>
+
 </body>
 </html>
